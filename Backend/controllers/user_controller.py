@@ -41,7 +41,7 @@ def register_user(request: UserCreate, db:Session =  Depends(get_db))->UserOut:
         nationality = request.nationality,
         gender = request.gender,
         password_id = new_password.password_id,
-        role_id  =  ROLENAMETOID[RoleFixed.user]
+        role_id  =  ROLENAMETOID[RoleFixed.user],
     )
 
     
@@ -66,7 +66,8 @@ def login_user (request:loginFormat, db: Session = Depends(get_db)):
             status_code = status.HTTP_401_UNAUTHORIZED,
             detail="Invalid User or Email"
         )
-    
+    is_artist = user.role_id == 699
+    is_admin = user.role_id == 69
 
     password_obj = db.query(Password).filter(Password.password_id == user.password_id).first()
 
@@ -79,13 +80,14 @@ def login_user (request:loginFormat, db: Session = Depends(get_db)):
     token = create_token(
         username = user.username,
         user_id = user.id,
-        role_id  = user.role_id
-        
+        role_id  = user.role_id,
     )
 
     return {
         "status" : f"You are Successfully Logged in {user.username}",
-        "auth": token
+        "auth": token,
+        "is_admin": is_admin,
+        "is_artist": is_artist
     }
     
 
