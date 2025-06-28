@@ -1,0 +1,10 @@
+[package]
+name = "admin_console"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+reqwest = {version = "*", features = ["blocking", "json"]}
+dotenv = "*"
+tokio = {version =   "*", features = ["full"]}
+serde = "*"
