@@ -89,7 +89,35 @@ def login_user (request:loginFormat, db: Session = Depends(get_db)):
         "is_admin": is_admin,
         "is_artist": is_artist
     }
+
+
+
+
+
+## getting the user data
+def get_user_data(payload:dict, db:Session)->dict:
     
+    user_id = payload.get("id")
+
+    if not user_id:
+        raise HTTPException(status_code=400, detail="Invalid payload")
+    
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+
+    return{
+        "user": UserOut.model_validate(user),
+        "is_admin": user.role_id == RoleFixed.superuser,
+        "is_artist": user.role_id == RoleFixed.artist,
+        "is_user": user.role_id == RoleFixed.user
+    }
+
+    
+
 
     
 

@@ -22,4 +22,10 @@ fn main(){
 
     println!("Success: {}", resp);
 
+    let data = api_client::fetch_admin_information(&api_base, token);
+    println!("username: {}", data.user.username);
+    println!("Full name: {}", data.user.full_name.unwrap_or("N/A".to_string()));
+    println!("Email: {}", data.user.email);
+    
+
 }

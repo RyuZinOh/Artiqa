@@ -7,4 +7,5 @@ edition = "2024"
 reqwest = {version = "*", features = ["blocking", "json"]}
 dotenv = "*"
 tokio = {version =   "*", features = ["full"]}
-serde = "*"
+serde = {version = "*", features = ["derive"]}
+
