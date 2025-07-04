@@ -8,6 +8,7 @@ import os
 load_dotenv()
 
 S_K = os.getenv("SECRET_KEY")
+EMAIL_k = os.getenv("EMAIL_SECRET_KEY")
 ALGO = os.getenv("ALGORITHM")
 EXPIRATION = int(os.getenv("TOKEN_EXPIRATION"))
 
@@ -32,6 +33,24 @@ def verify_token(token:str)->dict:
         raise HTTPException(status_code=401, detail="token expired")
     except jwt.exceptions.InvalidTokenError:
         raise HTTPException(status_code=401, detail="invalid token")
+
+
+
+
+
+##creating forgetpassordtoken to verify
+def password_token_create(email:str)->str:
+     payload = {
+        "sub": email,
+        "exp": datetime.now(timezone.utc) + timedelta(minutes=1)
+    }
+     return jwt.encode(payload, EMAIL_k, algorithm=ALGO)
+
+
+     
+
+        
+
 
 
 

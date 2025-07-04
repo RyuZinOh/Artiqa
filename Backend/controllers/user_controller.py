@@ -1,10 +1,11 @@
 from fastapi import HTTPException, status, Depends
 from sqlalchemy.orm import Session
 from models import User, Password
-from schemas import UserCreate, UserOut, RoleFixed, loginFormat
+from schemas import UserCreate, UserOut, RoleFixed, loginFormat, ForgetPasswordCreate
 from utils.hashing import get_pwd_hash, verify_password
 from database import get_db
-from utils.jwt_token import create_token
+from utils.jwt_token import create_token, password_token_create
+
 
 
 ## defining their for roles
@@ -117,6 +118,19 @@ def get_user_data(payload:dict, db:Session)->dict:
     }
 
     
+
+
+
+##generate the token to verify for password reset
+def token_generate_forgetpass(data:ForgetPasswordCreate, db:Session):
+    user = db.query(User).filter(data.email  == User.email).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail= "user not available")
+    
+
+    pass
+
 
 
     
