@@ -1,10 +1,10 @@
 from fastapi import HTTPException, status, Depends
 from sqlalchemy.orm import Session
 from models import User, Password
-from schemas import UserCreate, UserOut, RoleFixed, loginFormat, ForgetPasswordCreate
+from schemas import UserCreate, UserOut, RoleFixed, loginFormat, ForgetPasswordVerify, ForgetPasswordReset
 from utils.hashing import get_pwd_hash, verify_password
 from database import get_db
-from utils.jwt_token import create_token, password_token_create
+from utils.jwt_token import create_token, password_token_create, password_token_verfiy
 
 
 
@@ -121,15 +121,40 @@ def get_user_data(payload:dict, db:Session)->dict:
 
 
 
-##generate the token to verify for password reset
-def token_generate_forgetpass(data:ForgetPasswordCreate, db:Session):
+##generate the token after verify for password reset
+def verify_user_forget(data:ForgetPasswordVerify, db:Session):
     user = db.query(User).filter(data.email  == User.email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail= "user not available")
+    password_obj = db.query(Password).filter(Password.password_id == user.password_id).first()
+    
+    if not password_obj or password_obj.fav_food.lower() !=data.fav_food.lower():
+        raise HTTPException(status_code=400, detail= "password or the fav food isn't matching")
+    
+    token = password_token_create(user.email)
+    return{
+        "success" : "OK",
+        "reset_token": token
+    } 
+        
+
+
+def reset_password(token:str, data:ForgetPasswordReset, db:Session):
+    email = password_token_verfiy(token)
+    user = db.query(User).filter(email == User.email).first()
 
     if not user:
         raise HTTPException(status_code=404, detail= "user not available")
+    password_obj = db.query(Password).filter(Password.password_id == user.password_id).first()
+    password_obj.password_hash = get_pwd_hash(data.new_password)
+    db.commit()
+    return{
+        "success": "ok"
+    }
+    
     
 
-    pass
+
 
 
 

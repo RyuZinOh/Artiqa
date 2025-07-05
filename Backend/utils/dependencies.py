@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Header
 from fastapi.security import OAuth2PasswordBearer
 from utils.jwt_token import verify_token
  
@@ -40,6 +40,13 @@ def get_artist_token(token:str = Depends(owo_auth)):
         raise e
 
 
+
+
+##for forget password reset
+def get_bearer_token(authorization: str = Header(...)) -> str:
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="invalid Auth Header")
+    return authorization.split(" ")[1] #seperate to avoid the empty seperator issue here
 
 
 

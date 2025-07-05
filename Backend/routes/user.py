@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from controllers import user_controller 
-from utils.dependencies import get_user_from_token
+from utils.dependencies import get_user_from_token, get_bearer_token
 from database import get_db
 from schemas import UserOut, UserCreate, loginFormat
 
@@ -39,3 +39,23 @@ def check_request_test(username:str= Depends(get_user_from_token)):
 @router.get("/get_data")
 def get_user_data(payload:dict= Depends(get_user_from_token), db:Session = Depends(get_db)):
     return user_controller.get_user_data(payload, db)
+
+
+
+
+
+##password reset token
+@router.post("/forgetpass/getresettoken")
+def create_token_forreset(data: user_controller.ForgetPasswordVerify, db:Session = Depends(get_db)):
+    return user_controller.verify_user_forget(data, db)
+
+#password reset
+@router.post("/forgetpass/resetpwd")
+def reset_password(
+    data: user_controller.ForgetPasswordReset, token: str = Depends(get_bearer_token), db:Session = Depends(get_db)):
+    return user_controller.reset_password(token, data, db)
+
+
+
+
+
