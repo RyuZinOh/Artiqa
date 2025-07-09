@@ -1,6 +1,6 @@
 @import "tailwindcss";
 body{
-    font-family: "Aldrich", "poppins";
+    font-family: "poppins";
 }
 
 /*  fuck ms-edge revealing password icon, we use custom one*/

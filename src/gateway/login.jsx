@@ -1,90 +1,130 @@
-import React, {useState} from "react";
+import loginIllustration from "/assets/forLogin/illustrationLogin.svg";
+import blackblob from "/assets/forLogin/blob.svg";
+import { EyesIcon, UserIcon } from "@phosphor-icons/react";
+import { useState } from "react";
 
-
-export default function Login(){
-    const[showPwd, setShowPwd] = useState(false);
-
-    const user_icon = "/assets/forLogin/user_icon.svg";
-    const eye_icon = "/assets/forLogin/eyes_left.svg";
-    const gmail_icon = "/assets/forLogin/gmail.svg";
-    const fb_icon = "/assets/forLogin/facebook.svg";
-      return(
-      <div className="flex justify-center bg-white items-center min-h-screen" >
-        <div className="relative bg-white  px-2 h-[600px] w-80 border-2 border-black"
-        style={{boxShadow: "4px 4px 8px  rgba(0,0,00.5)"}}
-        >
-              {/* vertical right line */}
-                <div className="top-20 bottom-4 right-3 h-52 border-2 w-px bg-black absolute "/> 
-
-                {/* horizontal style */}
-                <div className="mb-2 mt-4">
-                    <hr   className="border-2 border-black ml-8 w-50px"/>
-                    <hr className="border-2 border-black mr-8 w-50px mt-3" />
-                <h2 className="text-3xl mt-2">LOGIN PORTAL</h2>
-                </div>
-             {/* input username */}
-             <div className="flex mb-a mt-30">
-                <div className="relative w-75px">
-                    <input type="text"
-                    placeholder="Enter Username"
-                    className="w-full border-black border-2 pl-2
-                    focus:outline-none focus:border-black
-                    " 
-        style={{boxShadow: "4px 4px 8px  rgba(0,0,00.5)"}}
-                    />
-                    <img src={user_icon} alt="a user icon" className="absolute right-3 top-1 w-h h-5" />
-                </div>
-             </div>
-           
-           {/* for password */}
-             <div className="flex mb-a mt-2">
-                <div className="relative w-75px">
-                    <input type={showPwd ?"text":"password"}
-                    placeholder="Enter Password"
-                    className="w-full border-black border-2 pl-2
-                    focus:outline-none focus:border-black
-                    " 
-        style={{boxShadow: "4px 4px 8px  rgba(0,0,00.5)"}}
-                    />
-                    <img src={eye_icon} alt="a eye  icon" className={`
-                    absolute right-3 top-1 w-h h-5 cursor-pointer
-                    transition-transform duration:200 
-                    ${showPwd? "scale-x-[-1]":""}
-                    `}
-                    onClick={()=>setShowPwd(!showPwd) }/>
-                </div>
-             </div>
-
-             {/* //login */}
-             <div>
-                <button
-               className="w-30 bg-black text-white py-0.5 mt-4 rounded"
-        style={{boxShadow: "4px 4px 8px  rgba(0,0,00.5)"}}
-
-                >LOGIN</button>
-             </div>
-
-
-             <div className="text-center text-3xl mt-14 drop-shadow-lg">OR</div>
-
-
-             {/* //optional logins */}
-             <div className="flex flex-col items-end space-y-4 absolute right-4 bottom-20">
-                <button className="border-black border-2 rounded-full p-2">
-                    <img src={gmail_icon} alt="gmail icon" className="w-4 h-4"/>
-                </button>
-                <button className="border-black border-2 rounded-full">
-                    <img src={fb_icon} alt = "facebook icon"/>
-                </button>
-             </div>
-
-           {/* forgetpass */}
-           <div className="text-center mt-40 mb-2 text-xs  text-gray-400 cursor-pointer">
-            forget password?
-           </div>
-           <hr className="border-2 border-black mb-8 w-[75%] mx-auto" />
+export default function Login() {
+  const [showPass, setShowPass] = useState(false);
+  return (
+    <div className="flex h-screen">
+      {/* left side */}
+      <div
+        className="flex-1 flex flex-col justify-center items-center p-8
+      bg-[var(--secondary)] text-[var(--tertiary)]"
+      >
+        <div className="w-full max-w-md">
+          <h1 className="text-6xl font-bold  drop-shadow-md mb-2">LOGIN</h1>
+          <p className="mb-4 font-bold drop-shadow-md">
+            Enter your account details
+          </p>
+          <form
+            className="space-y-6 px-12 py-12 border-2 border-[var(--tertiary)] 
+          rounded-md"
+          >
+            {/* username  */}
+            <div className="relative group">
+              <input
+                type="text"
+                className="w-full p-3 pr-10 border-2 border-[var(--tertiary)] rounded-md bg-transparent placeholder:text-[var(--tertiary)]
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--tertiary)]
+                "
+                placeholder="username"
+              />
+              <UserIcon
+                size={24}
+                weight="regular"
+                className="absolute right-3 top-4 -translate-y-0.5 text-[var(--tertiary)] group-hover:scale-100 transition-transform duration-150"
+              />
             </div>
+            {/* password */}
+            <div className="relative">
+              <input
+                type={showPass ? "text" : "password"}
+                className="w-full p-3 pr-10 border-2 border-[var(--tertiary)] rounded-md bg-transparent placeholder:text-[var(--tertiary)]
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--tertiary)]
+                "
+                placeholder="password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPass(!showPass)}
+                className="absolute right-3 top-4 -translate-y-0.5 text-[var(--tertiary)] group-hover:scale-100 transition-transform duration-150"
+              >
+                <EyesIcon
+                  size={24}
+                  weight="fill"
+                  className={showPass ? "scale-x-[-1]" : " "}
+                />
+              </button>
             </div>
 
-    );
+            {/* loginbutton */}
+            <button
+              type="submit"
+              className="w-full py-3 px-4 bg-[var(--secondary)] text-[var(--tertiary)]
+          border-2 border-[var(--tertiary)] rounded-md font-bold cursor-pointer
+          hover:bg-[var(--tertiary)] hover:text-[var(--secondary)] transition duration-300
+          "
+            >
+              LOGIN
+            </button>
+
+            {/* //forget password */}
+            <div className="flex justify-center">
+              <a
+                href="#"
+                className="text-sm text-[var(--tertiary)]  cursor-pointer  drop-shadow-md -mt-2
+                hover:underline transition
+                "
+              >
+                Forgot password?
+              </a>
+            </div>
+          </form>
+
+          {/* //signup strip */}
+          <div className="flex mx-12 items-center justify-between mt-4">
+            <p className="text-sm cursor-pointer drop-shadow-md  hover:underline transition">
+              Don't have an account?
+            </p>
+            <button
+              type="submit"
+              className="py-2 w-35 px-4 bg-[var(--tertiary)] text-[var(--secondary)] rounded-md drop-shadow-md cursor-pointer hover:brightness-150 transition duration-300"
+            >
+              SignUP
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* //right side */}
+      <div className="flex-1 flex flex-col justify-center p-8 bg-[var(--primary)]">
+        <div className="mb-8">
+          <h1 className="text-8xl leading-snug text-left drop-shadow-md">
+            <div className="font-bold">Welcome to</div>
+            <div className="-mt-12">Artiqa</div>
+          </h1>
+          <p className="text-3xl drop-shadow-sm text-left">
+            Login to access your account
+          </p>
+        </div>
+        <div className="relative h-full">
+          <div className="absolute -bottom-8 -right-8 w-full max-w-[650px]">
+            <div className="relative w-full">
+              <img
+                src={blackblob}
+                alt="black blob"
+                className="absolute top-0 left-0 w-full max-w-[450px]"
+              />
+              <img
+                src={loginIllustration}
+                alt="login illustration"
+                className="relative w-full max-w-[650px]"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
