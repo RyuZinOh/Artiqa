@@ -10,7 +10,7 @@ export default function Login() {
       {/* left side */}
       <div
         className="flex-1 flex flex-col justify-center items-center p-8
-      bg-[var(--secondary)] text-[var(--tertiary)]"
+      bg-white text-black"
       >
         <div className="w-full max-w-md">
           <h1 className="text-6xl font-bold  drop-shadow-md mb-2">LOGIN</h1>
@@ -18,37 +18,37 @@ export default function Login() {
             Enter your account details
           </p>
           <form
-            className="space-y-6 px-12 py-12 border-2 border-[var(--tertiary)] 
+            className="space-y-6 px-12 py-12 border-3 border-black 
           rounded-md"
           >
             {/* username  */}
             <div className="relative group">
               <input
                 type="text"
-                className="w-full p-3 pr-10 border-2 border-[var(--tertiary)] rounded-md bg-transparent placeholder:text-[var(--tertiary)]
-                transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--tertiary)]
+                className="w-full p-3 pr-10 border-2 border-black rounded-md bg-transparent placeholder:text-black
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
                 "
                 placeholder="username"
               />
               <UserIcon
                 size={24}
                 weight="regular"
-                className="absolute right-3 top-4 -translate-y-0.5 text-[var(--tertiary)] group-hover:scale-100 transition-transform duration-150"
+                className="absolute right-3 top-4 -translate-y-0.5 group-hover:scale-100 transition-transform duration-150"
               />
             </div>
             {/* password */}
             <div className="relative">
               <input
                 type={showPass ? "text" : "password"}
-                className="w-full p-3 pr-10 border-2 border-[var(--tertiary)] rounded-md bg-transparent placeholder:text-[var(--tertiary)]
-                transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--tertiary)]
+                className="w-full p-3 pr-10 border-2 border-black rounded-md bg-transparent placeholder:text-black
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
                 "
                 placeholder="password"
               />
               <button
                 type="button"
                 onClick={() => setShowPass(!showPass)}
-                className="absolute right-3 top-4 -translate-y-0.5 text-[var(--tertiary)] group-hover:scale-100 transition-transform duration-150"
+                className="absolute right-3 top-4 -translate-y-0.5 group-hover:scale-100 transition-transform duration-150"
               >
                 <EyesIcon
                   size={24}
@@ -61,9 +61,9 @@ export default function Login() {
             {/* loginbutton */}
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-[var(--secondary)] text-[var(--tertiary)]
-          border-2 border-[var(--tertiary)] rounded-md font-bold cursor-pointer
-          hover:bg-[var(--tertiary)] hover:text-[var(--secondary)] transition duration-300
+              className="w-full py-3 px-4 
+          border-2 border-black rounded-md font-bold cursor-pointer
+          hover:bg-black hover:text-white transition duration-300
           "
             >
               LOGIN
@@ -73,7 +73,7 @@ export default function Login() {
             <div className="flex justify-center">
               <a
                 href="#"
-                className="text-sm text-[var(--tertiary)]  cursor-pointer  drop-shadow-md -mt-2
+                className="text-sm  cursor-pointer  drop-shadow-md -mt-2
                 hover:underline transition
                 "
               >
@@ -89,7 +89,7 @@ export default function Login() {
             </p>
             <button
               type="submit"
-              className="py-2 w-35 px-4 bg-[var(--tertiary)] text-[var(--secondary)] rounded-md drop-shadow-md cursor-pointer hover:brightness-150 transition duration-300"
+              className="py-2 w-35 px-4 bg-black text-white rounded-md drop-shadow-md cursor-pointer hover:brightness-250 transition duration-300"
             >
               SignUP
             </button>

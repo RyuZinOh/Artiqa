@@ -1,8 +1,9 @@
-import Login from "./gateway/login";
-
+// import Login from "./gateway/login";
+import Register from "./gateway/register";
 function App() {
   return (
-    <Login/>
+    <Register/>
+    // <Login/>
   );
 }
 
