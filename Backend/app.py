@@ -15,3 +15,11 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(user_routes.router)
 app.include_router(admin_routes.router)
 app.include_router(artist_routes.router)
+
+
+
+@app.get("/")
+async def root():
+    return {
+        "message": "Artiqa is backshotting! SMH"
+    }
