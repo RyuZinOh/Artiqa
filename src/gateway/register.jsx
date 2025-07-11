@@ -1,5 +1,10 @@
+import { useState } from "react";
 import ladypaints from "/assets/forRegister/paintergirlillu.svg";
+import { AtIcon, EyesIcon, FeatherIcon, IdentificationCardIcon, UserIcon } from "@phosphor-icons/react";
+
 export default function Register(){
+  const [showPass, setShowPass] = useState(false);
+  const [showConf, setshowConf] = useState(false ) //if not created seperatly then the both password and confirm password might hide and show at same time , not sperately so for seperation, this seperate usestate 
     return(
         <div className="flex h-screen">
         {/* // left side  */}
@@ -21,48 +26,138 @@ export default function Register(){
           >
 
             {/* //email + username */}
-            <div className="flex space-x-4" >
-                <input type="email" 
+            <div className="flex space-x-4 relative" >
+              <div className="relative flex-1">
+                   <input type="email" 
                 placeholder="email"
-                className="flex-1 p-3 rounded border-2 bg-white"
-                />
+                className="
+                w-full p-3 pr-10 border-2 border-black rounded-md bg-white placeholder:text-black
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
+                "
+                />      
+          <AtIcon
+                size={24}
+                weight="regular"
+                className="absolute right-3 top-4 -translate-y-0.5"
+              />
+              </div>
+              <div className="relative flex-1">
                 <input type="text " 
                 placeholder="username"
-                className="flex-1 p-3 border-2 rounded bg-white"
+                className="
+                 w-full p-3 pr-10 border-2 border-black rounded-md bg-white placeholder:text-black
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
+               
+                "
                 />
-
+                          <UserIcon
+                size={24}
+                weight="regular"
+                className="absolute right-3 top-4 -translate-y-0.5"
+              />
+              </div>
+                
             </div>
             
             {/* //full name  */}
-                <input type="text " 
+            <div className="relative flex-1">
+  <input type="text " 
                 placeholder="full name"
-                className="w-full p-3 border-2 rounded bg-white"
+                className="
+                 w-full p-3 pr-10 border-2 border-black rounded-md bg-white placeholder:text-black
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
+               
+                "
                 />
+               <IdentificationCardIcon
+                size={24}
+                weight="regular"
+                className="absolute right-3 top-4 -translate-y-0.5"
+              />
+            </div>
                 
             
 {/* //password +bio */}
 <div className="flex space-x-4 " >
               <div className="flex flex-col flex-1 space-y-4">
+                
+               <div className="relative flex-1">
+                <input 
+                type={showPass ? "text" : "password"}
+                placeholder="password"
+               className="p
+                w-full p-3 pr-10 border-2 border-black rounded-md bg-white placeholder:text-black
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
                
-               <input type="password" placeholder="password"
-               className="p-3 rounded border-2 bg-white"/>
-               <input type="password" placeholder="confirm password"
-               className="p-3 rounded border-2 bg-white"/>
-                </div>
-                <textarea placeholder="biography"
-                className="flex-1 p-3 rounded border-2 resize-none bg-white">
+               "/>
+                <button
+                type="button"
+                onClick={() => setShowPass(!showPass)}
+                className="absolute right-3 top-4 -translate-y-0.5 group-hover:scale-100 transition-transform duration-150 cursor-pointer"
+              >
+                <EyesIcon
+                  size={24}
+                  weight="fill"
+                  className={showPass ? "scale-x-[-1] " : " "}
+                />
+              </button>
+           
+             
+               </div>
+               <div className="relative flex-1 ">
+                <input
+                type={showConf ? "text" : "password"}
+                placeholder="confirm password"
+               className="
+                w-full p-3 pr-10 border-2 border-black rounded-md bg-white placeholder:text-black
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
+               
+               "/>
 
+                   <button
+                type="button"
+                onClick={() => setshowConf(!showConf)}
+                className="absolute right-3 top-4 -translate-y-0.5 group-hover:scale-100 transition-transform duration-150 cursor-pointer"
+              >
+                <EyesIcon
+                  size={24}
+                  weight="fill"
+                  className={showConf ? "scale-x-[-1] " : " "}
+                />
+              </button>
+                </div>              
+               </div>
+
+                <div className="relative flex-1">
+                  <textarea placeholder="biography"
+                className="
+                
+                resize-none 
+                min-h-[7.8rem] 
+                w-full p-3 pr-10 border-2 border-black rounded-md bg-white placeholder:text-black
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
+               
+                ">
                 </textarea>
+                 <FeatherIcon
+                size={24}
+                weight="regular"
+                className="absolute right-3 top-4 -translate-y-0.5"
+              />
+
+                </div>
+
+                
             </div>
             
 
             <div className="flex justify-between items-center mb-2">
                 <div>
-                    <h3 className="text-xl mb-2">Gender</h3>
-                <div className="flex space-x-6">
+                    <h3 className="text-xl -my-5 mb-1 ">Gender</h3>
+                <div className="flex space-x-4">
 
                     {/* //male  */}
-                    <label className="flex items-center space-x-2">
+                    <label className="flex items-center space-x-1">
                         <input type="radio" name="gender" value="male"
                         
                         className="w-5 h-5 border-2 border-black accent-black"/>
@@ -70,7 +165,7 @@ export default function Register(){
 
                         {/* //female */}
                     </label>
-                        <label className="flex items-center space-x-2">
+                        <label className="flex items-center space-x-1">
                         <input type="radio" name="gender" value="female"
                         
                         className="w-5 h-5 border-2 border-black accent-black"/>
@@ -78,17 +173,17 @@ export default function Register(){
                         <span>female</span>
                     </label>
                         {/* others */}
-                        <label className="flex items-center space-x-2">
-                        <input type="radio" name="gender" value="other"
+                        <label className="flex items-center space-x-1">
+                        <input type="radio" name="gender" value="others"
                         
                         className="w-5 h-5 border-2 border-black accent-black"/>
                         
-                        <span>other</span>
+                        <span>others</span>
                     </label>
                 </div>
                 </div>
                 <button type="submit"
-                className="bg-black border-2 border-black text-white px-6 py-3 rounded-md hover:bg-white hover:text-black hover:border-2 transition -mb-7 w-[185px]"> 
+                className="bg-black border-2 border-black text-white px-8 py-3 rounded-md hover:bg-white hover:text-black hover:border-2 transition -mb-3 w-[200px] ml-8 "> 
                     REGISTER
                 </button>
             </div>
@@ -102,7 +197,7 @@ export default function Register(){
             </p>
             <button
               type="submit"
-              className="py-2 w-35 px-4 bg-white font-bold text-black rounded-md drop-shadow-2xl cursor-pointer border-black border-2 "
+              className="py-2 w-[100px] mr-7 px-4 bg-white font-bold text-black rounded-md drop-shadow-2xl cursor-pointer border-black border-2"
             >
               LOGIN
             </button>

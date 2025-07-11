@@ -14,7 +14,7 @@ export default function Login() {
       >
         <div className="w-full max-w-md">
           <h1 className="text-6xl font-bold  drop-shadow-md mb-2">LOGIN</h1>
-          <p className="mb-4 font-bold drop-shadow-md">
+          <p className="mb-2 drop-shadow-md">
             Enter your account details
           </p>
           <form
@@ -33,7 +33,7 @@ export default function Login() {
               <UserIcon
                 size={24}
                 weight="regular"
-                className="absolute right-3 top-4 -translate-y-0.5 group-hover:scale-100 transition-transform duration-150"
+                className="absolute right-3 top-4 -translate-y-0.5"
               />
             </div>
             {/* password */}
@@ -41,19 +41,19 @@ export default function Login() {
               <input
                 type={showPass ? "text" : "password"}
                 className="w-full p-3 pr-10 border-2 border-black rounded-md bg-transparent placeholder:text-black
-                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black 
                 "
                 placeholder="password"
               />
               <button
                 type="button"
                 onClick={() => setShowPass(!showPass)}
-                className="absolute right-3 top-4 -translate-y-0.5 group-hover:scale-100 transition-transform duration-150"
+                className="absolute right-3 top-4 -translate-y-0.5 group-hover:scale-100 transition-transform duration-150 cursor-pointer"
               >
                 <EyesIcon
                   size={24}
                   weight="fill"
-                  className={showPass ? "scale-x-[-1]" : " "}
+                  className={showPass ? "scale-x-[-1] " : " "}
                 />
               </button>
             </div>
