@@ -52,7 +52,7 @@ export default function ForgetPass() {
         <div className="flex justify-end">
           <button
             type="submit"
-            className="py-3 px-4 
+            className="py-3 px-4  z-30
           border-2 border-black rounded-md bg-black text-white font-bold cursor-pointer w-[150px]
           hover:bg-white hover:text-black transition duration-300
           "
