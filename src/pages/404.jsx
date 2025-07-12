@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import losterza from "../../public/assets/mascot_emotes/losterza.svg";
+import losterza from "/assets/mascot_emotes/losterza.svg";
 
 
 export default function PageNotFound(){

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ladypaints from "/assets/forRegister/paintergirlillu.svg";
 import { AtIcon, EyesIcon, FeatherIcon, IdentificationCardIcon, UserIcon } from "@phosphor-icons/react";
+import { NavLink } from "react-router-dom";
 
 export default function Register(){
   const [showPass, setShowPass] = useState(false);
@@ -183,7 +184,7 @@ export default function Register(){
                 </div>
                 </div>
                 <button type="submit"
-                className="bg-black border-2 border-black text-white px-8 py-3 rounded-md hover:bg-white hover:text-black hover:border-2 transition -mb-3 w-[200px] ml-8 "> 
+                className="bg-black border-2 border-black text-white font-bold px-8 py-3 rounded-md hover:bg-white hover:text-black hover:border-2 transition -mb-3 w-[200px] ml-8 "> 
                     REGISTER
                 </button>
             </div>
@@ -192,15 +193,16 @@ export default function Register(){
 
           </form>
            <div className="flex mx-12 items-center justify-between mt-4">
-            <p className="text-sm cursor-pointer drop-shadow-md  hover:underline transition">
+            <p className="text-sm cursor-pointer drop-shadow-md">
               Already have an account?
             </p>
-            <button
-              type="submit"
-              className="py-2 w-[100px] mr-7 px-4 bg-white font-bold text-black rounded-md drop-shadow-2xl cursor-pointer border-black border-2"
-            >
-              LOGIN
-            </button>
+            <NavLink
+            to="/login"
+            className="py-2 w-35 px-4 mr-2 bg-white text-black border-2 rounded-md text-center drop-shadow-md cursor-pointer font-bold
+          "
+          >LOGIN
+          </NavLink>
+
           </div>
           </div>
         </div>

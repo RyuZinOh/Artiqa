@@ -1,5 +1,5 @@
-import erzaforget from "../../public/assets/mascot_emotes/forget_mascot.png";
-import cloudbrush from "../../public/assets/forforget/cloudpen.svg";
+import erzaforget from "/assets/mascot_emotes/forget_mascot.png";
+import cloudbrush from "/assets/forforget/cloudpen.svg";
 import { AtIcon, QuestionMarkIcon } from "@phosphor-icons/react";
 
 export default function ForgetPass() {
@@ -52,7 +52,7 @@ export default function ForgetPass() {
         <div className="flex justify-end">
           <button
             type="submit"
-            className="py-3 px-4  z-30
+            className="py-3 px-4
           border-2 border-black rounded-md bg-black text-white font-bold cursor-pointer w-[150px]
           hover:bg-white hover:text-black transition duration-300
           "
@@ -65,7 +65,7 @@ export default function ForgetPass() {
       <img
         src={erzaforget}
         alt="erzamascot"
-        className="z-20 absolute bottom-0 left-40  ml-200 top-[200px]   w-[450px]"
+        className="pointer-events-none z-15 absolute bottom-0 left-40  ml-200 top-[200px]   w-[450px]"
       />
 
       <img

@@ -2,9 +2,11 @@ import loginIllustration from "/assets/forLogin/illustrationLogin.svg";
 import blackblob from "/assets/forLogin/blob.svg";
 import { EyesIcon, UserIcon } from "@phosphor-icons/react";
 import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [showPass, setShowPass] = useState(false);
+  const navigate = useNavigate();
   return (
     <div className="flex h-screen">
       {/* left side */}
@@ -18,6 +20,10 @@ export default function Login() {
             Enter your account details
           </p>
           <form
+          onSubmit= {(e)=>{
+            e.preventDefault();
+            navigate("/");
+          }}
             className="space-y-6 px-12 py-12 border-3 border-black 
           rounded-md"
           >
@@ -71,28 +77,29 @@ export default function Login() {
 
             {/* //forget password */}
             <div className="flex justify-center">
-              <a
-                href="#"
+              
+              <NavLink
+                to="/forgetpassword"
                 className="text-sm  cursor-pointer  drop-shadow-md -mt-2
                 hover:underline transition
                 "
               >
                 Forgot password?
-              </a>
+              </NavLink>
             </div>
           </form>
 
           {/* //signup strip */}
           <div className="flex mx-12 items-center justify-between mt-4">
-            <p className="text-sm cursor-pointer drop-shadow-md  hover:underline transition">
+            <p className="text-sm cursor-pointer drop-shadow-md">
               Don't have an account?
             </p>
-            <button
-              type="submit"
-              className="py-2 w-35 px-4 bg-black text-white rounded-md drop-shadow-md cursor-pointer hover:brightness-250 transition duration-300"
-            >
-              SignUP
-            </button>
+                  <NavLink
+            to="/register"
+            className="py-2 w-35 px-4 bg-black text-white rounded-md text-center drop-shadow-md cursor-pointer hover:brightness-250 transition duration-300
+          "
+          >SignUP 
+          </NavLink>
           </div>
         </div>
       </div>
