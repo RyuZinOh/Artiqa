@@ -1,6 +1,6 @@
 export const themes = {
    limeState: {
-    '--primary': "#FFFF00",
+    '--primary': "#eeff00",
     '--secondary': "#FFFFFF",
     '--tertiary': "#000000" 
   },
