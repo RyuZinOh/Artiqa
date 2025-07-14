@@ -22,7 +22,8 @@ class User(Base):
     role_id   = Column(Integer, ForeignKey("roles.role_id"), nullable=False)
     password = relationship("Password", back_populates="user")
     role  =  relationship("Role", back_populates="users")
- 
+
+    role_requests =  relationship("RoleRequest", back_populates="user")
 
     
 

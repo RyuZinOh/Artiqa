@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status, Depends
 from sqlalchemy.orm import Session
-from models import User, Password
+from models import User, Password, RoleRequest
 from schemas import UserCreate, UserOut, RoleFixed, loginFormat, ForgetPasswordVerify, ForgetPasswordReset
 from utils.hashing import get_pwd_hash, verify_password
 from database import get_db
@@ -155,10 +155,43 @@ def reset_password(token:str, data:ForgetPasswordReset, db:Session):
     
 
 
+## send the request for artist change
+def request_role_change(payload: dict, db:Session)->dict:
+    user_id = payload.get("id")
+    user = db.query(User).filter(User.id== user_id).first()
 
+    if not user or user.role_id != ROLENAMETOID[RoleFixed.user]:
+        raise HTTPException(status_code=400, detail="only user can request to change his/her role!")
+
+    existing_user = db.query(RoleRequest).filter(
+            RoleRequest.user_id ==user.id,
+            RoleRequest.requested_role == RoleFixed.artist,
+            RoleRequest.is_approved == False
+    ).first()
+
+
+    if existing_user:
+        raise HTTPException(status_code=400, detail="you already sent, wait for the approval!")
+
+    new_request = RoleRequest(user_id=user.id, requested_role=RoleFixed.artist)
+
+    db.add(new_request)
+    db.commit()
+    db.refresh(new_request)
+
+
+    return{
+            "message": "Artist role reqest successfully sent!"
+    }
 
 
     
 
+    
+
+
+
+
+    
 
 

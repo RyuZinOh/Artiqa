@@ -57,5 +57,11 @@ def reset_password(
 
 
 
+##as a user send the artist role change signal
+@router.post("/requestrolechange")
+def request_role_chang(payload:dict= Depends(get_user_from_token), db:Session = Depends(get_db)):
+    return user_controller.request_role_change(payload, db)
+
+
 
 

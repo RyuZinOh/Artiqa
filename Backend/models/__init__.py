@@ -6,3 +6,4 @@ class Base(DeclarativeBase):
 from .user_model import User
 from .role_model import Role
 from .password_model import Password
+from .role_request_model import RoleRequest
