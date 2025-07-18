@@ -68,8 +68,8 @@ export default function Login() {
             <button
               type="submit"
               className="w-full py-3 px-4 
-          border-2 border-black rounded-md font-bold cursor-pointer
-          hover:bg-black hover:text-white transition duration-300
+          border-2 border-black bg-black  text-white rounded-md font-bold cursor-pointer
+          hover:bg-white hover:text-black  transition duration-300
           "
             >
               LOGIN
@@ -96,7 +96,7 @@ export default function Login() {
             </p>
                   <NavLink
             to="/register"
-            className="py-2 w-35 px-4 bg-black text-white rounded-md text-center drop-shadow-md cursor-pointer hover:brightness-250 transition duration-300
+            className="py-2 w-35 px-4 bg-white text-black border-black border-3 rounded-md text-center drop-shadow-md cursor-pointer hover:text-white hover:bg-black transition duration-300
           "
           >SignUP 
           </NavLink>

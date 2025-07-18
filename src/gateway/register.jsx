@@ -2,23 +2,29 @@ import { useState } from "react";
 import ladypaints from "/assets/forRegister/paintergirlillu.svg";
 import { AtIcon, EyesIcon, FeatherIcon, IdentificationCardIcon, UserIcon } from "@phosphor-icons/react";
 import { NavLink } from "react-router-dom";
+import FavAfterRegister from "./favafterRegister";
 
 export default function Register(){
+  const [favfoo,setFoo] = useState(false);
   const [showPass, setShowPass] = useState(false);
   const [showConf, setshowConf] = useState(false ) //if not created seperatly then the both password and confirm password might hide and show at same time , not sperately so for seperation, this seperate usestate 
     return(
+      <>{
+        favfoo?(
+          <FavAfterRegister/>
+        ):(
         <div className="flex h-screen">
         {/* // left side  */}
         <div
-        className="flex-[0.5] flex flex-col justify-center px-16
-      bg-[var(--primary)]"
+        className="flex-1 flex flex-col justify-center px-16
+    items-center      bg-[var(--primary)] "
       >
-        <div className="max-w-xl w-full">
-          <h1 className="text-8xl leading-snug font-bold  drop-shadow-md">
+        <div className="max-w-xl w-full text-left">
+          <h1 className="text-8xl leading-snug font-bold  drop-shadow-md text-lef">
             Register
           </h1>
           <p className="text-3xl   drop-shadow-sm">
-            Artiqa <span className="ml-40">fill the form below</span>
+            Artiqa <span className="ml-52">fill the form below</span>
           </p>
           
           <form
@@ -183,10 +189,15 @@ export default function Register(){
                     </label>
                 </div>
                 </div>
-                <button type="submit"
+
+              <button type="submit"
+              onClick={
+                ()=>setFoo(true)
+                }
                 className="bg-black border-2 border-black text-white font-bold px-8 py-3 rounded-md hover:bg-white hover:text-black hover:border-2 transition -mb-3 w-[200px] ml-8 "> 
-                    REGISTER
+                    CONTINUE
                 </button>
+                
             </div>
 
             
@@ -198,8 +209,7 @@ export default function Register(){
             </p>
             <NavLink
             to="/login"
-            className="py-2 w-35 px-4 mr-2 bg-white text-black border-2 rounded-md text-center drop-shadow-md cursor-pointer font-bold
-          "
+            className="py-2 w-35 px-4 mr-2 bg-white hover:bg-black hover:text-white border-black text-black border-3 rounded-md text-center drop-shadow-md cursor-pointer"
           >LOGIN
           </NavLink>
 
@@ -210,17 +220,20 @@ export default function Register(){
       
 
       {/* //right side  */}
-      <div className="flex-[1.5] flex flex-col justify-center relative p-8 bg-white overflow-hidden">
+      <div className="flex-1 flex flex-col justify-center relative p-8 bg-white overflow-hidden">
         <img
                 src={ladypaints}
                 alt="lady paints"
-                className="absolute bottom-0 right-0 w-[800px] h-auto max-w-none"
+                className="absolute bottom-0 right-0 w-[780px] h-auto max-w-none"
               />
               </div>
 
  
         </div>
         
-
+)
+      }
+      </>
     );
+    
 }

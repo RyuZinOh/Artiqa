@@ -14,7 +14,8 @@ def approve_role_change(request_id: int, payload: dict, db:Session)->dict:
 
     if not admin_user or admin_user.role_id != ROLENAMETOID[RoleFixed.superuser]:
         raise HTTPException(status_code=403,detail="Only Admin can Approve!")
-
+    
+    # instead of  the rolerequest table id, we will be using the user id for more stable connection to users
     role_req = db.query(RoleRequest).filter(RoleRequest.user_id == request_id).first()
 
 
@@ -39,10 +40,7 @@ def approve_role_change(request_id: int, payload: dict, db:Session)->dict:
 
     return{
             "message": f"{user.username} has been  upgraded to {role_req.requested_role}"
-
-
-
-            }
+    }
 
 
 
