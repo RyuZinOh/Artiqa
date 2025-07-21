@@ -4,6 +4,7 @@ import PageNotFound from "./pages/404";
 import Login from "./gateway/login";
 import Register from "./gateway/register";
 import ForgetPass from "./gateway/forgetpass";
+import Weekly from "./pages/weekly";
 
 function App() {
   return (
@@ -14,6 +15,8 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/forgetpassword" element={<ForgetPass/>}/>
+        <Route path="/weekly" element={<Weekly/>}/>
+        
         
         <Route path="*" element={<PageNotFound/>}/>
 
