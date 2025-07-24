@@ -1,5 +1,5 @@
 import Layout from "../components/layouts/layout";
-import { CrownSimpleIcon} from "@phosphor-icons/react";
+import { CrownSimpleIcon } from "@phosphor-icons/react";
 
 // ##dummy data
 const leaderboardData = [
@@ -113,16 +113,15 @@ const leaderboardData = [
 export default function Weekly() {
   return (
     <Layout>
-      <div className="overflox-x-auto p-4">
-        <table className="min-w-full rounded-xl shadow-md overflow-hidden border border-gray-200">
+      <div className="overflox-x-auto">
+        <table className="min-w-full rounded-xl shadow-md overflow-hidden border border-gray-200 px-0">
           <thead className="bg-[var(--primary)] text-2xl uppercase">
             <tr>
-              <th className="px-7 py-3 text-left text-2xl">
-#              </th>
-              <th className="py-3 text-left">Artist</th>
+              <th className="px-3 py-3 text-left"># </th>
+              <th className="px-4 py-3 text-left">Artist</th>
               <th className="px-6 py-3 text-left">Art</th>
-              <th className="px-6 py-3 text-left">Votes</th>
-              <th className="px-6 py-3 text-left">Created At</th>
+              <th className="px-4 py-3 text-right">Votes</th>
+              <th className="px-4 py-3 pr-5 text-right">Date</th>
             </tr>
           </thead>
 
@@ -136,7 +135,7 @@ export default function Weekly() {
                 }
                 `}
               >
-                <td className="px-6 py-3">
+                <td className="px-3 py-3">
                   <div className="flex justify-start">
                     {entry.rank === 1 ? (
                       <CrownSimpleIcon
@@ -149,10 +148,10 @@ export default function Weekly() {
                     )}
                   </div>
                 </td>
-                <td className="py-3">{entry.artist}</td>
-                <td className="px-6 py-3">{entry.art}</td>
-                <td className="px-6 py-3">{entry.votes}</td>
-                <td className="px-6 py-3">{entry.createdAt}</td>
+                <td className="py-4 px-4">{entry.artist}</td>
+                <td className="px-6 py-3 text-left">{entry.art}</td>
+                <td className="px-4 py-3 text-right">{entry.votes}</td>
+                <td className="px-4 py-3 text-right pr-5">{entry.createdAt}</td>
               </tr>
             ))}
           </tbody>
