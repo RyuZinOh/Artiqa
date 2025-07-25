@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { themes } from ".";
 
 // default theme
-const defaultTheme = themes.limeState;
+const defaultTheme = themes.icyMint;
 
 function updateFavicon(letter) {
   const root = document.documentElement;
