@@ -15,7 +15,7 @@ export default function PageNotFound(){
      <NavLink
             to="/"
             className="py-4 px-4  z-30
-          border-2 border-black rounded-md bg-black text-white font-bold cursor-pointer w-[150px]  text-center
+          border-3 border-black rounded-md bg-black text-white font-bold cursor-pointer w-[150px]  text-center
           hover:bg-white hover:text-black transition duration-300
           "
           >

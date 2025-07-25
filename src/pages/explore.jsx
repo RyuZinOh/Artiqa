@@ -1,9 +1,8 @@
-import { HeartIcon } from "@phosphor-icons/react";
+import { ChatCircleTextIcon, HeartIcon } from "@phosphor-icons/react";
 import Layout from "../components/layouts/layout";
 
 export default function Explore() {
-
-  // dummy data cause frontend skeelton creation only for now for frontend defene thing, else we will be hosting images and media for users with nginx server 
+  // dummy data cause frontend skeelton creation only for now for frontend defene thing, else we will be hosting images and media for users with nginx server
   const images = [
     "https://i.pinimg.com/736x/24/26/ed/2426edc8a18359d9cb5392b1b3f2fb0e.jpg",
     "https://i.pinimg.com/736x/9e/92/0f/9e920fb9240464eb2cfcba5cc282632c.jpg",
@@ -15,9 +14,10 @@ export default function Explore() {
     "https://i.pinimg.com/1200x/0e/f6/7c/0ef67c9921106b902652377541a4cffc.jpg",
     "https://i.pinimg.com/736x/e2/13/ce/e213cef5c988581a5ed9968bc4ae76da.jpg",
     "https://i.pinimg.com/736x/61/63/82/616382e7948349fdf2d9bfbbd2869b5f.jpg",
-    "https://i.pinimg.com/736x/41/13/4f/41134f7ae32824ccfdf8fd7fd7cc2333.jpg"
+    "https://i.pinimg.com/736x/41/13/4f/41134f7ae32824ccfdf8fd7fd7cc2333.jpg",
+    "https://i.pinimg.com/736x/b3/0f/70/b30f707fd5a511e9b3e893911b50367f.jpg",
+    "https://i.pinimg.com/1200x/85/21/36/8521366c7a30a541c80c4f0e595d8e53.jpg",
   ];
-
 
   const users = [
     "safal726",
@@ -31,46 +31,54 @@ export default function Explore() {
     "safal726",
     "batista123",
     "laxmanrwat",
-];
-const hearts = [12,6,12,34,12,6,12,34,12,6,12];
+    "laxmanrwat",
+    "batista123",
+  ];
+  const hearts = [12, 6, 12, 50, 34, 12, 6, 12, 34, 12, 6, 12, 10];
+  const comments = [12, 6, 60, 12, 340, 12, 60, 102, 340, 120, 60, 12, 5];
 
-return (
+  return (
     <Layout>
       <div className="columns-[375px] gap-1 max-w-[1374px] mx-auto  box-border">
         {images.map((src, index) => (
-      <div
-      key={index} 
-      className="relative mb-1 border-3 border-black group">
-
-      <img
+          <div
             key={index}
-            src={src}
-            alt={`Image ${index + 1}`}
-            className="w-full"
-            loading="lazy"
-          />
+            className="relative mb-1 border-3 border-black group
+            overflow-hidden "
+          >
+            <img
+              key={index}
+              src={src}
+              alt={`Image ${index + 1}`}
+              className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+              loading="lazy"
+            />
 
-          
-          <div className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-black/80 to-transparent  flex items-end justify-between px-3 
+            <div
+              className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-black/80 to-transparent  flex items-end justify-between px-3 
           pb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150 
           cursor-pointer
           
-          select-none" >
+          select-none"
+            >
+              <span className="text-white text-sm">{users[index]}</span>
 
-            <span className="text-white text-sm">
-              {users[index]}
-            </span>
-            <span className="flex items-center text-white text-sm">
-              <HeartIcon size={20} weight="regular" className="mr-1"/>
-              {hearts[index]}
-            </span>
-
-        
-          
-          </div> 
-      </div>
-
-
+              <div className="flex items-center text-white text-sm space-x-2">
+                <span className="flex items-center">
+                  <HeartIcon size={20} weight="regular" className="mr-1" />
+                  {hearts[index]}
+                </span>
+                <span className="flex items-center">
+                  <ChatCircleTextIcon
+                    size={20}
+                    weight="regular"
+                    className="mr-1"
+                  />
+                  {comments[index]}
+                </span>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
     </Layout>

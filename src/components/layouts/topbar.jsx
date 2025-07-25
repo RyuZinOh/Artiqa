@@ -16,7 +16,7 @@ const label = location.pathname === "/" ? "Explore": location.pathname.slice(1);
                      <NavLink
             to="/login"
             className="
-          border border-black rounded-md bg-[var(--primary)] font-bold cursor-pointer w-[100px]  text-center
+          border-3 border-black rounded-md bg-[var(--primary)] font-bold cursor-pointer w-[100px]  text-center
            hover:bg-black hover:text-white 
           "
           >
