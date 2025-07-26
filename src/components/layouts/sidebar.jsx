@@ -1,7 +1,6 @@
 import { NavLink } from "react-router-dom";
 import {
   ArrowLeftIcon,
-  ChatTeardropDotsIcon,
   ChatTeardropTextIcon,
   CompassIcon,
   HeartIcon,
