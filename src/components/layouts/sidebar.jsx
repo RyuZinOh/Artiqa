@@ -5,10 +5,14 @@ import {
   CompassIcon,
   HeartIcon,
   MagnifyingGlassIcon,
+  PaintBrushIcon,
+  PresentationIcon,
   RankingIcon,
+  UserIcon,
+  UsersThreeIcon,
 } from "@phosphor-icons/react";
 import { CalendarCheckIcon } from "@phosphor-icons/react/dist/ssr";
-
+import mockUser from "../../dummy/user.json";
 export default function SideBar() {
   const navLinks = [
     { name: "Explore", to: "/", icon: <CompassIcon size={32} /> },
@@ -21,6 +25,26 @@ export default function SideBar() {
     },
     { name: "Weekly", to: "/weekly", icon: <CalendarCheckIcon size={32} /> },
   ];
+
+  const Artistry = [
+    {
+      name: "Management",
+      to: "/management",
+      icon: <PaintBrushIcon size={32} />,
+    },
+    {
+      name: "Statistics",
+      to: "/statistics",
+      icon: <PresentationIcon size={32} />,
+    },
+    { name: "Portfolio", to: "/potfolio", icon: <UserIcon size={32} /> },
+    {
+      name: "Collaboration",
+      to: "/collaboration",
+      icon: <UsersThreeIcon size={32} />,
+    },
+  ];
+
   return (
     <aside className="w-1/5 bg-[var(--primary)] text-black p-4 flex flex-col border-r-3 border-black">
       <h2 className="text-5xl font-bold mb-4 drop-shadow-md ">ARITQA</h2>
@@ -64,14 +88,35 @@ export default function SideBar() {
       </nav>
 
       {/* //this one is accessble after becoming artist request is approved but as this frontend defense first so we arent integrating backend for those logics */}
-
-      <h3 className="mt-6 font-bold text-lg">Artistry</h3>
-      <ul className="space-y-1 mt-2">
-        <li>Management</li>
-        <li>Statistics</li>
-        <li>Portfolio</li>
-        <li>Collaboration</li>
-      </ul>
+      {mockUser.role === "artist" && (
+        <>
+          <h3 className="mt-40 font-bold text-lg">Artistry</h3>
+          <nav className="space-y-2 mt-1">
+            {Artistry.map((link) => (
+              <NavLink key={link.name} to={link.to}>
+                {({ isActive }) => (
+                  <div
+                    className={`flex gap-x-2  text-2xl items-center group
+                    ${isActive ? "font-semibold" : "hover:font-semibold"}
+                    `}
+                  >
+                    <span className="text-black">{link.icon}</span>
+                    <span>{link.name}</span>
+                    <ArrowLeftIcon
+                      size={32}
+                      className={`transition-opacity duration-150
+                ${
+                  isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                }
+                `}
+                    />
+                  </div>
+                )}
+              </NavLink>
+            ))}
+          </nav>
+        </>
+      )}
     </aside>
   );
 }

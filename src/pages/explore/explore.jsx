@@ -1,7 +1,7 @@
 import { ChatCircleTextIcon, HeartIcon } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 import Layout from "../../components/layouts/layout";
-import posts from "../../../public/dummy/posts.json";
+import posts from "../../dummy/posts.json";
 
 function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, "-");

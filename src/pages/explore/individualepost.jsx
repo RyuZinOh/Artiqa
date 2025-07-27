@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
-import posts from "../../../public/dummy/posts.json";
+import posts from "../../dummy/posts.json";
 import Layout from "../../components/layouts/layout";
 import { HeartIcon, PaperPlaneRightIcon } from "@phosphor-icons/react";
 import { ChatTeardropTextIcon } from "@phosphor-icons/react/dist/ssr";
+import weekly from "/assets/mascot_emotes/artcomptweekly.png"
 
 function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -15,7 +16,7 @@ export default function IndividualePost() {
 
   return (
     <Layout>
-      <div className="flex flex-col md:flex-row gap-4 p-4">
+      <div className="flex flex-col md:flex-row gap-4 ">
         {/* critiques  */}
         <div className="md:w-1/2 border-black border-3 p-4">
           <div className="flex items-center space-x-2 mb-2">
@@ -56,7 +57,7 @@ export default function IndividualePost() {
         <div className="relative md:w-1/2">
           {post.isCompeting && (
             <img
-              src="/public/assets/mascot_emotes/artcomptweekly.png"
+              src={weekly}
               alt="competing this week"
               className="absolute  w-24 h-24 z-10"
             />
