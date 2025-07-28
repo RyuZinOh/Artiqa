@@ -1,7 +1,30 @@
 import Layout from "../../../components/layouts/layout";
 import mockUser from "../../../dummy/user.json";
+import ReactCalendarHeatmap from "react-calendar-heatmap";
 
 export default function Statistics() {
+  const today  = new Date();
+  const oneYearAgo = new Date(today);
+  oneYearAgo.setFullYear(today.getFullYear()-1);
+
+  const generateHeatmapData = () =>{
+    const data = [];
+    const today = new Date;
+    const streakStart = new Date(today);
+
+    streakStart.setDate(today.getDate()- mockUser.current_streak+1);
+
+    for (let d = new Date(streakStart); d<= today; d.setDate(d.getDate()+1)){
+      data.push({
+        date: new Date(d).toISOString().split("T")[0],
+        count: 1,
+      })
+    }
+    return data;
+  }
+
+  const heatmapData = generateHeatmapData();
+
   return (
     <Layout>
       <div className="border-3 border-black shadow-sm flex justify-between items-stretch min-h-[150px] relative">
@@ -79,6 +102,57 @@ export default function Statistics() {
           <span className="ml-1 font-normal text-2xl">653TH</span>
         </span>
       </div>
+
+
+
+      {/* //streak heapmap  */}
+      <div className="border-3 border-black shadow-sm mt-5 p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <span className="text-sm font-medium">Last 12 Months</span>
+          </div>
+        </div>
+        <div className="heatmap-container">
+          <ReactCalendarHeatmap
+          startDate={oneYearAgo}
+          endDate={today}
+          values={heatmapData}
+          classForValue={
+            (value)=> value? "c-fill": "c-empty"
+          }
+          tooltipDataAttrs={(value)=>
+            value?.date
+            ? {"dt":`${value.date}: ${value.count} tests` }
+            :null
+          }
+          showWeekdayLabels={true}
+          weekdayLabels={["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]}
+          monthLabels={["Jan","Feb","Mar", "Apr", "May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"]}
+          />
+        </div>
+      </div>
+
+      <style jsx global>{`
+        .react-calendar-heatmap .c-empty {
+          fill: #ebedf0;
+        }
+        .react-calendar-heatmap .c-fill {
+          fill: var(--primary);
+        }
+        .react-calendar-heatmap rect {
+          rx: 3;
+          ry: 3;
+        }
+        .react-calendar-heatmap rect:hover {
+          stroke: #000;
+          stroke-width: 1px;
+        }
+        .react-calendar-heatmap text {
+          font-size: 6px;
+          fill: #767676;
+        }
+      `}</style>
+
     </Layout>
   );
 }

@@ -11,7 +11,7 @@
   "role": "artist",
 "total_arts": 250,
 "total_wins": 6,
-"current_streak": 10,
+"current_streak": 200,
 "level": 25,
 "progress":0.77,
 "recent_victories":[
@@ -20,6 +20,7 @@
   "Blood soul",
   "Demons under my hood",
   "Dragon curling through the depths of sky"
-]
+],
+"is_login": true
 
 }
