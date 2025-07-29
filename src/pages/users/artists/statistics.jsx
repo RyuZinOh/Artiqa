@@ -6,6 +6,7 @@ import { useRef, useEffect } from "react";
 import stats from "../../../dummy/stats.json";
 import statsr from "../../../dummy/radar.json";
 import { useTheme } from "../../../theme/useTheme";
+import { getFullUrl } from "../../../utils/urlHelpers";
 
 export default function Statistics() {
   const {theme} = useTheme();
@@ -109,7 +110,7 @@ export default function Statistics() {
         {/* profile  */}
         <div className="flex items-center px-2 space-x-4 w-[30%]">
           <img
-            src={mockUser.profile_picture}
+            src={getFullUrl(mockUser.profile_picture)}
             alt={mockUser.username}
             className="w-20 h-20 rounded-full object-cover border-3 border-black drop-shadow-md"
           />

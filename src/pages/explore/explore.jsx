@@ -2,6 +2,7 @@ import { ChatCircleTextIcon, HeartIcon } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 import Layout from "../../components/layouts/layout";
 import posts from "../../dummy/posts.json";
+import { getFullUrl } from "../../utils/urlHelpers";
 
 function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -18,7 +19,7 @@ export default function Explore() {
             overflow-hidden block"
           >
             <img
-              src={post.image}
+              src={getFullUrl(post.image)}
               alt={`Image ${index + 1}`}
               className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
               loading="lazy"

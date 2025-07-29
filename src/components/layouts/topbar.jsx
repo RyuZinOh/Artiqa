@@ -1,6 +1,7 @@
 import { BellIcon, FunnelIcon} from "@phosphor-icons/react";
 import { NavLink, useLocation } from "react-router-dom";
 import theuser from "../../dummy/user.json";
+import { getFullUrl } from "../../utils/urlHelpers";
 
 export default function TopBar() {
   const location = useLocation();
@@ -17,7 +18,7 @@ export default function TopBar() {
           <>
             <BellIcon size={24} />
             <img
-              src={theuser.profile_picture}
+              src={getFullUrl(theuser.profile_picture)}
               alt={theuser.full_name}
               className="w-7 h-7 rounded-full object-cover cursor-pointer drop-shadow-md"
             />

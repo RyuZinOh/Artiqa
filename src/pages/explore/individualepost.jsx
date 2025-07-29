@@ -4,6 +4,7 @@ import Layout from "../../components/layouts/layout";
 import { HeartIcon, PaperPlaneRightIcon } from "@phosphor-icons/react";
 import { ChatTeardropTextIcon } from "@phosphor-icons/react/dist/ssr";
 import weekly from "/assets/mascot_emotes/artcomptweekly.png"
+import { getFullUrl } from "../../utils/urlHelpers";
 
 function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -12,6 +13,7 @@ function slugify(text) {
 export default function IndividualePost() {
   const { slug } = useParams();
   const post = posts.find((postItem) => slugify(postItem.title) === slug);
+
 
   return (
     <Layout>
@@ -27,7 +29,7 @@ export default function IndividualePost() {
               <div key={i} className="bg-[var(--primary)] p-2 border-3 border-black">
                 <div className="flex items-center space-x-2 ">
                   <img
-                    src={c.userpfp}
+                    src={getFullUrl(c.userpfp)}
                     alt="pfp"
                     className="w-6 h-6 border border-black rounded-2xl"
                   />
@@ -62,7 +64,7 @@ export default function IndividualePost() {
             />
           )}
           <img
-            src={post.image}
+            src={getFullUrl(post.image)}
             alt={post.description}
             className="w-full object-cover border-3 border-black"
             loading="lazy"
@@ -72,7 +74,7 @@ export default function IndividualePost() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <img
-                  src={post.artistpfp}
+                  src={getFullUrl(post.artistpfp)}
                   alt="user pfp"
                   className="w-8 h-8 rounded-2xl"
                   loading="lazy"
