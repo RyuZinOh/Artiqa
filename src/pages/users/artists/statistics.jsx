@@ -1,15 +1,22 @@
 import Layout from "../../../components/layouts/layout";
 import mockUser from "../../../dummy/user.json";
 import ReactCalendarHeatmap from "react-calendar-heatmap";
+import { Chart } from "chart.js/auto";
+import { useRef, useEffect } from "react";
+import stats from "../../../dummy/stats.json";
+import statsr from "../../../dummy/radar.json";
+import { useTheme } from "../../../theme/useTheme";
 
 export default function Statistics() {
+  const {theme} = useTheme();
+
   const today  = new Date();
   const oneYearAgo = new Date(today);
   oneYearAgo.setFullYear(today.getFullYear()-1);
 
   const generateHeatmapData = () =>{
     const data = [];
-    const today = new Date;
+    const today = new Date();
     const streakStart = new Date(today);
 
     streakStart.setDate(today.getDate()- mockUser.current_streak+1);
@@ -24,6 +31,77 @@ export default function Statistics() {
   }
 
   const heatmapData = generateHeatmapData();
+
+
+  //for stats
+  const barRef = useRef(null);
+  useEffect(()=>{
+    const ctx = barRef.current.getContext("2d");
+    
+    if(Chart.getChart(ctx)){
+      Chart.getChart(ctx).destroy();
+    }
+
+
+
+    const data= {
+      labels: stats.monthly_likes.labels,
+      datasets:[{
+        label: "Monthly Likes",
+        data: stats.monthly_likes.data,
+      backgroundColor:  theme["--primary"],
+        borderColor: "black",
+        borderWidth: 3,
+      },
+      ],
+    };
+    new Chart(ctx,{
+      type: "bar",data,
+      options:{
+        responsive: true,
+        scales:{
+          y:{
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  },[theme]);
+
+
+  //radar
+  const radarRef = useRef(null);
+  useEffect(()=>{
+    const ctx = radarRef.current.getContext('2d');
+
+
+
+    if (Chart.getChart(ctx)){
+      Chart.getChart(ctx).destroy();
+    }
+
+    const data = {
+      ...statsr,
+      datasets: statsr.datasets.map(ds=>({
+        ...ds,
+      backgroundColor:  theme["--primary"],
+        borderColor: "black",
+
+      })),
+    };
+
+    new Chart(ctx,{
+      type:"radar", data,
+      options:{
+        elements:{
+          line:{
+            borderWidth: 3,
+          },
+        },
+        responsive: true
+      },
+    });    
+  }, [theme])
 
   return (
     <Layout>
@@ -135,23 +213,42 @@ export default function Statistics() {
       <style jsx global>{`
         .react-calendar-heatmap .c-empty {
           fill: #ebedf0;
+          stroke: black;
+          stroke-width: 1px;
         }
         .react-calendar-heatmap .c-fill {
           fill: var(--primary);
+          stroke: black;
+          stroke-width: 1px;
         }
         .react-calendar-heatmap rect {
-          rx: 3;
-          ry: 3;
-        }
-        .react-calendar-heatmap rect:hover {
-          stroke: #000;
-          stroke-width: 1px;
+          rx: 2;
+          ry: 2;
         }
         .react-calendar-heatmap text {
           font-size: 6px;
-          fill: #767676;
+          fill: black;
         }
       `}</style>
+
+<div className="flex space-x-6 mt-6 mx-auto w-full">
+    {/* //stats  ->likes on months*/}
+      <div className="w-1/2  border-3 border-black p-6 rounded-lg
+      h-[400px] flex items-center justify-center">
+        <canvas ref={barRef}  className="max-w-full max-h-full"></canvas>
+      </div>
+
+      {/* his ilndividual stats  */}
+      <div className="w-1/2  border-3 border-black p-6 rounded-lg
+      h-[400px] flex items-center justify-center">
+        <canvas ref={radarRef} className="max-w-full max-h-full"></canvas>
+      </div>
+
+      
+
+</div>
+  
+
 
     </Layout>
   );

@@ -11,22 +11,21 @@ function slugify(text) {
 
 export default function IndividualePost() {
   const { slug } = useParams();
-
   const post = posts.find((postItem) => slugify(postItem.title) === slug);
 
   return (
     <Layout>
       <div className="flex flex-col md:flex-row gap-4 ">
         {/* critiques  */}
-        <div className="md:w-1/2 border-black border-3 p-4">
+        <div className="md:w-1/2 border-black border-3 p-4 flex flex-col h-225">
           <div className="flex items-center space-x-2 mb-2">
             <ChatTeardropTextIcon size={24} weight="bold" />
             <span className="text-lg font-black">{post.critiques.length}</span>
           </div>
-          <ul className="space-y-2 border-3 border-black p-2">
+          <div className="flex-1 overflow-y-auto border-3 border-black p-2 space-y-2">
             {post.critiques.map((c, i) => (
-              <li key={i} className="bg-[var(--primary)] p-2">
-                <div className="flex items-center space-x-2">
+              <div key={i} className="bg-[var(--primary)] p-2 border-3 border-black">
+                <div className="flex items-center space-x-2 ">
                   <img
                     src={c.userpfp}
                     alt="pfp"
@@ -34,13 +33,13 @@ export default function IndividualePost() {
                   />
                   <span>{c.user}</span>
                   <span className="inline-block h-4 border-l"></span>
-                  <span className="text-sm">{c.text}</span>
+                  <span className="text-sm ">{c.text}</span>
                 </div>
-              </li>
+              </div>
             ))}
-          </ul>
-
-          <div className="relative w-full mt-2">
+          </div>
+          
+          <div className="relative h-28 mt-2 mb-2">
             <textarea
               className="resize-none w-full border-3 p-2 border-black mt-2"
               placeholder="Add your critique..."

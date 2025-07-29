@@ -1,0 +1,9 @@
+{
+  "labels": ["Style", "Passion", "Consistency", "Artistic Spirit", "Creativity"],
+  "datasets": [
+    {
+      "label": "User Stats",
+      "data": [80, 90, 75, 85, 95]
+    }
+  ]
+}

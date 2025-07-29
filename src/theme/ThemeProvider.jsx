@@ -1,8 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { themes } from ".";
-
-// default theme
-const defaultTheme = themes.icyMint;
+import { ThemeContext } from "./Themecontext";
 
 function updateFavicon(letter) {
   const root = document.documentElement;
@@ -28,14 +26,20 @@ const svg = `
 }
 
 export const ThemeProvider = ({ children }) => {
-  useEffect(() => {
-    const root = document.documentElement;
+  const [theme, setTheme] = useState(themes.sunsetGlow);
 
-    for (const [key, value] of Object.entries(defaultTheme)) {
+    useEffect(()=>{
+    const root = document.documentElement;
+    for (const [key, value] of Object.entries(theme)) {
       root.style.setProperty(key, value);
     }
     updateFavicon("A");
-  }, []);
+  }, [theme]);
 
-  return children;
+    return (
+      <ThemeContext.Provider value={{theme, setTheme}}>
+        {children}
+      </ThemeContext.Provider>
+    );
 };
+
