@@ -6,7 +6,7 @@
                 index index.html;
                 autoindex on;
                 add_header Access-Control-Allow-Origin *;
-                add_header Access-Control-Allow-Methods 'GET, P>
+                add_header Access-Control-Allow-Methods 'GET, POST, OPTION';
                 add_header Access-Control-Allow-Headers '*';
         }
         location /upload{
