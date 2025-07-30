@@ -7,6 +7,7 @@ import Weekly from "./pages/weekly";
 import Explore from "./pages/explore/explore";
 import IndividualePost from "./pages/explore/individualepost";
 import Statistics from "./pages/users/artists/statistics";
+import Portfolio from "./pages/users/artists/portfolio";
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
 //this will have logic under certain criteria and auth but for now this is just it is what it is as frontend only defnese  */}
 
       <Route path="/statistics" element={<Statistics />} />
-
+      <Route path="/portfolio" element={<Portfolio />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

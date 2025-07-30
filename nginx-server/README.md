@@ -26,3 +26,11 @@
 3. now use the location port 8080 on .env of frontend for your dummy tests  to server file via nginx!
 
 
+
+
+```
+NOTE : Add the Background in jpg format of resolution 1440*552 px, and cards in jpg format and resolution can be updated via specific frame range just covering it but bg are quite compoex so it has to be static frame size.
+both the card and bg see its corresponding number and update the incremental with care
+```
+
+

@@ -9,6 +9,7 @@
   "email": "serena@safallama.com.np",
   "joined_date": "2025-07-25",
   "role": "artist",
+  "speciality": "manga",
 "total_arts": 250,
 "total_wins": 6,
 "current_streak": 200,
@@ -21,6 +22,13 @@
   "Demons under my hood",
   "Dragon curling through the depths of sky"
 ],
-"is_login": true
+"is_login": true,
+"selected_bg": "/Assets/Backgrounds/1.jpg",
+"selected_card":"/Assets/Cards/3.jpg",
+"badges":[
+  "/Assets/Badges/pixel_picasso.png",
+  "/Assets/Badges/too_deep_for_this_platform.png",
+  "/Assets/Badges/sketch_gremlin.png"  
+]
 
 }

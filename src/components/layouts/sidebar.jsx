@@ -37,7 +37,7 @@ export default function SideBar() {
       to: "/statistics",
       icon: <PresentationIcon size={32} />,
     },
-    { name: "Portfolio", to: "/potfolio", icon: <UserIcon size={32} /> },
+    { name: "Portfolio", to: "/portfolio", icon: <UserIcon size={32} /> },
     {
       name: "Collaboration",
       to: "/collaboration",
