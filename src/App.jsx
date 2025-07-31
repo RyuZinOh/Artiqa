@@ -8,6 +8,7 @@ import Explore from "./pages/explore/explore";
 import IndividualePost from "./pages/explore/individualepost";
 import Statistics from "./pages/users/artists/statistics";
 import Portfolio from "./pages/users/artists/portfolio";
+import Collaboration from "./pages/users/artists/collaboration";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
 
       <Route path="/statistics" element={<Statistics />} />
       <Route path="/portfolio" element={<Portfolio />} />
+      <Route path="/collaboration" element={<Collaboration />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

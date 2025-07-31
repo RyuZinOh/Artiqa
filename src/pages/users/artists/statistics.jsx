@@ -244,13 +244,8 @@ export default function Statistics() {
       h-[400px] flex items-center justify-center">
         <canvas ref={radarRef} className="max-w-full max-h-full"></canvas>
       </div>
-
-      
-
 </div>
-  
 
-
-    </Layout>
+  </Layout>
   );
 }
