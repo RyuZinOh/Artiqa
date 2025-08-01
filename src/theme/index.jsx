@@ -39,4 +39,16 @@ export const themes = {
     "--secondary": "#f7d6d0",
     "--tertiary": "#6b2737",
   },
+  twilightDusk: {
+  "--primary": "#5D5FEF",    
+  "--secondary": "#F5EFFF", 
+  "--tertiary": "#2E1A47",    
+},
+crimsonInk: {
+  "--primary": "#E53935",
+  "--secondary": "#FFEBEE",  
+  "--tertiary": "#1B1B1B",   
+},
+
+
 };

@@ -19,5 +19,48 @@
         "text": "smash"
       }
     ]
+  },
+  {
+    "image": "/Arts/Safal/creations/goku.jpg",
+    "artist": "safal726",
+    "artistpfp": "/Arts/Safal/safal.png",
+    "title": "Kakarot",
+    "description": "The goku, Through the heaven and earths he alone is the honored one!",
+    "isCompeting": false,
+    "hearts": 120,
+    "critiques": [
+      {
+        "userpfp":"/Arts/Bibek/bibek.jpg",
+        "user": "bibekkafle",
+        "text": "Dman he is tuff"
+      },
+      {
+        "userpfp":"/Arts/Laxman/laxman.jpg",
+        "user": "laxman",
+        "text": "kamehamehaa................"
+      }
+    ]
+  },
+  {
+    "image": "/Arts/Safal/creations/renpoche.jpg",
+    "artist": "safal726",
+    "artistpfp": "/Arts/Safal/safal.png",
+    "title": "Renpoche",
+    "description": "Padmashambhav",
+    "isCompeting":false,
+    "hearts": 40,
+    "critiques": [
+      {
+        "userpfp":"/Arts/Bibek/bibek.jpg",
+        "user": "bibekkafle",
+        "text": "very aesthetic"
+      },
+      {
+        "userpfp":"/Arts/Laxman/laxman.jpg",
+        "user": "laxman",
+        "text": "interesting art, What is this about?"
+      }
+    ]
   }
+
 ]

@@ -26,7 +26,7 @@ const svg = `
 }
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(themes.sunsetGlow);
+  const [theme, setTheme] = useState(themes.desertSand);
 
     useEffect(()=>{
     const root = document.documentElement;
