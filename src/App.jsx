@@ -10,6 +10,7 @@ import Statistics from "./pages/users/artists/statistics";
 import Portfolio from "./pages/users/artists/portfolio";
 import Collaboration from "./pages/users/artists/collaboration";
 import UserDashboard from "./pages/users/artists/userdashboard";
+import Settings from "./pages/settings";
 
 function App() {
   return (
@@ -20,6 +21,8 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/forgetpassword" element={<ForgetPass />} />
       <Route path="/weekly" element={<Weekly />} />
+      <Route path="/settings" element={<Settings/>} />
+
 
       {/* 
 //this will have logic under certain criteria and auth but for now this is just it is what it is as frontend only defnese  */}
