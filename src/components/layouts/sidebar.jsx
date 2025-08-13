@@ -46,15 +46,15 @@ export default function SideBar() {
   ];
 
   return (
-    <aside className="w-1/5 bg-[var(--primary)] text-black p-4 flex flex-col border-r-3 border-black">
-      <h2 className="text-5xl font-bold mb-4 drop-shadow-md ">ARITQA</h2>
+    <aside className="w-1/5 bg-[var(--sbgc)] text-[var(--border)] p-4 flex flex-col border-r-3">
+      <h2 className="text-5xl font-bold mb-4 drop-shadow-md  text-[var(--color)]">ARITQA</h2>
 
       {/* searchbar */}
       <div className="relative mb-4">
         <input
           type="search"
           placeholder="Search..."
-          className="w-full p-3 pr-10 rounded-full border-3 bg-white border-black drop-shadow-md  transition duration-200 focus:outline-none focus:ring-2 focus:ring-black"
+          className="w-full p-3 pr-10 rounded-full border-3 text-[var(--color)] border-[var(--border)] drop-shadow-md  transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)] "
         />
         <MagnifyingGlassIcon
           size={28}
@@ -67,11 +67,11 @@ export default function SideBar() {
           <NavLink key={link.name} to={link.to}>
             {({ isActive }) => (
               <div
-                className={`flex gap-x-2  text-2xl items-center group
+                className={`flex gap-x-2 text-[var(--color)] text-2xl items-center group
                     ${isActive ? "font-semibold" : "hover:font-semibold"}
                     `}
               >
-                <span className="text-black">{link.icon}</span>
+                <span >{link.icon}</span>
                 <span>{link.name}</span>
                 <ArrowLeftIcon
                   size={32}
@@ -90,17 +90,17 @@ export default function SideBar() {
       {/* //this one is accessble after becoming artist request is approved but as this frontend defense first so we arent integrating backend for those logics */}
       {mockUser.role === "artist" && (
         <>
-          <h3 className="mt-40 font-bold text-lg">Artistry</h3>
+          <h3 className="mt-40 font-bold text-lg text-[var(--color)]">Artistry</h3>
           <nav className="space-y-2 mt-1">
             {Artistry.map((link) => (
               <NavLink key={link.name} to={link.to}>
                 {({ isActive }) => (
                   <div
-                    className={`flex gap-x-2  text-2xl items-center group
+                    className={`flex gap-x-2 text-[var(--color)] text-2xl items-center group
                     ${isActive ? "font-semibold" : "hover:font-semibold"}
                     `}
                   >
-                    <span className="text-black">{link.icon}</span>
+                    <span>{link.icon}</span>
                     <span>{link.name}</span>
                     <ArrowLeftIcon
                       size={32}

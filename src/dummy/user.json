@@ -39,29 +39,66 @@
     "visibility": "public",
     "description": "goku is the best, no one can beat beat him, he negs the any verse u speak of.",
     "hearts":100,
-    "critiques": 2,
-    "image_url": "/Arts/Safal/creations/goku.jpg" 
+    "critiques": [
+      {
+        "userpfp":"/Arts/Bibek/bibek.jpg",
+        "user": "bibekkafle",
+        "text": "Dman he is tuff"
+      },
+      {
+        "userpfp":"/Arts/Laxman/laxman.jpg",
+        "user": "laxman",
+        "text": "kamehamehaa................"
+      }
+    ],
+    "image_url": "/Arts/Safal/creations/goku.jpg",
+    "isCompeting": true
   },
   {
     "image_id": 2,
-    "image_name": "Datura Bites",
-    "upload_date": "2025-01-08",
+    "image_name": "daturaBites",
+    "upload_date": "2024-01-08",
     "status": "published",
     "visibility": "public",
-    "description": "A beautiful breedable woman...",
-    "hearts": 12,
-    "critiques": 2,
-    "image_url": "/Arts/Safal/creations/datura.jpg"
-  },{
+    "description": "A beautiful Breedable Woman.",
+    "hearts":6900,
+    "critiques": [
+      {
+        "userpfp":"/Arts/Bibek/bibek.jpg",
+        "user": "bibekkafle",
+        "text": "smash.."
+      },
+      {
+        "userpfp":"/Arts/Laxman/laxman.jpg",
+        "user": "laxman",
+        "text": "time to get freaky.... :D"
+      }
+    ],
+    "image_url": "/Arts/Safal/creations/datura.jpg",
+    "isCompeting": false
+  },
+  {
     "image_id": 3,
     "image_name": "Renpoche",
-    "upload_date": "2025-01-08",
-    "status": "draft",
-    "visibility": "unknown",
-    "description": "Padmashambav",
-    "hearts": 40,
-    "critiques": 2,
-    "image_url": "/Arts/Safal/creations/datura.jpg"
+    "upload_date": "2024-01-08",
+    "status": "published",
+    "visibility": "public",
+    "description": "Padmashambhav",
+    "hearts":600,
+    "critiques": [
+      {
+        "userpfp":"/Arts/Bibek/bibek.jpg",
+        "user": "bibekkafle",
+        "text": "nice.."
+      },
+      {
+        "userpfp":"/Arts/Laxman/laxman.jpg",
+        "user": "laxman",
+        "text": "looks interesting concept"
+      }
+    ],
+    "image_url": "/Arts/Safal/creations/renpoche.jpg",
+    "isCompeting": false
   }
 ]
 }

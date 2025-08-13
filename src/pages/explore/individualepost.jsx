@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
-import posts from "../../dummy/posts.json";
 import Layout from "../../components/layouts/layout";
 import { HeartIcon, PaperPlaneRightIcon } from "@phosphor-icons/react";
 import { ChatTeardropTextIcon } from "@phosphor-icons/react/dist/ssr";
 import weekly from "/assets/mascot_emotes/artcomptweekly.png"
 import { getFullUrl } from "../../utils/urlHelpers";
+import arts from "../../dummy/user.json";
 
 function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -12,26 +12,26 @@ function slugify(text) {
 
 export default function IndividualePost() {
   const { slug } = useParams();
-  const post = posts.find((postItem) => slugify(postItem.title) === slug);
+  const post = arts.overall_posts.find((p) => slugify(p.image_name) === slug);
 
 
   return (
     <Layout>
       <div className="flex flex-col md:flex-row gap-4 ">
         {/* critiques  */}
-        <div className="md:w-1/2 border-black border-3 p-4 flex flex-col h-225">
+        <div className="md:w-1/2 border-[var(--border)] border-3 p-4 flex flex-col h-225 text-[var(--color)]">
           <div className="flex items-center space-x-2 mb-2">
             <ChatTeardropTextIcon size={24} weight="bold" />
             <span className="text-lg font-black">{post.critiques.length}</span>
           </div>
-          <div className="flex-1 overflow-y-auto border-3 border-black p-2 space-y-2">
+          <div className="flex-1 overflow-y-auto border-3 border-[var(--border)] p-2 space-y-2">
             {post.critiques.map((c, i) => (
-              <div key={i} className="bg-[var(--primary)] p-2 border-3 border-black">
+              <div key={i} className="bg-[var(--sbgc)] p-2 border-3 border-[var(--border)]">
                 <div className="flex items-center space-x-2 ">
                   <img
                     src={getFullUrl(c.userpfp)}
                     alt="pfp"
-                    className="w-6 h-6 border border-black rounded-2xl"
+                    className="w-6 h-6 border border-[var(--border)] rounded-2xl"
                   />
                   <span>{c.user}</span>
                   <span className="inline-block h-4 border-l"></span>
@@ -43,12 +43,12 @@ export default function IndividualePost() {
           
           <div className="relative h-28 mt-2 mb-2">
             <textarea
-              className="resize-none w-full border-3 p-2 border-black mt-2"
+              className="resize-none w-full border-3 p-2 border-[var(--border)] mt-2"
               placeholder="Add your critique..."
               rows={4}
             />
 
-            <button type="submit" className="absolute right-1 bottom-3 text-black">
+            <button type="submit" className="absolute right-2 bottom-0 ">
               <PaperPlaneRightIcon size={24} weight="bold" />
             </button>
           </div>
@@ -64,9 +64,9 @@ export default function IndividualePost() {
             />
           )}
           <img
-            src={getFullUrl(post.image)}
+            src={getFullUrl(post.image_url)}
             alt={post.description}
-            className="w-full object-cover border-3 border-black"
+            className="w-full object-cover border-3 border-[var(--border)]"
             loading="lazy"
           />
 
@@ -74,20 +74,20 @@ export default function IndividualePost() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <img
-                  src={getFullUrl(post.artistpfp)}
+                  src={getFullUrl(arts.profile_picture)}
                   alt="user pfp"
-                  className="w-8 h-8 rounded-2xl"
+                  className="w-8 h-8 rounded-2xl border-2 border-[var(--border)]"
                   loading="lazy"
                 />
-                <span className="text-sm  font-bold">{post.artist}</span>
+                <span className="text-sm  font-bold">{arts.username}</span>
               </div>
 
-              <div className="flex items-center space-x-1 text-sm text-gray-800">
+              <div className="flex items-center space-x-1 text-sm text-[var(--color)]">
                 <HeartIcon size={24} weight="bold" />
                 <span className="font-bold text-xl">{post.hearts}</span>
               </div>
             </div>
-            <p className="text-gray-800 mt-4">{post.description}</p>
+            <p className="text-[var(--color)] mt-4">{post.description}</p>
           </div>
         </div>
       </div>

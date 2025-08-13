@@ -24,20 +24,20 @@ export default function Weekly() {
 
   return (
     <Layout>
-      <div className="drop-shadow-md flex justify-between items-center mb-4">
+      <div className="drop-shadow-md flex justify-between items-center mb-4 text-[var(--color)]">
         <div className="font-bold text-2xl">
           {days[date.getUTCDay()]}, ( {date.getUTCDate()} / {date.getUTCMonth()}{" "}
           / {date.getFullYear()} )
         </div>
-        <div className="text-right font-bold text-2xl drop-shadow-md text-[var(--primary)] border-black border-2 bg-black px-4 py-1  rounded mb-4">
+        <div className="text-right font-bold text-2xl drop-shadow-md text-[var(--sbgc)] bg-[var(--color)] border-[var(--border)] border-2 px-4 py-1  rounded mb-4">
           {theme}
         </div>
       </div>
       {/* upper table  userSpecific */}
       <div className="mb-10">
-        <table className="min-w-full rounded-xl shadow-md overflow-hidden border border-gray-200">
-          <tbody className="text-md text-gray-800">
-            <tr className="bg-white hover:bg-gray-100 transition duration-100">
+        <table className="min-w-full rounded-xl shadow-md overflow-hidden border border-[var(--border)]">
+          <tbody className="text-md">
+            <tr className="bg-[var(--color)]">
               <td className="px-3 py-3 text-left w-[5%]">15</td>
               <td className="px-4 py-3 text-left w-[20%]">You (x%)</td>
               <td className="px-6 py-3 text-left w-[40%]">
@@ -50,9 +50,9 @@ export default function Weekly() {
         </table>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto text-[var(--color)]">
         <div className="flex justify-between items-centermb-2 drop-shadow-md">
-          <h1 className="text-xl">
+          <h1 className="text-xl text-[var(--color)]">
             Next reset in: {date.getHours()}:{date.getMinutes()}:
             {date.getSeconds()}
           </h1>
@@ -60,38 +60,42 @@ export default function Weekly() {
           <div className="flex space-x-3 mb-2">
             {/* getmydetail  */}
             <button
-              className=" flex items-center space-x-1 px-3 py-1 border-2 border-black bg-[var(--primary)]"
+              className=" flex items-center space-x-1 px-3 py-1 border-2 border-[var(--border)] bg-[var(--sgbc)]"
               title="User specific"
             >
-              <UserIcon size={24} weight="regular" />
+              <UserIcon size={24} weight="regular" 
+              />
             </button>
             {/* goback  */}
             <button
-              className=" flex items-center space-x-1 px-3 py-1 border-2 border-black bg-[var(--primary)]"
+              className=" flex items-center space-x-1 px-3 py-1 border-2 border-[var(--border)] bg-[var(--sbgc)]"
               title="go back"
             >
-              <LessThanIcon size={24} weight="regular" />{" "}
+              <LessThanIcon size={24} weight="regular"
+               />{" "}
             </button>{" "}
             {/* custom  */}
             <button
-              className=" flex items-center space-x-1 px-3 py-1 border-2 border-black bg-[var(--primary)]"
+              className=" flex items-center space-x-1 px-3 py-1 border-2 border-[var(--border)] bg-[var(--sbgc)]"
               title="enter your own number"
             >
-              <HashIcon size={24} weight="regular" />{" "}
+              <HashIcon size={24} weight="regular" 
+              />{" "}
             </button>{" "}
             {/* go front  */}
             <button
-              className=" flex items-center space-x-1 px-3 py-1 border-2 border-black bg-[var(--primary)]"
+              className=" flex items-center space-x-1 px-3 py-1 border-2 border-[var(--border)] bg-[var(--sbgc)]"
               title="go front"
             >
-              <GreaterThanIcon size={24} weight="regular" />{" "}
+              <GreaterThanIcon size={24} weight="regular" 
+              />{" "}
             </button>
           </div>
         </div>
 
         {/* lower table  */}
-        <table className="min-w-full rounded-xl shadow-md overflow-hidden border border-gray-200 px-0">
-          <thead className="bg-[var(--primary)] text-2xl uppercase">
+        <table className="min-w-full rounded-xl shadow-md overflow-hidden border border-[var(--border)] px-0 ">
+          <thead className="bg-[var(--sbgc)] text-2xl uppercase">
             <tr>
               <th className="px-3 py-3 text-left w-[5%]">#</th>
               <th className="px-4 py-3 text-left w-[20%]">Artist</th>
@@ -101,15 +105,10 @@ export default function Weekly() {
             </tr>
           </thead>
 
-          <tbody className="text-md text-gray-800">
+          <tbody className="text-md">
             {leaderboardData.map((entry, index) => (
               <tr
                 key={index}
-                className={`
-                hover:bg-gray-100 transition duration-100 ${
-                  index % 2 === 0 ? "bg-gray-50" : " "
-                }
-                `}
               >
                 <td className="px-3 py-3">
                   <div className="flex justify-start">
@@ -117,7 +116,6 @@ export default function Weekly() {
                       <CrownSimpleIcon
                         size={20}
                         weight="regular"
-                        className="text-black"
                       />
                     ) : (
                       <span className="ml-1">{entry.rank}</span>

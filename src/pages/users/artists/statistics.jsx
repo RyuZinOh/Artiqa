@@ -50,8 +50,8 @@ export default function Statistics() {
       datasets:[{
         label: "Monthly Likes",
         data: stats.monthly_likes.data,
-      backgroundColor:  theme["--primary"],
-        borderColor: "black",
+      backgroundColor:  theme["--sbgc"],
+        borderColor: theme["--border"],
         borderWidth: 3,
       },
       ],
@@ -75,8 +75,6 @@ export default function Statistics() {
   useEffect(()=>{
     const ctx = radarRef.current.getContext('2d');
 
-
-
     if (Chart.getChart(ctx)){
       Chart.getChart(ctx).destroy();
     }
@@ -85,8 +83,8 @@ export default function Statistics() {
       ...statsr,
       datasets: statsr.datasets.map(ds=>({
         ...ds,
-      backgroundColor:  theme["--primary"],
-        borderColor: "black",
+      backgroundColor:  theme["--sbgc"],
+        borderColor: theme["--border"],
 
       })),
     };
@@ -97,22 +95,31 @@ export default function Statistics() {
         elements:{
           line:{
             borderWidth: 3,
+            
           },
+          
         },
-        responsive: true
+        responsive: true,
+        scales:{
+          r:{
+            ticks:{
+              backdropColor: "transparent"
+            }
+          }
+        }
       },
     });    
   }, [theme])
 
   return (
     <Layout>
-      <div className="border-3 border-black shadow-sm flex justify-between items-stretch min-h-[150px] relative">
+      <div className="border-3 border-[var(--border)] shadow-sm flex justify-between items-stretch min-h-[150px] relative text-[var(--color)]">
         {/* profile  */}
         <div className="flex items-center px-2 space-x-4 w-[30%]">
           <img
             src={getFullUrl(mockUser.profile_picture)}
             alt={mockUser.username}
-            className="w-20 h-20 rounded-full object-cover border-3 border-black drop-shadow-md"
+            className="w-20 h-20 rounded-full object-cover border-3 border-[var(--border)] drop-shadow-md"
           />
           <div>
             <h2 className="font-bold text-xl">{mockUser.username}</h2>
@@ -124,7 +131,7 @@ export default function Statistics() {
                 year: "numeric",
               })}
             </p>
-            <p className="text-sm text-gray-800">
+            <p className="text-sm ">
               Current Streak: {mockUser.current_streak}
             </p>
             <div className="flex items-center space-x-2 mt-2">
@@ -146,7 +153,7 @@ export default function Statistics() {
 
         {/* arts some  */}
         <div className="flex flex-col text-center w-[20%] relative px-4">
-          <div className="absolute left-0 top-0 h-full border-l-3 border-black"></div>
+          <div className="absolute left-0 top-0 h-full border-l-3 border-[var(--border)]"></div>
           <p className="text-sm font-bold text-left uppercase tracking-wide">
             Total Arts
           </p>
@@ -159,7 +166,7 @@ export default function Statistics() {
 
         {/* recents victories  */}
         <div className="pl-4 w-[50%] relative">
-          <div className="absolute left-0 top-0 h-full border-l-3 border-black"></div>
+          <div className="absolute left-0 top-0 h-full border-l-3 border-[var(--border)]"></div>
 
           <p className="text-md uppercase font-semibold tracking-wide mb-2">
             Recent Victories
@@ -172,7 +179,7 @@ export default function Statistics() {
         </div>
       </div>
 
-      <div className="border-3 border-black shadow-sm mt-5 min-h-[70px] flex items-center justify-between px-4">
+      <div className="border-3 border-[var(--border)] shadow-sm mt-5 min-h-[70px] flex items-center justify-between px-4 text-[var(--color)]">
         <span className="text-2xl text-gray-500">
           All Time Artist Leaderboard
         </span>
@@ -185,7 +192,7 @@ export default function Statistics() {
 
 
       {/* //streak heapmap  */}
-      <div className="border-3 border-black shadow-sm mt-5 p-4">
+      <div className="border-3 border-[var(--border)] shadow-sm mt-5 p-4 text-[var(--color)]">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <span className="text-sm font-medium">Last 12 Months</span>
@@ -209,38 +216,51 @@ export default function Statistics() {
           monthLabels={["Jan","Feb","Mar", "Apr", "May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"]}
           />
         </div>
+
+        {/* legend  */}
+        <div className="flex items-center space-x-4 mt-4">
+          <div className="flex items-center">
+            <div className="w-4 h-4 border border-[var(--border)] bg-[#ebedf0]"></div>
+            <span className="text-sm p-2">Miss</span>
+          </div>
+             <div className="flex items-center">
+            <div className="w-4 h-4 border border-[var(--border)] bg-[var(--sbgc)]"></div>
+            <span className="text-sm p-2">Hit</span>
+          </div>
+        </div>
+
       </div>
 
       <style jsx global>{`
         .react-calendar-heatmap .c-empty {
           fill: #ebedf0;
-          stroke: black;
-          stroke-width: 1px;
+          stroke: var(--border);
+          stroke-width: 0.5px;
         }
         .react-calendar-heatmap .c-fill {
-          fill: var(--primary);
-          stroke: black;
-          stroke-width: 1px;
+          fill: var(--sbgc);
+          stroke: var(--border);
+          stroke-width: 0.5px;
         }
         .react-calendar-heatmap rect {
-          rx: 2;
-          ry: 2;
+          rx: 3;
+          ry: 3;
         }
         .react-calendar-heatmap text {
           font-size: 6px;
-          fill: black;
+          fill: var(--color);
         }
       `}</style>
 
 <div className="flex space-x-6 mt-6 mx-auto w-full">
     {/* //stats  ->likes on months*/}
-      <div className="w-1/2  border-3 border-black p-6 rounded-lg
+      <div className="w-1/2  border-3 border-[var(--border)] p-6 rounded-lg
       h-[400px] flex items-center justify-center">
         <canvas ref={barRef}  className="max-w-full max-h-full"></canvas>
       </div>
 
       {/* his ilndividual stats  */}
-      <div className="w-1/2  border-3 border-black p-6 rounded-lg
+      <div className="w-1/2  border-3 border-[var(--border)] p-6 rounded-lg
       h-[400px] flex items-center justify-center">
         <canvas ref={radarRef} className="max-w-full max-h-full"></canvas>
       </div>

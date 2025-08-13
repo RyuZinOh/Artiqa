@@ -5,11 +5,11 @@ import { ThemeContext } from "./Themecontext";
 function updateFavicon(letter) {
   const root = document.documentElement;
   // wont change at runtime
-  // const primaryColor =  defaultTheme["--primary"];
+  // const primaryColor =  defaultTheme["--sbgc"];
 
   // changes at runtime
   const primaryColor = getComputedStyle(root)
-    .getPropertyValue("--primary")
+    .getPropertyValue("--sbgc")
     .trim();
 
 const svg = `

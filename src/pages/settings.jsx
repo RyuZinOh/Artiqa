@@ -11,12 +11,12 @@ export default function Settings() {
   const [showThemes, setShowThemes] = useState(true);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col min-h-screen  bg-[var(--bgc)]">
       <TopBar />
 
       {/* nav Bar */}
-      <div className="flex flex-col items-center mt-10 gap-6 ]">
-        <div className="flex flex-wrap border-3 bg-[var(--primary)] border-black drop-shadow-md px-6 py-2 gap-6 justify-center ">
+      <div className="flex flex-col  items-center mt-10 gap-6 text-[var(--color)]">
+        <div className="flex flex-wrap border-3 border-[var(--border)] drop-shadow-md px-6 py-2 gap-6 justify-center ">
           <NavItem icon={<HouseIcon size={24} />} label="Home" to="/" />
           <NavItem icon={<UserIcon size={24} />} label="Account" />
           <NavItem icon={<PaletteIcon size={24} />} label="Themes" />
@@ -60,12 +60,12 @@ export default function Settings() {
                   className={`cursor-pointer border-3 rounded-md px-3 py-3  flex flex-col items-center justify-center 
                     ${
                       isActive
-                        ? "border-black font-bold"
+                        ? "border-[var(--border)] font-bold"
                         : " "
                     }`}
                   style={{
-                    backgroundColor: colors["--primary"],
-                    color: "black",
+                    backgroundColor: colors["--sbgc"],
+                    color: colors["--color"],
                     width: "305px",
                     height: "60px",
                   }}

@@ -28,12 +28,11 @@ export default function TopBar() {
 
   
 
-
   return (
-    <header className="bg-white p-4 justify-between items-center flex">
-      <div className="text-xl font-semibold">{label}</div>
+    <header className="bg-[var(--bgc)] p-4 justify-between items-center flex">
+      <div className="text-xl font-semibold text-[var(--color)]">{label}</div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 text-[var(--color)]">
         <FunnelIcon size={24} />
         {theuser.is_login ? (
           <>
@@ -45,7 +44,7 @@ export default function TopBar() {
               onClick={toggleMenu}
             />
             {menuOpen &&(
-              <div className="absolute right-4 top-12 border-3 shadow-lg rounded-md p-2 w-40 z-50 bg-[var(--primary)]">
+              <div className="absolute right-4 top-12 border-3 shadow-lg rounded-md p-2 w-40 z-50 bg-[var(--sbgc)] text-[var(--color)]">
                 <NavLink
                 to="/settings"
                 className="block px-4 py-2 text-s hover:font-bold"
@@ -65,9 +64,7 @@ export default function TopBar() {
           <NavLink
             to="/login"
             className="
-          border-3 border-black rounded-md bg-[var(--primary)] font-bold cursor-pointer w-[100px]  text-center
-           hover:bg-black hover:text-white 
-          "
+          border-3 border-[var(--border)] rounded-md bg-[var(--sbgc)] font-bold cursor-pointer w-[100px]  text-center text-[var(--color)]"
           >
             Login
           </NavLink>

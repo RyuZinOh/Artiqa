@@ -1,54 +1,49 @@
 export const themes = {
   limeState: {
-    "--primary": "#eeff00",
-    "--secondary": "#FFFFFF",
-    "--tertiary": "#000000",
+    "bg-url": "",
+    "--bgc": "#ffffff",
+    "--sbgc": "#eeff00",
+    "--color": "#000000",
+    "--border": "#000000"
   },
+
+  darkKnight: {
+    "bg-url": "",
+    "--bgc": "#1e1e2f",
+    "--sbgc": "#3a3a5c",
+    "--color": "#f0f0f5",
+    "--border": "#6e6e8c"
+  },
+
   oceanBreeze: {
-    "--primary": "#0077b6",
-    "--secondary": "#caf0f8",
-    "--tertiary": "#023e8a",
+    "bg-url": "",
+    "--bgc": "#e0f7fa",
+    "--sbgc": "#00bcd4",
+    "--color": "#004d40",
+    "--border": "#00838f"
   },
+
   sunsetGlow: {
-    "--primary": "#ff6f61",
-    "--secondary": "#ffece6",
-    "--tertiary": "#b9473e",
+    "bg-url": "",
+    "--bgc": "#fff3e0",
+    "--sbgc": "#ff7043",
+    "--color": "#3e2723",
+    "--border": "#bf360c"
   },
+
+  violetDream: {
+    "bg-url": "",
+    "--bgc": "#f3e5f5",
+    "--sbgc": "#9c27b0",
+    "--color": "#4a148c",
+    "--border": "#6a1b9a"
+  },
+
   forestWhisper: {
-    "--primary": "#2a9d8f",
-    "--secondary": "#e0fbfc",
-    "--tertiary": "#264653",
-  },
-  royalLavender: {
-    "--primary": "#7b2ff7",
-    "--secondary": "#ede7f6",
-    "--tertiary": "#4a148c",
-  },
-  desertSand: {
-    "--primary": "#c89f70",
-    "--secondary": "#fff9f0",
-    "--tertiary": "#5d473a",
-  },
-  icyMint: {
-    "--primary": "#00bfa6",
-    "--secondary": "#d7f9f1",
-    "--tertiary": "#004d40",
-  },
-  vintageRose: {
-    "--primary": "#c94f70",
-    "--secondary": "#f7d6d0",
-    "--tertiary": "#6b2737",
-  },
-  twilightDusk: {
-  "--primary": "#5D5FEF",    
-  "--secondary": "#F5EFFF", 
-  "--tertiary": "#2E1A47",    
-},
-crimsonInk: {
-  "--primary": "#E53935",
-  "--secondary": "#FFEBEE",  
-  "--tertiary": "#1B1B1B",   
-},
-
-
+    "bg-url": "",
+    "--bgc": "#e8f5e9",
+    "--sbgc": "#43a047",
+    "--color": "#1b5e20",
+    "--border": "#2e7d32"
+  }
 };

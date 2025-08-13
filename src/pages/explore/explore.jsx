@@ -1,25 +1,28 @@
 import { ChatCircleTextIcon, HeartIcon } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 import Layout from "../../components/layouts/layout";
-import posts from "../../dummy/posts.json";
+import arts from "../../dummy/user.json";
 import { getFullUrl } from "../../utils/urlHelpers";
 
 function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 }
 export default function Explore() {
+  const publishedPosts  = arts.overall_posts.filter(
+    post => post.status == "published"
+  );
   return (
     <Layout>
-      <div className="columns-[375px] gap-1 max-w-[1374px] mx-auto  box-border">
-        {posts.map((post, index) => (
+      <div className=" min-h-screen columns-[375px]  gap-1 max-w-[1374px] mx-auto  box-border">
+        {publishedPosts.map((post, index) => (
           <Link
             key={index}
-            to={`/Explore/${slugify(post.title)}`}
-            className="relative mb-1 border-3 border-black group
+            to={`/Explore/${slugify(post.image_name)}`}
+            className="relative mb-1 border-3 border-[var(--border)] group
             overflow-hidden block"
           >
             <img
-              src={getFullUrl(post.image)}
+              src={getFullUrl(post.image_url)}
               alt={`Image ${index + 1}`}
               className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
               loading="lazy"
@@ -32,7 +35,7 @@ export default function Explore() {
           
           select-none"
             >
-              <span className="text-white text-sm">{post.artist}</span>
+              <span className="text-white text-sm">{arts.username}</span>
 
               <div className="flex items-center text-white text-sm space-x-2">
                 <span className="flex items-center">

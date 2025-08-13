@@ -22,7 +22,7 @@ const draftCount  = userPosts.filter(
 
   return (
   <Layout>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto min-h-screen  text-[var(--color)]">
         <div className="flex justify-between items-center flex-wrap mb-6 pl-2 gap-4">
             <div>
             <h1 className="pl-2">
@@ -37,7 +37,7 @@ const draftCount  = userPosts.filter(
 
         {/* creating post  */}
         <div>
-            <button className="flex items-center space-x-3 px-6 py-4 border-3 border-[var(--primary)] shadow-lg text-4xl hover:bg-white transition cursor-pointer">
+            <button className="flex items-center space-x-3 px-6 py-4 border-3 border-[var(--border)] shadow-lg text-4xl cursor-pointer">
                 <span><PlusIcon
                 size={32}
                 weight="bold"
@@ -53,39 +53,36 @@ const draftCount  = userPosts.filter(
 
         <div className="flex justify-between items-center mb-2 drop-shadow-md">
             <div className="relative  p-1 w-full max-w-sm">
-                {/* searchbar */}
-                    <input
-                      type="search"
-                      placeholder="Search Artworks.."
-                      className="w-full p-3 pr-10 rounded-full border-3 bg-white border-black drop-shadow-md  transition duration-200 focus:outline-none focus:ring-2 focus:ring-black"
-                    />
-                    <MagnifyingGlassIcon
-                      size={28}
-                      weight="regular"
-                      className="absolute right-4 top-1/2 -translate-y-1/2"
-                    />
-                  </div>
-
-
+        <input
+          type="search"
+          placeholder="Search ArtWorks..."
+          className="w-full p-3 pr-10 rounded-full border-3 text-[var(--color)] border-[var(--border)]  transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)]"
+        />
+        <MagnifyingGlassIcon
+          size={28}
+          weight="regular"
+          className="absolute right-5 top-1/2 -translate-y-1/2"
+        />
+      </div>
 
           <div className="flex space-x-3 mb-2">
             {/* goback  */}
             <button
-              className=" flex items-center space-x-1 px-3 py-1 border-2 border-black bg-[var(--primary)]"
+              className=" flex items-center space-x-1 px-3 py-1 border-2 border-[var(--border)] bg-[var(--sbgc)]"
               title="go back"
             >
               <LessThanIcon size={24} weight="regular" />{" "}
             </button>{" "}
             {/* custom  */}
             <button
-              className=" flex items-center space-x-1 px-3 py-1 border-2 border-black bg-[var(--primary)]"
+              className=" flex items-center space-x-1 px-3 py-1 border-2 border-[var(--border)] bg-[var(--sbgc)]"
               title="enter your own number"
             >
               <HashIcon size={24} weight="regular" />{" "}
             </button>{" "}
             {/* go front  */}
             <button
-              className=" flex items-center space-x-1 px-3 py-1 border-2 border-black bg-[var(--primary)]"
+              className=" flex items-center space-x-1 px-3 py-1 border-2 border-[var(--border)] bg-[var(--sbgc)]"
               title="go front"
             >
               <GreaterThanIcon size={24} weight="regular" />{" "}
@@ -94,8 +91,8 @@ const draftCount  = userPosts.filter(
         </div>
 
         {/* lower table  */}
-        <table className="min-w-full rounded-xl shadow-md overflow-hidden border border-gray-200 px-0">
-          <thead className="bg-[var(--primary)] text-2xl uppercase">
+        <table className="min-w-full rounded-xl shadow-md overflow-hidden px-0">
+          <thead className="bg-[var(--sbgc)] text-2xl uppercase">
             <tr>
               <th className="px-3 py-3 text-left w-[5%]">#</th>
               <th className="px-4 py-3 text-left w-[25%]">Art</th>
@@ -106,15 +103,10 @@ const draftCount  = userPosts.filter(
             </tr>
           </thead>
 
-          <tbody className="text-md text-gray-800">
-            {userPosts.map((post, index) => (
+          <tbody className="text-md">
+            {userPosts.map((post) => (
               <tr
                 key={post.image_id}
-                className={`
-                hover:bg-gray-100 transition duration-100 ${
-                  index % 2 === 0 ? "bg-gray-50" : " "
-                }
-                `}
               >
                 <td className="px-3 py-3">
                   <div className="flex justify-start">                   

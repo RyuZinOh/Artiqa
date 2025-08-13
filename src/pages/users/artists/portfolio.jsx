@@ -7,7 +7,7 @@ export default function Portfolio() {
     const {theme} = useTheme();
     return(
      <Layout>
-        <div className="w-full min-h-screen flex flex-col drop-shadow-md border-3 border-black relative">
+        <div className="w-full min-h-screen flex flex-col drop-shadow-md border-3 border-[var(--border)] relative text-[var(--color)]">
             <div className="w-full h-120 drop-shadow-md"
                style = {{
                 backgroundImage:`url(${getFullUrl(mockUser.selected_bg)})`,
@@ -20,7 +20,7 @@ export default function Portfolio() {
                 <div className="absolute left-8 top-[22rem] z-10">
                     <img src={getFullUrl(mockUser.profile_picture)}
                      alt="pfp" 
-                     className="w-69 h-69 rounded-full shadow-xl object-cover border-3 border-black"
+                     className="w-69 h-69 rounded-full shadow-xl object-cover border-3 border-[var(--border)]"
                      />
                 </div>
 
@@ -28,7 +28,7 @@ export default function Portfolio() {
                 <div className="absolute right-18 top-[4rem] z-10 transform rotate-12">
                     <img src={getFullUrl(mockUser.selected_card)}
                      alt="selected card by user" 
-                     className="w-90 h-150  shadow-xl object-cover border-3 border-black"
+                     className="w-90 h-150  shadow-xl object-cover border-3 border-[var(--border)]"
                      />
                 </div>
                 
