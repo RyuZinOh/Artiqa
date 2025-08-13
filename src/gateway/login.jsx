@@ -105,7 +105,7 @@ export default function Login() {
       </div>
 
       {/* //right side */}
-      <div className="flex-1 flex flex-col justify-center p-8 bg-[var(--primary)]">
+      <div className="flex-1 flex flex-col justify-center p-8 bg-[var(--sbgc)] text-[var(--color)]">
         <div className="mb-8">
           <h1 className="text-8xl leading-snug text-left drop-shadow-md">
             <div className="font-bold">Welcome to</div>

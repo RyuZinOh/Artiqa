@@ -17,7 +17,7 @@ export default function Register(){
         {/* // left side  */}
         <div
         className="flex-1 flex flex-col justify-center px-16
-    items-center      bg-[var(--primary)] "
+    items-center    text-[var(--color)]  bg-[var(--sbgc)] "
       >
         <div className="max-w-xl w-full text-left">
           <h1 className="text-8xl leading-snug font-bold  drop-shadow-md text-lef">
@@ -28,7 +28,7 @@ export default function Register(){
           </p>
           
           <form
-        className="space-y-6  border-3 border-black 
+        className="space-y-6  border-3 border-[var(--border)]
         rounded-md p-6"
           >
 
@@ -38,8 +38,8 @@ export default function Register(){
                    <input type="email" 
                 placeholder="email"
                 className="
-                w-full p-3 pr-10 border-2 border-black rounded-md bg-white placeholder:text-black
-                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
+                w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-[var(--bgc)] placeholder:text-[var(--color)]
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)]
                 "
                 />      
           <AtIcon
@@ -52,8 +52,8 @@ export default function Register(){
                 <input type="text " 
                 placeholder="username"
                 className="
-                 w-full p-3 pr-10 border-2 border-black rounded-md bg-white placeholder:text-black
-                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
+                 w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-[var(--bgc)]  placeholder:text-[var(--color)]
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)]
                
                 "
                 />
@@ -71,8 +71,8 @@ export default function Register(){
   <input type="text " 
                 placeholder="full name"
                 className="
-                 w-full p-3 pr-10 border-2 border-black rounded-md bg-white placeholder:text-black
-                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
+                 w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-[var(--bgc)] placeholder:text-[var(--color)]
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)]
                
                 "
                 />
@@ -93,9 +93,8 @@ export default function Register(){
                 type={showPass ? "text" : "password"}
                 placeholder="password"
                className="p
-                w-full p-3 pr-10 border-2 border-black rounded-md bg-white placeholder:text-black
-                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
-               
+                w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-[var(--bgc)] placeholder:text-[var(--color)]
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)
                "/>
                 <button
                 type="button"
@@ -116,8 +115,8 @@ export default function Register(){
                 type={showConf ? "text" : "password"}
                 placeholder="confirm password"
                className="
-                w-full p-3 pr-10 border-2 border-black rounded-md bg-white placeholder:text-black
-                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
+                w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-[var(--bgc)] placeholder:text-[var(--color)]
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)]
                
                "/>
 
@@ -141,8 +140,8 @@ export default function Register(){
                 
                 resize-none 
                 min-h-[7.8rem] 
-                w-full p-3 pr-10 border-2 border-black rounded-md bg-white placeholder:text-black
-                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
+                w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-[var(--bgc)] placeholder:text-[var(--color)]
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)]
                
                 ">
                 </textarea>
@@ -194,7 +193,7 @@ export default function Register(){
               onClick={
                 ()=>setFoo(true)
                 }
-                className="bg-black border-2 border-black text-white font-bold px-8 py-3 rounded-md hover:bg-white hover:text-black hover:border-2 transition -mb-3 w-[200px] ml-8 "> 
+                className="bg-[var(--sbgc)] border-2 border-[var(--border)] text-[var(--color)] font-bold px-8 py-3 rounded-md hover:bg-[var(--bgc)]  hover:border-2 transition -mb-3 w-[200px] ml-8 "> 
                     CONTINUE
                 </button>
                 
@@ -209,7 +208,7 @@ export default function Register(){
             </p>
             <NavLink
             to="/login"
-            className="py-2 w-35 px-4 mr-2 bg-white hover:bg-black hover:text-white border-black text-black border-3 rounded-md text-center drop-shadow-md cursor-pointer"
+            className="py-2 w-35 px-4 mr-2 bg-[var(--bgc)] hover:bg-[var(--sbgc)] text-[var(--color)] border-[var(--birder)] border-3 rounded-md font-bold text-center drop-shadow-md cursor-pointer"
           >LOGIN
           </NavLink>
 

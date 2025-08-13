@@ -8,7 +8,7 @@ export default function FavAfterRegister(){
         {/* // left side  */}
         <div
         className="flex-1 flex flex-col justify-center px-16
-      bg-[var(--primary)] items-center"
+      bg-[var(--sbgc)] items-center"
       >
         <div className="max-w-xl w-full text-left">
           <h1 className="text-7xl leading-snug font-bold  drop-shadow-md">Security Setup
@@ -17,7 +17,7 @@ export default function FavAfterRegister(){
             Answer the question to help us recover your account later.
           </p>
           <form
-        className="space-y-6  border-3 border-black 
+        className="space-y-6  border-3 border-[var(--border)]
         rounded-md p-6"
           >
 
@@ -26,8 +26,8 @@ export default function FavAfterRegister(){
   <input type="text " 
                 placeholder="enter your fav food"
                 className="
-                 w-full p-3 pr-10 border-2 border-black rounded-md bg-white placeholder:text-black
-                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
+                 w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-[var(--bgc)] placeholder:text-[var(--color)]
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)]
                
                 "
                 />
@@ -40,7 +40,7 @@ export default function FavAfterRegister(){
                 <div className="flex justify-end">
  <NavLink
                 to ="/login"
-                className="bg-black border-2 border-black text-white font-bold px-8 py-3 rounded-md hover:bg-white hover:text-black hover:border-2 transition -mb-3 w-[200px] ml-8 text-center "> 
+                className="bg--[var(--sbgc)] border-2 border-[var(--border)] text--[var(--color)] font-bold px-8 py-3 rounded-md hover:bg-[var(--bgc)] hover:border-2 transition -mb-3 w-[200px] ml-8 text-center "> 
                     REGISTER
                 </NavLink>
 

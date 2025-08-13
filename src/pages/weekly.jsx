@@ -35,9 +35,9 @@ export default function Weekly() {
       </div>
       {/* upper table  userSpecific */}
       <div className="mb-10">
-        <table className="min-w-full rounded-xl shadow-md overflow-hidden border border-[var(--border)]">
+        <table className="min-w-full rounded-xl shadow-md overflow-hidden ">
           <tbody className="text-md">
-            <tr className="bg-[var(--color)]">
+            <tr className="bg-[var(--bgc)]">
               <td className="px-3 py-3 text-left w-[5%]">15</td>
               <td className="px-4 py-3 text-left w-[20%]">You (x%)</td>
               <td className="px-6 py-3 text-left w-[40%]">

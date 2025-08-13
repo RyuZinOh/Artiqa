@@ -4,16 +4,16 @@ import { AtIcon, QuestionMarkIcon } from "@phosphor-icons/react";
 
 export default function ForgetPass() {
   return (
-    <div className="min-h-screen bg-[var(--primary)] flex  flex-col  relative overflow-hidden">
-      <h1 className="text-black text-8xl  text-center font-bold  mt-8">
+    <div className="min-h-screen bg-[var(--sbgc)] flex  flex-col  relative overflow-hidden">
+      <h1 className="text-[var(--color)] text-8xl  text-center font-bold  mt-8">
         Account Recovery
       </h1>
 
       <form
-        className="z-10 space-y-6 w-[600px]  mx-auto px-10 py-10 border-3 bg-white border-black  mt-8
+        className="z-10 space-y-6 w-[600px]  mx-auto px-10 py-10 border-3 bg-[var(--bgc)] border-[var(--border)]  mt-8
           rounded-md relative"
       >
-        <h1 className="text-black  text-xl text-center italic ">
+        <h1 className="text-[var(--color)] text-xl text-center italic ">
           Please enter your details to recover the account
         </h1>
 
@@ -21,8 +21,8 @@ export default function ForgetPass() {
         <div className="relative group">
           <input
             type="text"
-            className="w-full p-3 pr-10 border-2 border-black rounded-md bg-transparent placeholder:text-black
-                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
+            className="w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-transparent placeholder:text-[var(--color)]
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)]
                 "
             placeholder="email"
           />
@@ -36,8 +36,8 @@ export default function ForgetPass() {
         <div className="relative group">
           <input
             type="text"
-            className="w-full p-3 pr-10 border-2 border-black rounded-md bg-transparent placeholder:text-black
-                transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
+            className="w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-transparent placeholder:text-[var(--color)]
+                transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)]
                 "
             placeholder="What was your favorite food?"
           />
@@ -53,8 +53,8 @@ export default function ForgetPass() {
           <button
             type="submit"
             className="py-3 px-4
-          border-2 border-black rounded-md bg-black text-white font-bold cursor-pointer w-[150px]
-          hover:bg-white hover:text-black transition duration-300
+          border-2 border-[var(--border)] rounded-md bg-[var(--sbgc)] text-[var(--color)] font-bold cursor-pointer w-[150px]
+          hover:bg-[var(--bgc)]  transition duration-300
           "
           >
             CHECK
