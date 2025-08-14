@@ -13,7 +13,13 @@ import {
 } from "@phosphor-icons/react";
 import { CalendarCheckIcon } from "@phosphor-icons/react/dist/ssr";
 import mockUser from "../../dummy/user.json";
+import { useTheme } from "../../theme/useTheme";
 export default function SideBar() {
+  const {theme} = useTheme();
+  const sbgurl = theme["--sbgurl"];
+  const opacity = theme["--opacity"];
+  const blur = theme["--blur"];
+
   const navLinks = [
     { name: "Explore", to: "/", icon: <CompassIcon size={32} /> },
     { name: "Likes", to: "/likes", icon: <HeartIcon size={32} /> },
@@ -46,7 +52,30 @@ export default function SideBar() {
   ];
 
   return (
-    <aside className="w-1/5 bg-[var(--sbgc)] text-[var(--border)] p-4 flex flex-col border-r-3">
+    
+    <aside className="w-1/5 overflow-hidden text-[var(--border)] p-4 flex flex-col border-r-3 relative"
+    style={
+      {
+        backgroundColor: sbgurl && sbgurl!== "none"
+        ? "none": `var(--sbgc)`
+
+      }
+    }
+    >
+      {sbgurl && sbgurl!== "none" && ( 
+      <div className="absolute inset-0"
+      style={{
+        backgroundImage: `url(${sbgurl})`,
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        filter: `blur(${blur})`,
+        opacity: opacity,
+        zIndex:-1
+      }}
+      />
+  )}
+  
       <h2 className="text-5xl font-bold mb-4 drop-shadow-md  text-[var(--color)]">ARITQA</h2>
 
       {/* searchbar */}
@@ -54,7 +83,7 @@ export default function SideBar() {
         <input
           type="search"
           placeholder="Search..."
-          className="w-full p-3 pr-10 rounded-full border-3 text-[var(--color)] border-[var(--border)] drop-shadow-md  transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)] "
+          className="w-full p-3 pr-10 rounded-full bg-[var(--bgc)] border-3 text-[var(--color)] border-[var(--border)] drop-shadow-md  transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)] "
         />
         <MagnifyingGlassIcon
           size={28}

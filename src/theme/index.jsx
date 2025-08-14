@@ -1,49 +1,23 @@
 export const themes = {
   limeState: {
-    "bg-url": "",
+    "--sbgurl": "none",
     "--bgc": "#ffffff",
     "--sbgc": "#eeff00",
     "--color": "#000000",
-    "--border": "#000000"
+    "--border": "#000000",
+    "--opacity": "0.5", //limit is 0-1
+    "--blur": "1px" // limit is 0px - 50px
   },
+  
+  monochromeMist: {
+  "--sbgurl": "https://w.wallhaven.cc/full/7j/wallhaven-7jg6me.jpg",
+  "--bgc": "#f5f5f5",     
+  "--sbgc": "#c0c0c0",    
+  "--color": "#1a1a1a",
+  "--border": "#7a7a7a", 
+  "--opacity": "0.6",      
+  "--blur": "4px"          
+}
 
-  darkKnight: {
-    "bg-url": "",
-    "--bgc": "#1e1e2f",
-    "--sbgc": "#3a3a5c",
-    "--color": "#f0f0f5",
-    "--border": "#6e6e8c"
-  },
 
-  oceanBreeze: {
-    "bg-url": "",
-    "--bgc": "#e0f7fa",
-    "--sbgc": "#00bcd4",
-    "--color": "#004d40",
-    "--border": "#00838f"
-  },
-
-  sunsetGlow: {
-    "bg-url": "",
-    "--bgc": "#fff3e0",
-    "--sbgc": "#ff7043",
-    "--color": "#3e2723",
-    "--border": "#bf360c"
-  },
-
-  violetDream: {
-    "bg-url": "",
-    "--bgc": "#f3e5f5",
-    "--sbgc": "#9c27b0",
-    "--color": "#4a148c",
-    "--border": "#6a1b9a"
-  },
-
-  forestWhisper: {
-    "bg-url": "",
-    "--bgc": "#e8f5e9",
-    "--sbgc": "#43a047",
-    "--color": "#1b5e20",
-    "--border": "#2e7d32"
-  }
 };

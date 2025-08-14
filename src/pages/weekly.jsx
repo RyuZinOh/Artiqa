@@ -35,7 +35,7 @@ export default function Weekly() {
       </div>
       {/* upper table  userSpecific */}
       <div className="mb-10">
-        <table className="min-w-full rounded-xl shadow-md overflow-hidden ">
+        <table className="min-w-full rounded-xl shadow-md overflow-hidden  text-gray-500">
           <tbody className="text-md">
             <tr className="bg-[var(--bgc)]">
               <td className="px-3 py-3 text-left w-[5%]">15</td>
@@ -60,7 +60,7 @@ export default function Weekly() {
           <div className="flex space-x-3 mb-2">
             {/* getmydetail  */}
             <button
-              className=" flex items-center space-x-1 px-3 py-1 border-2 border-[var(--border)] bg-[var(--sgbc)]"
+              className=" flex items-center space-x-1 px-3 py-1 border-2 border-[var(--border)] bg-[var(--sbgc)]"
               title="User specific"
             >
               <UserIcon size={24} weight="regular" 
