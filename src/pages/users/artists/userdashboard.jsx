@@ -23,12 +23,12 @@ const draftCount  = userPosts.filter(
   return (
   <Layout>
       <div className="overflow-x-auto min-h-screen  text-[var(--color)]">
-        <div className="flex justify-between items-center flex-wrap mb-6 pl-2 gap-4">
+        <div className="flex justify-between items-center flex-wrap mb-6 gap-4">
             <div>
-            <h1 className="pl-2">
+            <h1>
             <span className="font-bold text-5xl drop-shadow-md">Hi, {userData.username}</span> 
             </h1>
-        <p className="mb-6 p-2 mt-5 italic drop-shadow-md text-2xl">
+        <p className="mb-6 mt-5 italic drop-shadow-md text-2xl">
             You have overall {userPosts.length} arts created so far!
             <br/>
              {publishedCount}-Published & {draftCount}-drafts...
@@ -52,11 +52,11 @@ const draftCount  = userPosts.filter(
       
 
         <div className="flex justify-between items-center mb-2 drop-shadow-md">
-            <div className="relative  p-1 w-full max-w-sm">
+            <div className="relative  mb-2 w-full max-w-sm">
         <input
           type="search"
           placeholder="Search ArtWorks..."
-          className="w-full p-3 pr-10 rounded-full border-3 text-[var(--color)] border-[var(--border)]  transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)]"
+          className="w-full p-3 pr-10 rounded-md border-3 text-[var(--color)] border-[var(--border)]  "
         />
         <MagnifyingGlassIcon
           size={28}
@@ -66,31 +66,26 @@ const draftCount  = userPosts.filter(
       </div>
 
           <div className="flex space-x-3 mb-2">
-            {/* goback  */}
-            <button
-              className=" flex items-center space-x-1 px-3 py-1 border-2 border-[var(--border)] bg-[var(--sbgc)]"
-              title="go back"
-            >
-              <LessThanIcon size={24} weight="regular" />{" "}
-            </button>{" "}
-            {/* custom  */}
-            <button
-              className=" flex items-center space-x-1 px-3 py-1 border-2 border-[var(--border)] bg-[var(--sbgc)]"
-              title="enter your own number"
-            >
-              <HashIcon size={24} weight="regular" />{" "}
-            </button>{" "}
-            {/* go front  */}
-            <button
-              className=" flex items-center space-x-1 px-3 py-1 border-2 border-[var(--border)] bg-[var(--sbgc)]"
-              title="go front"
-            >
-              <GreaterThanIcon size={24} weight="regular" />{" "}
-            </button>
+            {[
+              {icon: LessThanIcon, title: "go back"},
+              {icon: HashIcon, title: "Enter your own number"},
+              {icon: GreaterThanIcon, title: "go front"}
+            ].map(({icon, title},i)=>{
+              const IconComponenet = icon;
+             return( <button
+              key={i}
+              className="p-2 border-2 border-[var(--border)] bg-[var(--sbgc)] rounded-lg"
+              title={title}
+              >
+                <IconComponenet size={22} weight="regular"/>
+              </button>
+             );
+})}
           </div>
         </div>
 
         {/* lower table  */}
+        <div className="mt-2 rounded-md  overflow-hidden border-3 border-[var(--border)]">
         <table className="min-w-full rounded-xl shadow-md overflow-hidden px-0">
           <thead className="bg-[var(--sbgc)] text-2xl uppercase">
             <tr>
@@ -136,6 +131,7 @@ const draftCount  = userPosts.filter(
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </Layout>
   );

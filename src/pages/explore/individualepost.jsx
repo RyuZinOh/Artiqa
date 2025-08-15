@@ -22,7 +22,7 @@ export default function IndividualePost() {
         <div className="md:w-1/2 border-[var(--border)] border-3 p-4 flex flex-col h-225 text-[var(--color)]">
           <div className="flex items-center space-x-2 mb-2">
             <ChatTeardropTextIcon size={24} weight="bold" />
-            <span className="text-lg font-black">{post.critiques.length}</span>
+            <span className="text-lg text-[var(--color)]">{post.critiques.length}</span>
           </div>
           <div className="flex-1 overflow-y-auto border-3 border-[var(--border)] p-2 space-y-2">
             {post.critiques.map((c, i) => (
@@ -79,7 +79,7 @@ export default function IndividualePost() {
                   className="w-8 h-8 rounded-2xl border-2 border-[var(--border)]"
                   loading="lazy"
                 />
-                <span className="text-sm  font-bold">{arts.username}</span>
+                <span className="text-sm   text-[var(--color)] font-bold">{arts.username}</span>
               </div>
 
               <div className="flex items-center space-x-1 text-sm text-[var(--color)]">

@@ -10,14 +10,23 @@ export const themes = {
   },
   
   monochromeMist: {
-  "--sbgurl": "https://w.wallhaven.cc/full/7j/wallhaven-7jg6me.jpg",
+  "--sbgurl": "none",
   "--bgc": "#f5f5f5",     
   "--sbgc": "#c0c0c0",    
   "--color": "#1a1a1a",
   "--border": "#7a7a7a", 
   "--opacity": "0.6",      
   "--blur": "4px"          
-}
+},
+  pantimos: {
+    "--sbgurl": "none",
+    "--bgc": "#2b2b3f",
+    "--sbgc": "#4f5d75",
+    "--color": "#dfe4ea",
+    "--border": "#627d98",
+    "--opacity": "0.6",
+    "--blur": "5px"
+  }
 
 
 };

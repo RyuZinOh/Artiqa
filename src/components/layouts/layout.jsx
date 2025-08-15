@@ -11,7 +11,7 @@ export default function Layout({ children }) {
         style={{ willChange: "transform" }}
       >
         <TopBar />
-        <main className=" p-4 bg-[var(--bgc)] box-border">{children}</main>
+        <main className="p-4 bg-[var(--bgc)] box-border">{children}</main>
       </div>
     </div>
   );

@@ -35,8 +35,8 @@ export default function Weekly() {
       </div>
       {/* upper table  userSpecific */}
       <div className="mb-10">
-        <table className="min-w-full rounded-xl shadow-md overflow-hidden  text-gray-500">
-          <tbody className="text-md">
+        <table className="min-w-full drop-shadow-md text-gray-500">
+          <tbody className="text-md border-3  border-[var(--border)] overflow-hidden">
             <tr className="bg-[var(--bgc)]">
               <td className="px-3 py-3 text-left w-[5%]">15</td>
               <td className="px-4 py-3 text-left w-[20%]">You (x%)</td>
@@ -50,6 +50,7 @@ export default function Weekly() {
         </table>
       </div>
 
+
       <div className="overflow-x-auto text-[var(--color)]">
         <div className="flex justify-between items-centermb-2 drop-shadow-md">
           <h1 className="text-xl text-[var(--color)]">
@@ -58,43 +59,30 @@ export default function Weekly() {
           </h1>
 
           <div className="flex space-x-3 mb-2">
-            {/* getmydetail  */}
-            <button
-              className=" flex items-center space-x-1 px-3 py-1 border-2 border-[var(--border)] bg-[var(--sbgc)]"
-              title="User specific"
-            >
-              <UserIcon size={24} weight="regular" 
-              />
-            </button>
-            {/* goback  */}
-            <button
-              className=" flex items-center space-x-1 px-3 py-1 border-2 border-[var(--border)] bg-[var(--sbgc)]"
-              title="go back"
-            >
-              <LessThanIcon size={24} weight="regular"
-               />{" "}
-            </button>{" "}
-            {/* custom  */}
-            <button
-              className=" flex items-center space-x-1 px-3 py-1 border-2 border-[var(--border)] bg-[var(--sbgc)]"
-              title="enter your own number"
-            >
-              <HashIcon size={24} weight="regular" 
-              />{" "}
-            </button>{" "}
-            {/* go front  */}
-            <button
-              className=" flex items-center space-x-1 px-3 py-1 border-2 border-[var(--border)] bg-[var(--sbgc)]"
-              title="go front"
-            >
-              <GreaterThanIcon size={24} weight="regular" 
-              />{" "}
-            </button>
+            {[
+              {icon: UserIcon, title: "userspecific"},
+              {icon: LessThanIcon, title: "go back"},
+              {icon: HashIcon, title: "Enter your own number"},
+              {icon: GreaterThanIcon, title: "go front"}
+            ].map(({icon, title},i)=>{
+              const IconComponenet = icon;
+             return( <button
+              key={i}
+              className="p-2 border-3 border-[var(--border)] bg-[var(--sbgc)] rounded-lg"
+              title={title}
+              >
+                <IconComponenet size={22} weight="regular"/>
+              </button>
+             );
+})}
           </div>
         </div>
 
         {/* lower table  */}
-        <table className="min-w-full rounded-xl shadow-md overflow-hidden border border-[var(--border)] px-0 ">
+        <div className="mt-2 rounded-md  overflow-hidden border-3 border-[var(--border)]">
+
+        <table className="min-w-full ">
+
           <thead className="bg-[var(--sbgc)] text-2xl uppercase">
             <tr>
               <th className="px-3 py-3 text-left w-[5%]">#</th>
@@ -109,6 +97,10 @@ export default function Weekly() {
             {leaderboardData.map((entry, index) => (
               <tr
                 key={index}
+                // className={
+                //   entry.rank % 2 ==0 ? "bg-[var(--sbgc)]"
+                //   : "bg-transparent"
+                // }
               >
                 <td className="px-3 py-3">
                   <div className="flex justify-start">
@@ -130,7 +122,10 @@ export default function Weekly() {
             ))}
           </tbody>
         </table>
-      </div>
+        </div>
+
+</div>
+
     </Layout>
   );
 }

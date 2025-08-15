@@ -61,8 +61,8 @@ export default function Portfolio() {
                         color: theme["--primary"]
                     }}
                     >   
-                      <div className="absolute left-0 -top-15 h-40 border-l-4 border-black" />
-                      <div className="absolute left-4 -top-15 h-40 border-l-4 border-black" />
+                      <div className="absolute left-0 -top-15 h-40 border-l-4 border-[var(--border)]" />
+                      <div className="absolute left-4 -top-15 h-40 border-l-4 border-[var(--border)]" />
 
                       {/* //label for now but it will be link to user gallary */}
                         <span className="ml-10">Gallery</span></h2>
