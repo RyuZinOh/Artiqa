@@ -87,7 +87,7 @@ const draftCount  = userPosts.filter(
         {/* lower table  */}
         <div className="mt-2 rounded-md  overflow-hidden border-3 border-[var(--border)]">
         <table className="min-w-full rounded-xl shadow-md overflow-hidden px-0">
-          <thead className="bg-[var(--sbgc)] text-2xl uppercase">
+          <thead className="bg-[var(--sbgc)] text-2xl uppercase  border-b-3 border-[var(--border)]">
             <tr>
               <th className="px-3 py-3 text-left w-[5%]">#</th>
               <th className="px-4 py-3 text-left w-[25%]">Art</th>

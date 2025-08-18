@@ -83,7 +83,7 @@ export default function Weekly() {
 
         <table className="min-w-full ">
 
-          <thead className="bg-[var(--sbgc)] text-2xl uppercase">
+          <thead className="bg-[var(--sbgc)] text-2xl uppercase border-b-3 border-[var(--border)]">
             <tr>
               <th className="px-3 py-3 text-left w-[5%]">#</th>
               <th className="px-4 py-3 text-left w-[20%]">Artist</th>
