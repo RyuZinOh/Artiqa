@@ -10,8 +10,7 @@ import Statistics from "./pages/users/artists/statistics";
 import Portfolio from "./pages/users/artists/portfolio";
 import Collaboration from "./pages/users/artists/collaboration";
 import UserDashboard from "./pages/users/artists/userdashboard";
-import Settings from "./pages/settings";
-
+import Settings from "./pages/users/Settings";
 function App() {
   return (
     <Routes>
