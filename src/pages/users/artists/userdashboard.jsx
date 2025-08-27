@@ -1,18 +1,23 @@
 import Layout from "../../../components/layouts/layout";
 import {
-  CrownSimpleIcon,
   GreaterThanIcon,
   HashIcon,
   LessThanIcon,
   MagnifyingGlassIcon,
   PlusIcon,
 } from "@phosphor-icons/react";
-import userData from "../../../dummy/user.json";
+import users from "../../../dummy/user.json";
+import currentUser from "../../../dummy/current_user.json";
+
 import { EyeIcon, PencilIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr";
 
 
 export default function  UserDashboard(){
-const userPosts = userData.overall_posts || [];
+  const loggedInUser = currentUser?.username && currentUser.username.trim()!== ""?
+  users.find((u)=>u.username === currentUser.username):null;
+
+
+const userPosts = loggedInUser?.overall_posts || [];
 const publishedCount  = userPosts.filter(
     (post)=> post.status ==="published"
 ).length;
@@ -26,7 +31,7 @@ const draftCount  = userPosts.filter(
         <div className="flex justify-between items-center flex-wrap mb-6 gap-4">
             <div>
             <h1>
-            <span className="font-bold text-5xl drop-shadow-md">Hi, {userData.username}</span> 
+            <span className="font-bold text-5xl drop-shadow-md">Hi, {loggedInUser?.username}</span> 
             </h1>
         <p className="mb-6 mt-5 italic drop-shadow-md text-2xl">
             You have overall {userPosts.length} arts created so far!

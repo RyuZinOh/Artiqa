@@ -8,20 +8,27 @@ import {
   PaintBrushIcon,
   PresentationIcon,
   RankingIcon,
+  User,
   UserIcon,
   UsersThreeIcon,
 } from "@phosphor-icons/react";
 import { CalendarCheckIcon } from "@phosphor-icons/react/dist/ssr";
-import mockUser from "../../dummy/user.json";
+import users from "../../dummy/user.json";
 import { useTheme } from "../../theme/useTheme";
+import currentUser from "../../dummy/current_user.json";
+
 export default function SideBar() {
   const {theme} = useTheme();
   const sbgurl = theme["--sbgurl"];
   const opacity = theme["--opacity"];
   const blur = theme["--blur"];
 
+  const loggedInUser = currentUser?.username && currentUser.username.trim()!== ""?
+  users.find((u)=>u.username === currentUser.username):null;
+
+
   const navLinks = [
-    { name: "Explore", to: "/", icon: <CompassIcon size={32} /> },
+    { name: "Explore", to: "/Explore", icon: <CompassIcon size={32} /> },
     { name: "Likes", to: "/likes", icon: <HeartIcon size={32} /> },
     { name: "Top", to: "/top", icon: <RankingIcon size={32} /> },
     {
@@ -117,7 +124,7 @@ export default function SideBar() {
       </nav>
 
       {/* //this one is accessble after becoming artist request is approved but as this frontend defense first so we arent integrating backend for those logics */}
-      {mockUser.role === "artist" && (
+      {loggedInUser?.role === "artist" && (
         <>
           <h3 className="mt-40 font-bold text-lg text-[var(--color)]">Artistry</h3>
           <nav className="space-y-2 mt-1">

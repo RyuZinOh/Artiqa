@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import PageNotFound from "./pages/404";
 import Login from "./gateway/login";
 import Register from "./gateway/register";
@@ -11,10 +11,13 @@ import Portfolio from "./pages/users/artists/portfolio";
 import Collaboration from "./pages/users/artists/collaboration";
 import UserDashboard from "./pages/users/artists/userdashboard";
 import Settings from "./pages/users/Settings";
+import Gallery from "./pages/users/artists/Gallery";
+import ProtectedRoute from "./protection/ProtectedRoute";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Explore />} />
+      <Route path="/" element={<Navigate to="/Explore" replace />} />
+      <Route path="/Explore" element={<Explore/>} />
       <Route path="/Explore/:slug" element={<IndividualePost />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
@@ -26,10 +29,34 @@ function App() {
       {/* 
 //this will have logic under certain criteria and auth but for now this is just it is what it is as frontend only defnese  */}
 
-      <Route path="/statistics" element={<Statistics />} />
-      <Route path="/portfolio" element={<Portfolio />} />
-      <Route path="/collaboration" element={<Collaboration />} />
-      <Route path="/management" element={<UserDashboard />} />
+      <Route path="/statistics" element={
+        <ProtectedRoute>
+        <Statistics />
+        </ProtectedRoute>
+        
+        }/>
+
+      <Route path="/portfolio" element={
+        <ProtectedRoute>
+        <Portfolio />
+        </ProtectedRoute>
+        
+        } />
+      <Route path="/portfolio/gallery" element={
+        <ProtectedRoute>
+        <Gallery />
+        </ProtectedRoute>
+        } />
+      <Route path="/collaboration" element={
+        <ProtectedRoute>
+        <Collaboration />
+        </ProtectedRoute>
+      } />
+      <Route path="/management" element={
+        <ProtectedRoute>
+        <UserDashboard />
+        </ProtectedRoute>
+        } />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

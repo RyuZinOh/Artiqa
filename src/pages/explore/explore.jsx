@@ -1,16 +1,21 @@
 import { ChatCircleTextIcon, HeartIcon } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 import Layout from "../../components/layouts/layout";
-import arts from "../../dummy/user.json";
+import users from "../../dummy/user.json";
 import { getFullUrl } from "../../utils/urlHelpers";
 
 function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 }
 export default function Explore() {
-  const publishedPosts  = arts.overall_posts.filter(
-    post => post.status == "published"
-  );
+  const publishedPosts  = users.flatMap(user=> 
+    user.overall_posts.filter(post=> post.status == "published").map(
+      post=> ({
+        ...post, 
+        username: user.username
+      })
+    )
+  )
   return (
     <Layout>
       <div className=" min-h-screen columns-[375px]  gap-1 max-w-[1374px] mx-auto  box-border">
@@ -35,7 +40,7 @@ export default function Explore() {
           
           select-none"
             >
-              <span className="text-white text-sm">{arts.username}</span>
+              <span className="text-white text-sm">{post.username}</span>
 
               <div className="flex items-center text-white text-sm space-x-2">
                 <span className="flex items-center">

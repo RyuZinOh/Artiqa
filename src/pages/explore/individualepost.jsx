@@ -4,7 +4,7 @@ import { HeartIcon, PaperPlaneRightIcon } from "@phosphor-icons/react";
 import { ChatTeardropTextIcon } from "@phosphor-icons/react/dist/ssr";
 import weekly from "/assets/mascot_emotes/artcomptweekly.png"
 import { getFullUrl } from "../../utils/urlHelpers";
-import arts from "../../dummy/user.json";
+import users from "../../dummy/user.json";
 
 function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -12,7 +12,15 @@ function slugify(text) {
 
 export default function IndividualePost() {
   const { slug } = useParams();
-  const post = arts.overall_posts.find((p) => slugify(p.image_name) === slug);
+  let post, postUser;
+  for (const user of users){
+    const found = user.overall_posts.find(p=>slugify(p.image_name) === slug);
+    if (found){
+      post = found;
+      postUser = user;
+      break;
+    }
+  }
 
 
   return (
@@ -74,12 +82,12 @@ export default function IndividualePost() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <img
-                  src={getFullUrl(arts.profile_picture)}
+                  src={getFullUrl(postUser.profile_picture)}
                   alt="user pfp"
                   className="w-8 h-8 rounded-2xl border-2 border-[var(--border)]"
                   loading="lazy"
                 />
-                <span className="text-sm   text-[var(--color)] font-bold">{arts.username}</span>
+                <span className="text-sm   text-[var(--color)] font-bold">{postUser.username}</span>
               </div>
 
               <div className="flex items-center space-x-1 text-sm text-[var(--color)]">

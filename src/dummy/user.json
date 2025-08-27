@@ -1,4 +1,5 @@
-{
+[
+  {
   "username": "safal726",
   "full_name": "Safal Lama",
   "profile_picture": "/Arts/Safal/safal.png",
@@ -22,7 +23,6 @@
   "Demons under my hood",
   "Dragon curling through the depths of sky"
 ],
-"is_login": true,
 "selected_bg": "/Assets/Backgrounds/1.jpg",
 "selected_card":"/Assets/Cards/3.jpg",
 "badges":[
@@ -102,3 +102,4 @@
   }
 ]
 }
+]

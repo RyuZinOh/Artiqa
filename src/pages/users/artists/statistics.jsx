@@ -1,5 +1,6 @@
 import Layout from "../../../components/layouts/layout";
-import mockUser from "../../../dummy/user.json";
+import users from "../../../dummy/user.json";
+import currentUser from "../../../dummy/current_user.json";
 import ReactCalendarHeatmap from "react-calendar-heatmap";
 import { Chart } from "chart.js/auto";
 import { useRef, useEffect } from "react";
@@ -9,6 +10,10 @@ import { useTheme } from "../../../theme/useTheme";
 import { getFullUrl } from "../../../utils/urlHelpers";
 
 export default function Statistics() {
+
+  const loggedInUser = currentUser?.username && currentUser.username.trim()!== ""?
+    users.find((u)=>u.username === currentUser.username):null;
+ 
   const {theme} = useTheme();
 
   const today  = new Date();
@@ -20,7 +25,7 @@ export default function Statistics() {
     const today = new Date();
     const streakStart = new Date(today);
 
-    streakStart.setDate(today.getDate()- mockUser.current_streak+1);
+    streakStart.setDate(today.getDate()- loggedInUser.current_streak+1);
 
     for (let d = new Date(streakStart); d<= today; d.setDate(d.getDate()+1)){
       data.push({
@@ -117,35 +122,35 @@ export default function Statistics() {
         {/* profile  */}
         <div className="flex items-center px-2 space-x-4 w-[30%]">
           <img
-            src={getFullUrl(mockUser.profile_picture)}
-            alt={mockUser.username}
+            src={getFullUrl(loggedInUser.profile_picture)}
+            alt={loggedInUser.username}
             className="w-20 h-20 rounded-full object-cover border-3 border-[var(--border)] drop-shadow-md"
           />
           <div>
-            <h2 className="font-bold text-xl">{mockUser.username}</h2>
+            <h2 className="font-bold text-xl">{loggedInUser.username}</h2>
             <p className="text-sm">
               Joined{" "}
-              {new Date(mockUser.joined_date).toLocaleDateString("en-GB", {
+              {new Date(loggedInUser.joined_date).toLocaleDateString("en-GB", {
                 day: "numeric",
                 month: "short",
                 year: "numeric",
               })}
             </p>
             <p className="text-sm ">
-              Current Streak: {mockUser.current_streak}
+              Current Streak: {loggedInUser.current_streak}
             </p>
             <div className="flex items-center space-x-2 mt-2">
-              <span className="text-lg">{mockUser.level}</span>
+              <span className="text-lg">{loggedInUser.level}</span>
               <div className="w-44 h-3 border-3 overflow-hidden rounded-full">
                 <div
-                  className="h-3 bg-[var(--primary)] rounded-full"
+                  className="h-3 bg-[var(--sbgc)] rounded-full"
                   style={{
-                    width: `${mockUser.progress * 100}%`,
+                    width: `${loggedInUser.progress * 100}%`,
                   }}
                 ></div>
               </div>
               <span className="text-sm">
-                {(mockUser.progress * 1).toFixed(2)}k/1k
+                {(loggedInUser.progress * 1).toFixed(2)}k/1k
               </span>
             </div>
           </div>
@@ -157,11 +162,11 @@ export default function Statistics() {
           <p className="text-sm font-bold text-left uppercase tracking-wide">
             Total Arts
           </p>
-          <p className="text-xl text-left">{mockUser.total_arts}</p>
+          <p className="text-xl text-left">{loggedInUser.total_arts}</p>
           <p className="text-sm font-bold text-left uppercase tracking-wide mt-[15px]">
             Wins
           </p>
-          <p className="text-xl text-left">{mockUser.total_wins}</p>
+          <p className="text-xl text-left">{loggedInUser.total_wins}</p>
         </div>
 
         {/* recents victories  */}
@@ -172,7 +177,7 @@ export default function Statistics() {
             Recent Victories
           </p>
           <ul className="list-disc ml-5 space-y-1 text-sm">
-            {mockUser.recent_victories.map((v, index) => (
+            {loggedInUser.recent_victories.map((v, index) => (
               <li key={index}>{v}</li>
             ))}
           </ul>

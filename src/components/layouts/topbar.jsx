@@ -1,8 +1,9 @@
 import { BellIcon, FunnelIcon} from "@phosphor-icons/react";
 import { NavLink, useLocation } from "react-router-dom";
-import theuser from "../../dummy/user.json";
+import users from "../../dummy/user.json";
 import { getFullUrl } from "../../utils/urlHelpers";
 import { useEffect, useRef, useState } from "react";
+import currentUser from "../../dummy/current_user.json";
 
 export default function TopBar() {
   const location = useLocation();
@@ -25,6 +26,9 @@ export default function TopBar() {
       return ()=> document.removeEventListener("mousedown",handleClickOutside);
     },[]);
 
+  const loggedInUser = currentUser?.username && currentUser.username.trim()!== ""?
+  users.find((u)=>u.username === currentUser.username):null;
+
 
   
 
@@ -34,12 +38,12 @@ export default function TopBar() {
 
       <div className="flex items-center gap-4 text-[var(--color)]">
         <FunnelIcon size={24} />
-        {theuser.is_login ? (
+        {loggedInUser ? (
           <>
             <BellIcon size={24} />
             <img
-              src={getFullUrl(theuser.profile_picture)}
-              alt={theuser.full_name}
+              src={getFullUrl(loggedInUser.profile_picture)}
+              alt={loggedInUser.full_name}
               className="w-7 h-7 rounded-full object-cover cursor-pointer drop-shadow-md"
               onClick={toggleMenu}
             />
