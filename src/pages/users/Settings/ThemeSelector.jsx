@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 export default function ThemeSelector() {
   const { theme, setTheme } = useContext(ThemeContext);
   const themeRef = useRef(null);
-  const [expanded, setExpanded] = useState(false); //for collapsed or expanded
+  const [expanded, setExpanded] = useState(true); //for collapsed or expanded
   const [activePanel, setActivePanel] = useState("themes");  //themes preset && custom
 
   const [customTheme, setCustomTheme] = useState({
@@ -93,11 +93,11 @@ export default function ThemeSelector() {
             onClick={() => setExpanded(!expanded)} 
              className="flex items-center gap-2 cursor-pointer text-3xl font-bold hover:underline mt-10"
           >  
-            <PaletteIcon size={32} weight="bold" /> 
-            <span>Themes</span>
+            <PaletteIcon size={32} weight="bold" className="text-[var(--color)]" /> 
+            <span className="text-[var(--color)]">Themes</span>
             {expanded ? 
-            <CaretDownIcon size={32} weight="bold"/> :
-             <CaretRightIcon size={32} weight="bold"/>
+            <CaretDownIcon size={32} weight="bold" className="text-[var(--color)]"/> :
+             <CaretRightIcon size={32} weight="bold" className="text-[var(--color)]"/>
             }
           </div>
           {expanded && (
