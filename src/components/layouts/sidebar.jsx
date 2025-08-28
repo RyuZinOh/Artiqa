@@ -1,18 +1,21 @@
 import { NavLink } from "react-router-dom";
 import {
   ArrowLeftIcon,
+  BoxingGloveIcon,
+  CalendarCheckIcon,
   ChatTeardropTextIcon,
   CompassIcon,
   HeartIcon,
+  KanbanIcon,
+  ListChecksIcon,
   MagnifyingGlassIcon,
   PaintBrushIcon,
   PresentationIcon,
   RankingIcon,
-  User,
+  SwordIcon,
   UserIcon,
   UsersThreeIcon,
 } from "@phosphor-icons/react";
-import { CalendarCheckIcon } from "@phosphor-icons/react/dist/ssr";
 import users from "../../dummy/user.json";
 import { useTheme } from "../../theme/useTheme";
 import currentUser from "../../dummy/current_user.json";
@@ -29,14 +32,14 @@ export default function SideBar() {
 
   const navLinks = [
     { name: "Explore", to: "/Explore", icon: <CompassIcon size={32} /> },
-    { name: "Likes", to: "/likes", icon: <HeartIcon size={32} /> },
-    { name: "Top", to: "/top", icon: <RankingIcon size={32} /> },
+    { name: "Likes", to: "/Likes", icon: <HeartIcon size={32} /> },
+    { name: "Top", to: "/Top", icon: <RankingIcon size={32} /> },
     {
       name: "Comments",
-      to: "/comments",
+      to: "/Comments",
       icon: <ChatTeardropTextIcon size={32} />,
     },
-    { name: "Weekly", to: "/weekly", icon: <CalendarCheckIcon size={32} /> },
+    { name: "Weekly", to: "/Weekly", icon: <CalendarCheckIcon size={32} /> },
   ];
 
   const Artistry = [
@@ -58,6 +61,29 @@ export default function SideBar() {
     },
   ];
 
+
+  const superuser = [
+    {
+      name: "Artist Requests",
+      to: "/Review-Artists",
+      icon: <ListChecksIcon size={32} />
+    },
+    {
+      name: "Manage Weekly",
+      to: "/Manage-Weekly",
+      icon: <SwordIcon size={32} />
+    },
+    {
+      name: "Manage Users",
+      to: "/Manage-Users",
+      icon: <KanbanIcon size={32} />
+    },
+    {
+      name: "Moderate Arts",
+      to: "/Moderate-Arts",
+      icon: <BoxingGloveIcon size={32} />
+    },
+  ]
   return (
     
     <aside className="w-1/5 overflow-hidden text-[var(--border)] p-4 flex flex-col border-r-3 relative"
@@ -153,6 +179,39 @@ export default function SideBar() {
           </nav>
         </>
       )}
+   
+   {/* //for superuser or admin  */}
+      {loggedInUser?.role === "superuser" && (
+        <>
+          <h3 className="mt-40 font-bold text-lg text-[var(--color)]">Admin / Superuser</h3>
+          <nav className="space-y-2 mt-1">
+            {superuser.map((link) => (
+              <NavLink key={link.name} to={link.to}>
+                {({ isActive }) => (
+                  <div
+                    className={`flex gap-x-2 text-[var(--color)] text-2xl items-center group
+                    ${isActive ? "font-semibold" : "hover:font-semibold"}
+                    `}
+                  >
+                    <span>{link.icon}</span>
+                    <span>{link.name}</span>
+                    <ArrowLeftIcon
+                      size={32}
+                      className={`transition-opacity duration-150
+                ${
+                  isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                }
+                `}
+                    />
+                  </div>
+                )}
+              </NavLink>
+            ))}
+          </nav>
+        </>
+      )}
+   
+   
     </aside>
   );
 }

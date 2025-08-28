@@ -13,6 +13,7 @@ import UserDashboard from "./pages/users/artists/userdashboard";
 import Settings from "./pages/users/Settings";
 import Gallery from "./pages/users/artists/Gallery";
 import ProtectedRoute from "./protection/ProtectedRoute";
+import Top from "./pages/Top";
 function App() {
   return (
     <Routes>
@@ -23,6 +24,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/forgetpassword" element={<ForgetPass />} />
       <Route path="/weekly" element={<Weekly />} />
+      <Route path="/Top" element={<Top />} />
       <Route path="/settings" element={<Settings/>} />
 
 
