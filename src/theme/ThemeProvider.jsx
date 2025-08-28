@@ -26,7 +26,7 @@ const svg = `
 }
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(themes.limeState);
+  const [theme, setTheme] = useState(themes.midnight);
 
     useEffect(()=>{
     const root = document.documentElement;

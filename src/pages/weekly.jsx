@@ -71,7 +71,7 @@ export default function Weekly() {
               className="p-2 border-3 border-[var(--border)] bg-[var(--sbgc)] rounded-lg"
               title={title}
               >
-                <IconComponenet size={22} weight="regular"/>
+                <IconComponenet size={22} weight="bold"/>
               </button>
              );
 })}
