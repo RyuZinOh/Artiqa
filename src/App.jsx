@@ -14,6 +14,8 @@ import Settings from "./pages/users/Settings";
 import Gallery from "./pages/users/artists/Gallery";
 import ProtectedRoute from "./protection/ProtectedRoute";
 import Top from "./pages/Top";
+import OnlyAdmin from "./protection/onlyAdmin";
+import ManageUsers from "./pages/admin/manageuser/ManageUsers";
 function App() {
   return (
     <Routes>
@@ -59,6 +61,20 @@ function App() {
         <UserDashboard />
         </ProtectedRoute>
         } />
+
+
+
+        {/* //admin shiboinger */}
+        <Route path="/manage-users" element={
+        <OnlyAdmin>
+        <ManageUsers />
+        </OnlyAdmin>
+        } />
+
+
+
+
+        
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
