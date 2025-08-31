@@ -16,6 +16,7 @@ import ProtectedRoute from "./protection/ProtectedRoute";
 import Top from "./pages/Top";
 import OnlyAdmin from "./protection/onlyAdmin";
 import ManageUsers from "./pages/admin/manageuser/ManageUsers";
+import AritstRequests from "./pages/admin/ArtistRequests";
 function App() {
   return (
     <Routes>
@@ -68,6 +69,12 @@ function App() {
         <Route path="/manage-users" element={
         <OnlyAdmin>
         <ManageUsers />
+        </OnlyAdmin>
+        } />
+
+        <Route path="/review-artists" element={
+        <OnlyAdmin>
+        <AritstRequests />
         </OnlyAdmin>
         } />
 

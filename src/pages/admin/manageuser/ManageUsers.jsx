@@ -58,7 +58,9 @@ export default function ManageUsers(){
                 key={index}
               >
                 <td className="px-3 py-3">
+                     <span className="ml-1">
                     {index+1}
+                    </span>
                 </td>
                 <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
