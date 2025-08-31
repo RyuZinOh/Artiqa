@@ -1,26 +1,26 @@
 import { getFullUrl } from "../../../utils/urlHelpers";
-import { BellIcon,  XIcon } from "@phosphor-icons/react";
+import { BellIcon,  HammerIcon,  XIcon } from "@phosphor-icons/react";
 
 
 
 
 //user card, for actual user management -> includes:
-// account delete = pending
+// account delete = done [added banning concept or deletion using hammer]
 // account notify = done
 // account view = done
 //its usually user realted to his art and creation wont be counted individually but as an whole we still keep track of them [ps: specific art related stuff will be managed in art management for superuser instead]
 
 export default function CardManage({user, onClose}){
     return(
-        <div className="relative bg-[var(--sbgc)] drop-shadow-md border-3 w-96 border-[var(--border)] flex flex-col text-[var(--color)]">
+        <div className="mt-2 relative bg-[var(--sbgc)] drop-shadow-md  w-81 rounded-xl shadow flex flex-col text-[var(--color)]">
 
-            <div className="h-28  bg-cover bg-center"
+            <div className="h-28  bg-cover bg-center rounded-t-xl"
             style={{
                 backgroundImage: `url(${getFullUrl(user.selected_bg)})`
             }}
             >
             </div>
-            <button className="absolute top-2 right-2">
+            <button className="absolute top-2 right-2 shadow drop-shadow-md">
                 <XIcon size={24}
                 weight="bold"
                 className="text-[var(--color)] cursor-pointer hover:bg-[var(--bgc)]  bg-[var(--sbgc)] rounded-full"
@@ -46,15 +46,18 @@ export default function CardManage({user, onClose}){
                 ))}
                 </div>
             )}
-              <h2 className="text-xl font-bold " font-bold>{user.full_name}</h2>
-                <h2  font-bold>@{user.username}</h2>
-                <p className="text-sm" font-bold>{user.biography}</p>
+              <h2 className="text-[16px] font-bold " font-bold>{user.full_name}</h2>
+                <h2 className="text-[14px]">@{user.username}</h2>
+                <p className="italic text-[12px]">{user.biography}</p>
                 </div>
 
-                <div className="ml-20 flex flex-col gap-2 mt-28 text-sm">
-                    <p>{user.gender}</p>
-                    <p>{user.role}</p>
-                    <p>{user.nationality}</p>
+                <div className="flex flex-col mt-28 text-sm">
+                    {/* //it aint button but it will be button at develeopment [backend intergration] */}
+                    <HammerIcon size={48} className="top-0 -mt-10 border-3 rounded-full ml-26 mb-8 p-2 bg-[var(--bgc)] border-[var(--border)] cursor-pointer"
+                    />                    
+                    <p className="ml-20">{user.gender}</p>
+                    <p className="ml-20">{user.role}</p>
+                    <p className="ml-20">{user.nationality}</p>
                 </div>
             </div>
             <div className="grid grid-cols-3 mb-2 gap-2 text-center text-sm px-8 pt-6">
@@ -78,9 +81,9 @@ export default function CardManage({user, onClose}){
 
 />
                 <button
-                className="p-2 bg-[var(--bgc)] border-3 rounded-lg border-[var(--border)]"
+                className="p-2 bg-[var(--bgc)] border-3 rounded-lg border-[var(--border)] cursor-pointer"
                 >
-                    <BellIcon size={20 } weight="bold"className="text-[var(--color)] cursor-pointer"
+                    <BellIcon size={20 } weight="bold"className="text-[var(--color)] "
                     />
                 </button>
 
