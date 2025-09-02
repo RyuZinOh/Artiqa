@@ -17,6 +17,7 @@ import Top from "./pages/Top";
 import OnlyAdmin from "./protection/onlyAdmin";
 import ManageUsers from "./pages/admin/manageuser/ManageUsers";
 import AritstRequests from "./pages/admin/ArtistRequests";
+import CreateCompeition from "./pages/admin/CreateComp";
 function App() {
   return (
     <Routes>
@@ -77,7 +78,14 @@ function App() {
         <AritstRequests />
         </OnlyAdmin>
         } />
+        
 
+        <Route path="/manage-weekly" element={
+        <OnlyAdmin>
+        <CreateCompeition />
+        </OnlyAdmin>
+        } />
+        
 
 
 

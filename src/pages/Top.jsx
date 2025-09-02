@@ -6,8 +6,9 @@ import {
   LessThanIcon,
   UserIcon,
 } from "@phosphor-icons/react";
-import leaderboardData from "../dummy/leaderboard.json";
+import leaderboardData from "../dummy/user.json";
 import { useState } from "react";
+import currentuser from "../dummy/current_user.json";
 
 
 
@@ -15,9 +16,10 @@ export default function Weekly() {
   const date = new Date(); // here we will like get the created challenge date from the database and diff it through one week of time, but for now its's Just the skeleton so whatever is looking resemblance is added!
 
 
+  const ukelele = leaderboardData.find(u=> u.username === currentuser.username);
 
 
-  const sortedData = [...leaderboardData].sort((a,b) => b.wins - a.wins);
+  const sortedData = [...leaderboardData].sort((a,b) => b.total_wins - a.total_wins);
 
   //pagination
   const per = 15;
@@ -40,12 +42,14 @@ export default function Weekly() {
         <table className="min-w-full drop-shadow-md text-gray-500">
           <tbody className="text-md border-3  border-[var(--border)] overflow-hidden">
             <tr className="bg-[var(--bgc)]">
-              <td className="px-3 py-3 text-left w-[5%]">15</td>
-              <td className="px-4 py-3 text-left w-[45%]">You (x%)</td>
+              {/* //yet to implement the dynamic rank calculation instead of incremental err for this indivdual shi, or we can later modify this code accordinly to later table */}
+              <td className="px-3 py-3 text-left w-[5%]">2</td>
+              <td className="px-4 py-3 text-left w-[45%]">{ukelele.username}</td>
+
               <td className="px-6 py-3 text-left w-[20%]">
-                15
+                {ukelele.total_wins}
               </td>
-              <td className="px-4 py-3 pr-5 text-right w-[30%]">2025-5-20</td>
+              <td className="px-4 py-3 pr-5 text-right w-[30%]">{ukelele.joined_date}</td>
             </tr>
           </tbody>
         </table>
@@ -110,7 +114,7 @@ export default function Weekly() {
               <th className="px-3 py-3 text-left w-[5%]">#</th>
               <th className="px-4 py-3 text-left w-[45%]">Artist</th>
               <th className="px-6 py-3 text-left w-[20%]">Wins</th>
-              <th className="px-4 py-3 pr-5 text-right w-[30%]">Claimed At</th>
+              <th className="px-4 py-3 pr-5 text-right w-[30%]">Joined At</th>
             </tr>
           </thead>
 
@@ -134,9 +138,9 @@ export default function Weekly() {
                     )}
                   </div>
                 </td>
-                <td className="py-4 px-4">{entry.artist}</td>
-                <td className="px-6 py-3 text-left">{entry.wins}</td>
-                <td className="px-4 py-3 text-right pr-5">{entry.claimedAt}</td>
+                <td className="py-4 px-4">{entry.username}</td>
+                <td className="px-6 py-3 text-left">{entry.total_wins}</td>
+                <td className="px-4 py-3 text-right pr-5">{entry.joined_date}</td>
               </tr>
             ))}
           </tbody>

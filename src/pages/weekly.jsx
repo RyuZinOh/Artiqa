@@ -6,7 +6,8 @@ import {
   LessThanIcon,
   UserIcon,
 } from "@phosphor-icons/react";
-import leaderboardData from "../dummy/weeky.json";
+import userData from "../dummy/user.json";
+import currentUser from "../dummy/current_user.json"
 
 const days = [
   "Sunday",
@@ -21,6 +22,25 @@ const days = [
 export default function Weekly() {
   const date = new Date(); // here we will like get the created challenge date from the database and diff it through one week of time, but for now its's Just the skeleton so whatever is looking resemblance is added!
   const theme = "Whispers from Forgotten Worlds";
+
+
+  //collecting all competing posts from each user in the array or groups
+  const competingPosts = userData.flatMap(user=>
+    user.overall_posts.filter(post=> post.isCompeting)
+    .map(post=>({
+      artist: user.username,
+      art: post.image_name,
+      votes: post.hearts,
+      createdAt: post.upload_date
+    }))
+  )
+
+  const sortedPosts = competingPosts.sort((a,b)=> b.votes - a.votes);
+
+  const cuurentuserpost = sortedPosts.find(p=> p.artist === currentUser.username);
+  const currentRank = sortedPosts.findIndex(p=> p === cuurentuserpost) +1;
+
+
 
   return (
     <Layout>
@@ -38,13 +58,13 @@ export default function Weekly() {
         <table className="min-w-full drop-shadow-md text-gray-500">
           <tbody className="text-md border-3  border-[var(--border)] overflow-hidden">
             <tr className="bg-[var(--bgc)]">
-              <td className="px-3 py-3 text-left w-[5%]">15</td>
-              <td className="px-4 py-3 text-left w-[20%]">You (x%)</td>
+              <td className="px-3 py-3 text-left w-[5%]">{currentRank}</td>
+              <td className="px-4 py-3 text-left w-[20%]">{cuurentuserpost.artist}</td>
               <td className="px-6 py-3 text-left w-[40%]">
-                Whispers petrified{" "}
+              {cuurentuserpost.art}
               </td>
-              <td className="py-3 px-4 text-right w-[15%]">0.5k</td>
-              <td className="px-4 py-3 pr-5 text-right w-[20%]">2025-4-12</td>
+              <td className="py-3 px-4 text-right w-[15%]">{cuurentuserpost.votes}</td>
+              <td className="px-4 py-3 pr-5 text-right w-[20%]">{cuurentuserpost.createdAt}</td>
             </tr>
           </tbody>
         </table>
@@ -94,7 +114,7 @@ export default function Weekly() {
           </thead>
 
           <tbody className="text-md">
-            {leaderboardData.map((entry, index) => (
+            {sortedPosts.map((entry, index) => (
               <tr
                 key={index}
                 // className={
@@ -104,13 +124,13 @@ export default function Weekly() {
               >
                 <td className="px-3 py-3">
                   <div className="flex justify-start">
-                    {entry.rank === 1 ? (
+                    {index === 0 ? (
                       <CrownSimpleIcon
                         size={20}
                         weight="regular"
                       />
                     ) : (
-                      <span className="ml-1">{entry.rank}</span>
+                      <span className="ml-1">{index+1}</span>
                     )}
                   </div>
                 </td>

@@ -12,7 +12,7 @@
   "role": "superuser",
   "speciality": "manga",
 "total_arts": 250,
-"total_wins": 6,
+"total_wins": 12,
 "current_streak": 200,
 "level": 25,
 "progress":0.77,
@@ -43,12 +43,17 @@
       {
         "userpfp":"/Arts/Bibek/bibek.jpg",
         "user": "bibekkafle",
-        "text": "Dman he is tuff"
+        "text": "Dann he looks tuff"
       },
       {
         "userpfp":"/Arts/Laxman/laxman.jpg",
         "user": "laxman",
         "text": "kamehamehaa................"
+      },
+      {
+        "userpfp":"/Arts/Batista/batista.jpg",
+        "user": "batista123",
+        "text": "Chad ☝️☝️"
       }
     ],
     "image_url": "/Arts/Safal/creations/goku.jpg",
@@ -56,29 +61,6 @@
   },
   {
     "image_id": 2,
-    "image_name": "daturaBites",
-    "upload_date": "2024-01-08",
-    "status": "published",
-    "visibility": "public",
-    "description": "A beautiful Breedable Woman.",
-    "hearts":6900,
-    "critiques": [
-      {
-        "userpfp":"/Arts/Bibek/bibek.jpg",
-        "user": "bibekkafle",
-        "text": "smash.."
-      },
-      {
-        "userpfp":"/Arts/Laxman/laxman.jpg",
-        "user": "laxman",
-        "text": "time to get freaky.... :D"
-      }
-    ],
-    "image_url": "/Arts/Safal/creations/datura.jpg",
-    "isCompeting": false
-  },
-  {
-    "image_id": 3,
     "image_name": "Renpoche",
     "upload_date": "2024-01-08",
     "status": "published",
@@ -99,6 +81,55 @@
     ],
     "image_url": "/Arts/Safal/creations/renpoche.jpg",
     "isCompeting": false
+  }
+]
+},
+{
+  "username": "batist123",
+  "full_name": "Dave Batista",
+  "profile_picture": "/Arts/Batista/batista.jpg",
+  "nationality": "American",
+  "biography": "Nothing can motivate me any more thatn I'm motivated.",
+  "birthday": "1969-01-18",
+  "gender": "male",
+  "email": "batista_arts@gmail.com",
+  "joined_date": "2025-06-01",
+  "role": "artist",
+  "speciality": "manga",
+"total_arts": 100,
+"total_wins": 42,
+"current_streak": 50,
+"level": 12,
+"progress":1.07,
+"recent_victories":[
+  "Dragon destiny",
+  "Rowdy ",
+  "Ola torpido",
+  "Bushido"
+],
+"selected_bg": "/Assets/Backgrounds/1.jpg",
+"selected_card":"/Assets/Cards/3.jpg",
+"badges":[
+  "/Assets/Badges/too_deep_for_this_platform.png"
+],
+"overall_posts":[
+  {
+    "image_id": 1,
+    "image_name": "SquidWar",
+    "upload_date": "2024-01-08",
+    "status": "published",
+    "visibility": "public",
+    "description": "The Chad, so powerful his mere existence destroys the infinite void ahh.",
+    "hearts":69000,
+    "critiques": [
+      {
+        "userpfp":"/Arts/Bibek/bibek.jpg",
+        "user": "bibekkafle",
+        "text": "tough mane"
+      }
+    ],
+    "image_url": "/Arts/Batista/creations/squirtchad.jpg",
+    "isCompeting": true
   }
 ]
 }

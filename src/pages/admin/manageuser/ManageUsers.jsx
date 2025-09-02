@@ -68,6 +68,7 @@ export default function ManageUsers(){
                         src={getFullUrl(user.profile_picture)}
                         alt={user.username}
                         className="w-10 h-10 rounded-full object-cover cursor-pointer"
+
                         onClick={()=> setSelectedUser(user)}
                         
                         />
