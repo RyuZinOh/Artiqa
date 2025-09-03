@@ -16,3 +16,9 @@ uvicorn app:app --reload
 ```
 ### Testing the Backend Using Postman 
 - **URL:** `http://127.0.0.1:8000/` with the valid methods
+
+
+
+
+### Remotely access xampp MySQL Database
+- ``cloudflared access tcp --hostname artiqa.safallama.com.np --url localhost:3306``

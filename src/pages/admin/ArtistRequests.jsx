@@ -16,7 +16,7 @@ export default function AritstRequests(){
               const IconComponenet = icon;
              return( <button
               key={i}
-              className="p-2 border-3 border-[var(--border)] bg-[var(--sbgc)] rounded-lg"
+              className="p-2 border-3 border-[var(--border)]  bg-[var(--sbgc)] rounded-lg"
               title={title}
               >
                 <IconComponenet size={22} weight="bold"/>
@@ -25,14 +25,14 @@ export default function AritstRequests(){
             })}
           </div>
 
-               <div className="mt-2 rounded-md  overflow-hidden border-3 border-[var(--border)]">
+               <div className="mt-2 rounded-md overflow-hidden border-3 border-[var(--border)]">
            
         <table className="min-w-full ">
 
-          <thead className="bg-[var(--sbgc)] text-2xl uppercase border-b-3 border-[var(--border)]">
+          <thead className="text-2xl uppercase border-b-3 border-[var(--border)] bg-[var(--sbgc)]">
             <tr>
               <th className="px-3 py-3 text-left w-[10%]">#</th>
-              <th className="px-4 py-3 text-left w-[25%]">Artist</th>
+              <th className="px-4 py-3 text-left w-[25%]">Requests</th>
               <th className="px-4 py-3 text-left w-[40%]">Message</th>
               <th className="px-4 py-3 text-right w-[25%]">Actions</th>
             </tr>

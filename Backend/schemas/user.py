@@ -29,6 +29,7 @@ class UserOut(BaseModel):
     is_verified: bool
     role_id: Optional[int]
     joined_date: datetime
+    folder_usernme: Optional[bool] = None
 
     model_config  ={
         "from_attributes": True

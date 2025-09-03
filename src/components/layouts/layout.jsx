@@ -7,11 +7,11 @@ export default function Layout({ children }) {
       <SideBar />
 
       <div
-        className="flex flex-col flex-1 overflow-y-auto h-screen box-border"
+        className="flex flex-col bg-[var(--bgc)] flex-1 overflow-y-auto h-screen box-border"
         style={{ willChange: "transform" }}
       >
         <TopBar />
-        <main className="p-4 bg-[var(--bgc)] box-border">{children}</main>
+        <main className="p-4 box-border">{children}</main>
       </div>
     </div>
   );

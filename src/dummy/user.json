@@ -23,8 +23,8 @@
   "Demons under my hood",
   "Dragon curling through the depths of sky"
 ],
-"selected_bg": "/Assets/Backgrounds/1.jpg",
-"selected_card":"/Assets/Cards/3.jpg",
+"selected_bg": "/Assets/Backgrounds/4.jpg",
+"selected_card":"/Assets/Cards/2.jpg",
 "badges":[
   "/Assets/Badges/pixel_picasso.png",
   "/Assets/Badges/too_deep_for_this_platform.png",
@@ -129,7 +129,13 @@
       }
     ],
     "image_url": "/Arts/Batista/creations/squirtchad.jpg",
-    "isCompeting": true
+    "isCompeting": true,
+    "reports": [
+  { "user": "safal", "reason": "Inappropriate content" },
+  { "user": "laxman", "reason": "Spam" },
+  { "user": "bibek", "reason": "Offensive language" }
+]
+
   }
 ]
 }

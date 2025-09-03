@@ -18,6 +18,8 @@ import OnlyAdmin from "./protection/onlyAdmin";
 import ManageUsers from "./pages/admin/manageuser/ManageUsers";
 import AritstRequests from "./pages/admin/ArtistRequests";
 import CreateCompeition from "./pages/admin/CreateComp";
+import ModerateArts from "./pages/admin/moderatearts/ModerateArts";
+import ArtReport from "./pages/admin/moderatearts/ArtReports";
 function App() {
   return (
     <Routes>
@@ -83,6 +85,18 @@ function App() {
         <Route path="/manage-weekly" element={
         <OnlyAdmin>
         <CreateCompeition />
+        </OnlyAdmin>
+        } />
+
+          <Route path="/moderate-arts" element={
+        <OnlyAdmin>
+        <ModerateArts />
+        </OnlyAdmin>
+        } />
+        
+          <Route path="/moderate-arts/art-report/:imagename" element={
+        <OnlyAdmin>
+        <ArtReport />
         </OnlyAdmin>
         } />
         

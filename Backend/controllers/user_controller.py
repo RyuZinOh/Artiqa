@@ -5,7 +5,11 @@ from schemas import UserCreate, UserOut, RoleFixed, loginFormat, ForgetPasswordV
 from utils.hashing import get_pwd_hash, verify_password
 from database import get_db
 from utils.jwt_token import create_token, password_token_create, password_token_verfiy
+import os
 
+
+
+A_F = os.getenv("ARTS_PATH")
 
 
 ## defining their for roles
@@ -50,8 +54,25 @@ def register_user(request: UserCreate, db:Session =  Depends(get_db))->UserOut:
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    
-    return UserOut.model_validate(new_user)
+
+
+
+    ##creating a folder for user
+    ufp = os.path.join(A_F, new_user.username)
+    folder_created = False
+    try: 
+        os.makedirs(ufp, exist_ok=True)
+        folder_created = True
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to create user folder:{str(e)}"
+        )    
+    user_out  = UserOut.model_validate(new_user)
+    user_out.folder_usernme = folder_created
+
+    return user_out
 
 
 

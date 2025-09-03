@@ -9,7 +9,7 @@ export default function CreateCompeition(){
 
                 <div className="relative w-full">
                     <LightbulbIcon size={26} weight="bold" 
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color)] z-10 shadow drop-shadow-md"/>
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color)] z-10"/>
 
                 <input type="text"
                 placeholder="Think of the art theme for this week..."
