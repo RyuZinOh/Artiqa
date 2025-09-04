@@ -38,6 +38,11 @@ export default function Portfolio() {
                 </div>
                 
                 <div className="flex-1 ml-80">
+
+
+
+
+
                     <h2 className="text-xl drop-shadow-md">{loggedInUser.full_name}{" / "}
                         {loggedInUser.nationality}
                     </h2>
@@ -84,6 +89,16 @@ export default function Portfolio() {
             Top [x%] 
             {/* //yet to determine, This will be done after over all Leaderboarding but this as a placeholder for now */}
          </div>
+
+         <div className="absolute bottom-10 right-4 font-bold text-[var(--color)]">
+                    <NavLink to={`/profile/${loggedInUser.username}`}>
+        Public View
+    </NavLink>
+
+         </div>
+
+
+
 
                 </div>
     </Layout>

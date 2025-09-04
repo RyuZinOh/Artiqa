@@ -5,10 +5,8 @@ import { ChatTeardropTextIcon } from "@phosphor-icons/react/dist/ssr";
 import weekly from "/assets/mascot_emotes/artcomptweekly.png"
 import { getFullUrl } from "../../utils/urlHelpers";
 import users from "../../dummy/user.json";
+import { slugify } from "../../utils/slugify";
 
-function slugify(text) {
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-}
 
 export default function IndividualePost() {
   const { slug } = useParams();

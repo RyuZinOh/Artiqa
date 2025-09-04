@@ -9,7 +9,8 @@ import {
 import leaderboardData from "../dummy/user.json";
 import { useState } from "react";
 import currentuser from "../dummy/current_user.json";
-
+import { getFullUrl } from "../utils/urlHelpers";
+import { NavLink } from "react-router-dom";
 
 
 export default function Weekly() {
@@ -138,7 +139,23 @@ export default function Weekly() {
                     )}
                   </div>
                 </td>
-                <td className="py-4 px-4">{entry.username}</td>
+                <td className="py-4 px-4">
+
+                        <NavLink
+                        to={`/profile/${entry.username}`}
+                        className="flex items-center gap-3 hover:underline"
+                        >
+                                          <img
+                                          src={getFullUrl(entry.profile_picture)}
+                                          alt={entry.artist}
+                                          className="w-8 h-8 rounded-full object-cover cursor-pointer"
+                                          />
+                                          <span
+                                          className="hover:underline cursor-pointer"
+                                          >{entry.username}</span>
+                        </NavLink>
+
+                </td>
                 <td className="px-6 py-3 text-left">{entry.total_wins}</td>
                 <td className="px-4 py-3 text-right pr-5">{entry.joined_date}</td>
               </tr>

@@ -8,7 +8,9 @@ import {
 } from "@phosphor-icons/react";
 import userData from "../dummy/user.json";
 import currentUser from "../dummy/current_user.json"
-
+import { getFullUrl } from "../utils/urlHelpers";
+import { NavLink } from "react-router-dom";
+import { slugify } from "../utils/slugify";
 const days = [
   "Sunday",
   "Monday",
@@ -18,6 +20,7 @@ const days = [
   "Friday",
   "Saturday",
 ];
+
 
 export default function Weekly() {
   const date = new Date(); // here we will like get the created challenge date from the database and diff it through one week of time, but for now its's Just the skeleton so whatever is looking resemblance is added!
@@ -29,6 +32,7 @@ export default function Weekly() {
     user.overall_posts.filter(post=> post.isCompeting)
     .map(post=>({
       artist: user.username,
+      pfp: user.profile_picture,
       art: post.image_name,
       votes: post.hearts,
       createdAt: post.upload_date
@@ -117,11 +121,7 @@ export default function Weekly() {
             {sortedPosts.map((entry, index) => (
               <tr
                 key={index}
-                // className={
-                //   entry.rank % 2 ==0 ? "bg-[var(--sbgc)]"
-                //   : "bg-transparent"
-                // }
-              >
+                >
                 <td className="px-3 py-3">
                   <div className="flex justify-start">
                     {index === 0 ? (
@@ -134,8 +134,28 @@ export default function Weekly() {
                     )}
                   </div>
                 </td>
-                <td className="py-4 px-4">{entry.artist}</td>
-                <td className="px-6 py-3 text-left">{entry.art}</td>
+                <td className="py-4 px-4">
+                  <NavLink
+                        to={`/profile/${entry.artist}`}
+                        className="flex items-center gap-3 hover:underline"
+                        >
+                                          <img
+                                          src={getFullUrl(entry.pfp)}
+                                          alt={entry.artist}
+                                          className="w-8 h-8 rounded-full object-cover cursor-pointer"
+                                          />
+                                          <span
+                                          className="hover:underline cursor-pointer"
+                                          >{entry.artist}</span>
+                        </NavLink>
+                              
+                </td>
+                <td className="px-6 py-3 text-left hover:underline">
+                  
+                  <NavLink to={`/Explore/${slugify(entry.art)}`}>
+                  {entry.art}
+                  </NavLink>
+                  </td>
                 <td className="px-4 py-3 text-right">{entry.votes}</td>
                 <td className="px-4 py-3 text-right pr-5">{entry.createdAt}</td>
               </tr>

@@ -20,6 +20,7 @@ import AritstRequests from "./pages/admin/ArtistRequests";
 import CreateCompeition from "./pages/admin/CreateComp";
 import ModerateArts from "./pages/admin/moderatearts/ModerateArts";
 import ArtReport from "./pages/admin/moderatearts/ArtReports";
+import PublicProfile from "./pages/users/PublicProfile";
 function App() {
   return (
     <Routes>
@@ -32,6 +33,8 @@ function App() {
       <Route path="/weekly" element={<Weekly />} />
       <Route path="/Top" element={<Top />} />
       <Route path="/settings" element={<Settings/>} />
+
+      <Route path="/profile/:username" element={<PublicProfile/>}/>
 
 
       {/* 
@@ -50,6 +53,12 @@ function App() {
         </ProtectedRoute>
         
         } />
+ 
+   
+
+
+        
+
       <Route path="/portfolio/gallery" element={
         <ProtectedRoute>
         <Gallery />
