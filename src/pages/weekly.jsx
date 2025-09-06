@@ -41,8 +41,10 @@ export default function Weekly() {
 
   const sortedPosts = competingPosts.sort((a,b)=> b.votes - a.votes);
 
-  const cuurentuserpost = sortedPosts.find(p=> p.artist === currentUser.username);
-  const currentRank = sortedPosts.findIndex(p=> p === cuurentuserpost) +1;
+  const cuurentuserpost = currentUser?.username && currentUser.username.trim()!= "" && currentUser.username!="none" ?  
+  sortedPosts.find(p=> p.artist === currentUser.username): null;
+
+  const currentRank = cuurentuserpost ? sortedPosts.findIndex(p=> p === cuurentuserpost) +1: null;
 
 
 
@@ -58,6 +60,7 @@ export default function Weekly() {
         </div>
       </div>
       {/* upper table  userSpecific */}
+      {cuurentuserpost&& (
       <div className="mb-10">
         <table className="min-w-full drop-shadow-md text-gray-500">
           <tbody className="text-md border-3  border-[var(--border)] overflow-hidden">
@@ -73,6 +76,8 @@ export default function Weekly() {
           </tbody>
         </table>
       </div>
+      )}
+
 
 
       <div className="overflow-x-auto text-[var(--color)]">

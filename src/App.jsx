@@ -21,6 +21,10 @@ import CreateCompeition from "./pages/admin/CreateComp";
 import ModerateArts from "./pages/admin/moderatearts/ModerateArts";
 import ArtReport from "./pages/admin/moderatearts/ArtReports";
 import PublicProfile from "./pages/users/PublicProfile";
+import IsValid from "./protection/isValid";
+import HeLiked from "./pages/users/heLiked";
+import HeCommented from "./pages/users/heCommented";
+import PleaseRegisterOrLogin from "./pages/PleaseRegisterOrLogin";
 function App() {
   return (
     <Routes>
@@ -33,8 +37,25 @@ function App() {
       <Route path="/weekly" element={<Weekly />} />
       <Route path="/Top" element={<Top />} />
       <Route path="/settings" element={<Settings/>} />
+      <Route path="/plead" element={<PleaseRegisterOrLogin/>} />
+
 
       <Route path="/profile/:username" element={<PublicProfile/>}/>
+
+
+
+      <Route path="/likes" element={
+        <IsValid>
+        <HeLiked/>
+        </IsValid>
+        
+        }/>
+        <Route path="/comments" element={
+        <IsValid>
+        <HeCommented/>
+        </IsValid>
+        
+        }/>
 
 
       {/* 
@@ -53,6 +74,9 @@ function App() {
         </ProtectedRoute>
         
         } />
+
+
+        
  
    
 

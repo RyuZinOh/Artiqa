@@ -17,7 +17,7 @@ export default function Weekly() {
   const date = new Date(); // here we will like get the created challenge date from the database and diff it through one week of time, but for now its's Just the skeleton so whatever is looking resemblance is added!
 
 
-  const ukelele = leaderboardData.find(u=> u.username === currentuser.username);
+  const ukelele = currentuser?.username && currentuser.username.trim()!= "" && currentuser.username!="none" ?leaderboardData.find(u=> u.username === currentuser.username): null;
 
 
   const sortedData = [...leaderboardData].sort((a,b) => b.total_wins - a.total_wins);
@@ -39,12 +39,14 @@ export default function Weekly() {
   return (
     <Layout>
       {/* upper table  userSpecific */}
+     {ukelele &&(
       <div className="mb-10">
         <table className="min-w-full drop-shadow-md text-gray-500">
           <tbody className="text-md border-3  border-[var(--border)] overflow-hidden">
             <tr className="bg-[var(--bgc)]">
-              {/* //yet to implement the dynamic rank calculation instead of incremental err for this indivdual shi, or we can later modify this code accordinly to later table */}
-              <td className="px-3 py-3 text-left w-[5%]">2</td>
+              <td className="px-3 py-3 text-left w-[5%]">
+                {sortedData.findIndex((u)=> u.username === ukelele.username)+1}
+              </td>
               <td className="px-4 py-3 text-left w-[45%]">{ukelele.username}</td>
 
               <td className="px-6 py-3 text-left w-[20%]">
@@ -55,7 +57,7 @@ export default function Weekly() {
           </tbody>
         </table>
       </div>
-
+     )}
 
       <div className="overflow-x-auto text-[var(--color)]">
         <div className="flex justify-between items-centermb-2 drop-shadow-md">

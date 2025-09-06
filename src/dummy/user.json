@@ -9,7 +9,7 @@
   "gender": "male",
   "email": "serena@safallama.com.np",
   "joined_date": "2025-07-25",
-  "role": "artist",
+  "role": "superuser",
   "speciality": "manga",
 "total_arts": 250,
 "total_wins": 12,
@@ -82,6 +82,20 @@
     "image_url": "/Arts/Safal/creations/renpoche.jpg",
     "isCompeting": false
   }
+],
+"liked_arts":[
+  {
+  "artist":"batist123",
+  "art": "/Arts/Batista/creations/squirtchad.jpg"
+  },
+   {
+  "artist":"safal726",
+"art": "/Arts/Safal/creations/renpoche.jpg"
+  },
+  {
+  "artist":"bibekkafle",
+    "art": "/Arts/Bibek/creations/radhekrishna.jpg"
+  }
 ]
 },
 {
@@ -126,7 +140,14 @@
         "userpfp":"/Arts/Bibek/bibek.jpg",
         "user": "bibekkafle",
         "text": "tough mane"
+      },
+      {
+        "userpfp":"/Arts/Safal/safal.png",
+        "user": "safal726",
+        "text": "interesting lil bro, kinda funky :D"
       }
+      
+      
     ],
     "image_url": "/Arts/Batista/creations/squirtchad.jpg",
     "isCompeting": true,
@@ -136,6 +157,145 @@
   { "user": "bibek", "reason": "Offensive language" }
 ]
 
+  }
+],
+"liked_arts":[
+  {
+  "artist":"safal726",
+"art": "/Arts/Safal/creations/renpoche.jpg"
+  }
+]
+},
+
+
+
+
+
+
+
+
+
+
+
+
+{
+  "username": "bibekkafle",
+  "full_name": "Bibek Kafle",
+  "profile_picture": "/Arts/Bibek/bibek.jpg",
+  "nationality": "Nepalease",
+  "biography": "cheete ki teji, aur baaj ki najar!",
+  "birthday": "1969-01-18",
+  "gender": "male",
+  "email": "bibekkafle123@gmail.com",
+  "joined_date": "2025-06-08",
+  "role": "artist",
+  "speciality": "pattachitra",
+"total_arts": 1,
+"total_wins": 0,
+"current_streak": 14,
+"level": 11,
+"progress":1.00,
+"recent_victories":[],
+"selected_bg": "/Assets/Backgrounds/2.jpg",
+"selected_card":"/Assets/Cards/1.jpg",
+"badges":[],
+"overall_posts":[
+  {
+    "image_id": 1,
+    "image_name": "radhekrishna",
+    "upload_date": "2024-01-08",
+    "status": "published",
+    "visibility": "public",
+    "description": "jai shree krishna, and radha: A Aesthetic pictures",
+    "hearts":4500,
+    "critiques": [
+      {
+        "userpfp":"/Arts/Safal/safal.png",
+        "user": "safal726",
+        "text": "Nice"
+      }      
+    ],
+    "image_url": "/Arts/Bibek/creations/radhekrishna.jpg",
+    "isCompeting": true,
+    "reports": []
+
+  }
+],
+"liked_arts":[
+  {
+  "artist":"safal726",
+"art": "/Arts/Safal/creations/renpoche.jpg"
+  }
+]
+}
+
+
+,{
+  "username": "laxman",
+  "full_name": "Laxman Rawat",
+  "profile_picture": "/Arts/Laxman/laxman.jpg",
+  "nationality": "Nepalease",
+  "biography": "i alone am the honord one",
+  "birthday": "1969-01-18",
+  "gender": "male",
+  "email": "laxysoul@gmail.com",
+  "joined_date": "2025-06-08",
+  "role": "artist",
+  "speciality": "Sketch",
+"total_arts": 2,
+"total_wins": 0,
+"current_streak": 5,
+"level": 8,
+"progress": 0.95,
+"recent_victories":[],
+"selected_bg": "/Assets/Backgrounds/5.jpg",
+"selected_card":"/Assets/Cards/4.jpg",
+"badges":[],
+"overall_posts":[
+  {
+    "image_id": 1,
+    "image_name": "shivaJi",
+    "upload_date": "2024-01-08",
+    "status": "published",
+    "visibility": "public",
+    "description": "he alone the honored one, his art is divine.. Oh nava shivaiyy",
+    "hearts":5500,
+    "critiques": [
+      {
+        "userpfp":"/Arts/Safal/safal.png",
+        "user": "safal726",
+        "text": "om :P"
+      }      
+    ],
+    "image_url": "/Arts/Laxman/creations/shivaji.jpg",
+    "isCompeting": true,
+    "reports": []
+
+  },
+  {
+    "image_id": 2,
+    "image_name": "JaganNath",
+    "upload_date": "2024-01-08",
+    "status": "published",
+    "visibility": "public",
+    "description": "shristiko palanhar...",
+    "hearts":40000,
+    "critiques": [
+      {
+        "userpfp":"/Arts/Safal/safal.png",
+        "user": "safal726",
+        "text": "interesting"
+      }      
+    ],
+    "image_url" :"/Arts/Laxman/creations/jagannatha.jpg",
+     "isCompeting": false,
+    "reports": []
+  }
+],
+"liked_arts":[
+  {
+  "artist":"safal726",
+"art": "/Arts/Safal/creations/renpoche.jpg"
   }
 ]
 }

@@ -72,17 +72,17 @@ const draftCount  = userPosts.filter(
 
           <div className="flex space-x-3 mb-2">
             {[
-              {icon: LessThanIcon, title: "go back"},
+              {icon: LessThanIcon, title: "go back",},
               {icon: HashIcon, title: "Enter your own number"},
               {icon: GreaterThanIcon, title: "go front"}
             ].map(({icon, title},i)=>{
               const IconComponenet = icon;
              return( <button
               key={i}
-              className="p-2 border-2 border-[var(--border)] bg-[var(--sbgc)] rounded-lg"
+              className="p-2 border-3 border-[var(--border)] bg-[var(--sbgc)] rounded-lg"
               title={title}
               >
-                <IconComponenet size={22} weight="regular"/>
+                <IconComponenet size={22} weight="bold"/>
               </button>
              );
 })}
