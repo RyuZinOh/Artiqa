@@ -10,7 +10,7 @@ export const themes = {
   },
   
   monochromeMist: {
-  "--sbgurl": "https://tse3.mm.bing.net/th/id/OIP.VzVsWISjGkopzLb-eixahwHaLS?r=0&cb=thfc1&rs=1&pid=ImgDetMain&o=7&rm=3",
+  "--sbgurl": "/Assets/Cards/5.jpg",
   "--bgc": "#f5f5f5",     
   "--sbgc": "#c0c0c0",    
   "--color": "#1a1a1a",

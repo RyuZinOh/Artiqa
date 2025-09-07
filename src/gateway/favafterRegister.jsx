@@ -1,8 +1,9 @@
 import ladypaints from "/assets/forRegister/paintergirlillu.svg";
 import { BowlFoodIcon} from "@phosphor-icons/react";
-import { NavLink } from "react-router-dom";
-
-export default function FavAfterRegister(){
+import { useFavAfter } from "./gateway";
+export default function FavAfterRegister({formData}){
+  const {favFood, setFavfood, handleSubmit} = useFavAfter(formData);
+  
     return(
         <div className="flex h-screen">
         {/* // left side  */}
@@ -17,6 +18,7 @@ export default function FavAfterRegister(){
             Answer the question to help us recover your account later.
           </p>
           <form
+          onSubmit={handleSubmit}
         className="space-y-6  border-3 border-[var(--border)]
         rounded-md p-6"
           >
@@ -25,6 +27,8 @@ export default function FavAfterRegister(){
             <div className="relative flex-1">
   <input type="text " 
                 placeholder="enter your fav food"
+                value={favFood}
+                onChange={(e)=>setFavfood(e.target.value)}
                 className="
                  w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-[var(--bgc)] placeholder:text-[var(--color)]
                 transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)]
@@ -38,11 +42,11 @@ export default function FavAfterRegister(){
               />
             </div>
                 <div className="flex justify-end">
- <NavLink
-                to ="/login"
-                className="bg--[var(--sbgc)] border-2 border-[var(--border)] text--[var(--color)] font-bold px-8 py-3 rounded-md hover:bg-[var(--bgc)] hover:border-2 transition -mb-3 w-[200px] ml-8 text-center "> 
+ <button
+ type="submit"
+                className="bg-[var(--sbgc)] border-2 border-[var(--border)] text-[var(--color)] font-bold px-8 py-3 rounded-md hover:bg-[var(--bgc)] hover:border-2 transition -mb-3 w-[200px] ml-8 text-center "> 
                     REGISTER
-                </NavLink>
+                </button>
 
 
                 </div>

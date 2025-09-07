@@ -1,18 +1,40 @@
-import { useState } from "react";
 import ladypaints from "/assets/forRegister/paintergirlillu.svg";
-import { AtIcon, EyesIcon, FeatherIcon, IdentificationCardIcon, UserIcon } from "@phosphor-icons/react";
+import { AtIcon, EyesIcon, FeatherIcon, FlagIcon, IdentificationCardIcon, UserIcon } from "@phosphor-icons/react";
 import { NavLink } from "react-router-dom";
 import FavAfterRegister from "./favafterRegister";
+import { useRegister } from "./gateway";
+
+
+
 
 export default function Register(){
-  const [favfoo,setFoo] = useState(false);
-  const [showPass, setShowPass] = useState(false);
-  const [showConf, setshowConf] = useState(false ) //if not created seperatly then the both password and confirm password might hide and show at same time , not sperately so for seperation, this seperate usestate 
-    return(
-      <>{
-        favfoo?(
-          <FavAfterRegister/>
-        ):(
+const{
+  favFlow,
+        showPass,
+        showConf, 
+        formData,
+        setFormData,
+        setShowConf,
+        setShowPass, 
+        handleContinue
+} = useRegister({
+      email: "",
+      username: "",
+      full_name:"",
+      password:"",
+      confirm_password: "",
+      biography: "",
+      gender:"",
+      nationality:"",
+      profile_pic: null
+})
+
+  if(favFlow){
+    return <FavAfterRegister formData={formData}/>;
+}
+
+  return(
+      
         <div className="flex h-screen">
         {/* // left side  */}
         <div
@@ -28,6 +50,7 @@ export default function Register(){
           </p>
           
           <form
+          onSubmit={handleContinue}
         className="space-y-6  border-3 border-[var(--border)]
         rounded-md p-6"
           >
@@ -41,6 +64,8 @@ export default function Register(){
                 w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-[var(--bgc)] placeholder:text-[var(--color)]
                 transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)]
                 "
+                value={formData.email}
+                onChange={(e)=> setFormData({...formData, email: e.target.value})}
                 />      
           <AtIcon
                 size={24}
@@ -50,6 +75,8 @@ export default function Register(){
               </div>
               <div className="relative flex-1">
                 <input type="text " 
+                value={formData.username}
+                onChange={(e)=> setFormData({...formData, username: e.target.value})}
                 placeholder="username"
                 className="
                  w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-[var(--bgc)]  placeholder:text-[var(--color)]
@@ -70,6 +97,8 @@ export default function Register(){
             <div className="relative flex-1">
   <input type="text " 
                 placeholder="full name"
+                value={formData.full_name}
+                onChange={(e)=> setFormData({...formData, full_name: e.target.value})}
                 className="
                  w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-[var(--bgc)] placeholder:text-[var(--color)]
                 transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)]
@@ -82,6 +111,28 @@ export default function Register(){
                 className="absolute right-3 top-4 -translate-y-0.5"
               />
             </div>
+
+
+
+            {/* //nationality */}
+<div className="relative flex-1 mt-4">
+  <input
+    type="text"
+    placeholder="Nationality"
+    value={formData.nationality}
+    onChange={(e) => setFormData({ ...formData, nationality: e.target.value })}
+    className="
+      w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-[var(--bgc)] placeholder:text-[var(--color)]
+      transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)]
+    "
+  />
+    <FlagIcon
+                size={24}
+                weight="regular"
+                className="absolute right-3 top-4 -translate-y-0.5"
+              />
+</div>
+
                 
             
 {/* //password +bio */}
@@ -92,7 +143,9 @@ export default function Register(){
                 <input 
                 type={showPass ? "text" : "password"}
                 placeholder="password"
-               className="p
+                value={formData.password}
+                onChange={(e)=> setFormData({...formData, password: e.target.value})}
+               className="
                 w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-[var(--bgc)] placeholder:text-[var(--color)]
                 transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)
                "/>
@@ -114,6 +167,8 @@ export default function Register(){
                 <input
                 type={showConf ? "text" : "password"}
                 placeholder="confirm password"
+                value={formData.confirm_password}
+                onChange={(e)=> setFormData({...formData, confirm_password: e.target.value})}   
                className="
                 w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-[var(--bgc)] placeholder:text-[var(--color)]
                 transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)]
@@ -122,7 +177,7 @@ export default function Register(){
 
                    <button
                 type="button"
-                onClick={() => setshowConf(!showConf)}
+                onClick={() => setShowConf(!showConf)}
                 className="absolute right-3 top-4 -translate-y-0.5 group-hover:scale-100 transition-transform duration-150 cursor-pointer"
               >
                 <EyesIcon
@@ -136,8 +191,9 @@ export default function Register(){
 
                 <div className="relative flex-1">
                   <textarea placeholder="biography"
-                className="
-                
+               value={formData.biography}
+                onChange={(e)=> setFormData({...formData, biography: e.target.value})}
+               className="
                 resize-none 
                 min-h-[7.8rem] 
                 w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-[var(--bgc)] placeholder:text-[var(--color)]
@@ -165,7 +221,8 @@ export default function Register(){
                     {/* //male  */}
                     <label className="flex items-center space-x-1">
                         <input type="radio" name="gender" value="male"
-                        
+                        checked={formData.gender === "male"}
+                onChange={(e)=> setFormData({...formData, gender: e.target.value})}
                         className="w-5 h-5 border-2 border-black accent-black"/>
                         <span>male</span>
 
@@ -173,7 +230,8 @@ export default function Register(){
                     </label>
                         <label className="flex items-center space-x-1">
                         <input type="radio" name="gender" value="female"
-                        
+                        checked={formData.gender === "female"}
+                onChange={(e)=> setFormData({...formData, gender: e.target.value})}                        
                         className="w-5 h-5 border-2 border-black accent-black"/>
                         
                         <span>female</span>
@@ -181,7 +239,8 @@ export default function Register(){
                         {/* others */}
                         <label className="flex items-center space-x-1">
                         <input type="radio" name="gender" value="others"
-                        
+                        checked={formData.gender ==="others"}
+                onChange={(e)=> setFormData({...formData, gender: e.target.value})}                        
                         className="w-5 h-5 border-2 border-black accent-black"/>
                         
                         <span>others</span>
@@ -190,9 +249,6 @@ export default function Register(){
                 </div>
 
               <button type="submit"
-              onClick={
-                ()=>setFoo(true)
-                }
                 className="bg-[var(--sbgc)] border-2 border-[var(--border)] text-[var(--color)] font-bold px-8 py-3 rounded-md hover:bg-[var(--bgc)]  hover:border-2 transition -mb-3 w-[200px] ml-8 "> 
                     CONTINUE
                 </button>
@@ -208,7 +264,7 @@ export default function Register(){
             </p>
             <NavLink
             to="/login"
-            className="py-2 w-35 px-4 mr-2 bg-[var(--bgc)] hover:bg-[var(--sbgc)] text-[var(--color)] border-[var(--birder)] border-3 rounded-md font-bold text-center drop-shadow-md cursor-pointer"
+            className="py-2 w-35 px-4 mr-2 bg-[var(--bgc)] hover:bg-[var(--sbgc)] text-[var(--color)] border-[var(--border)] border-3 rounded-md font-bold text-center drop-shadow-md cursor-pointer"
           >LOGIN
           </NavLink>
 
@@ -231,8 +287,5 @@ export default function Register(){
         </div>
         
 )
-      }
-      </>
-    );
     
 }

@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { getFullUrl } from "../../utils/urlHelpers";
 import {
   ArrowLeftIcon,
   BoxingGloveIcon,
@@ -98,7 +99,7 @@ export default function SideBar() {
       {sbgurl && sbgurl!== "none" && ( 
       <div className="absolute inset-0"
       style={{
-        backgroundImage: `url(${sbgurl})`,
+        backgroundImage: `url(${getFullUrl(sbgurl)})`,
         backgroundPosition: "center",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
