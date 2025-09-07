@@ -46,7 +46,7 @@ export function useFavAfter(formData){
 
     try {
       const res = await fetch(
-            `${import.meta.env.VITE_STATIC_FAST_API_URL}/users/register`,
+            `${import.meta.env.VITE_STATIC_BASE_URL}/users/register`,
    {
     method: "POST",
     headers:{"Content-Type": "application/json"},
