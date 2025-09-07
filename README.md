@@ -1,3 +1,5 @@
+<samp>Only works when I from my localhost run artiqa else the link wont run.</samp>
+
 ### Tech Stack
 <table>
   <tr>
@@ -9,7 +11,6 @@
           
   </tr>
 </table>
-
 
 
 ## Integration with Backend
