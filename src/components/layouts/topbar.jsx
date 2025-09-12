@@ -1,51 +1,84 @@
 import { BellIcon, FunnelIcon} from "@phosphor-icons/react";
-import { NavLink, useLocation } from "react-router-dom";
-import users from "../../dummy/user.json";
-import notifications from "../../dummy/noti_samp.json";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { getFullUrl } from "../../utils/urlHelpers";
 import { useEffect, useRef, useState } from "react";
-import currentUser from "../../dummy/current_user.json";
+import { useAuth } from "../../context/useAuth";
+import { toast } from "react-toastify";
 
 export default function TopBar() {
+  const {auth, logout} = useAuth();
+  const navigate = useNavigate();
   const location = useLocation();
   const label =
     location.pathname === "/" ? "Explore" : location.pathname.slice(1);
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [notiOpen, setNotiOpen] = useState(false);
+    const [userData, setUserData] = useState(null);
+    const [notifications, setNotifications] = useState([]);
+    
 
     const menuRef = useRef(null);
     const notiRef = useRef(null);
-    
-    const toggleMenu = ()=> {
-      setMenuOpen((prev)=> !prev);
-      setNotiOpen(false);
-    }
-
-    //notification toggle
-    const toggleNoti =()=>{
-      setNotiOpen((prev) => !prev);
-      setMenuOpen(false);
-    }
 
 
     useEffect(()=>{
-      function handleClickOutside(e){
-        if (menuRef.current && !menuRef.current.contains(e.target)
-        && notiRef.current && !notiRef.current.contains(e.target)
-        ){
-          setMenuOpen(false);
-          setNotiOpen(false);
-        }
+      if(!auth?.token){
+        setUserData(null);
+        setNotifications([]);
+      return;
       }
-      document.addEventListener("mousedown",handleClickOutside);
-      return ()=> document.removeEventListener("mousedown",handleClickOutside);
-    },[]);
 
-  const loggedInUser = currentUser?.username && currentUser.username.trim()!== ""?
-  users.find((u)=>u.username === currentUser.username):null;
+      const fetchUser = async()=>{
+        try{
+          const res = await fetch(
+            `${import.meta.env.VITE_STATIC_FAST_API_URL}/users/get_data`,{
+              headers:{Authorization: `Bearer ${auth.token}`},
+            });
+            if (!res.ok){
+              toast.error("failed to fetch user data");
+            }
+              const data = await res.json();
+              setUserData(data.user || null);
 
+              setNotifications([
+                {username: "system", Stuff: "hi", pfp:"/something"}
+              ]);
+            
+            }catch(err){
+              toast.error("error fetching data", err);
+              logout();
+              navigate("/login");
+            }
+        };
+        fetchUser();
+      },[auth, logout, navigate]);
 
+      useEffect(()=>{
+        const handleClickOutside = (e) =>{
+          if(
+            menuRef.current && !menuRef.current.contains(e.target) &&
+            notiRef.current && !notiRef.current.contains(e.target) 
+          ){
+            setMenuOpen(false);
+            setNotiOpen(false);
+          }
+        };
+          document.addEventListener("mousedown", handleClickOutside);
+          return() => document.removeEventListener("mousedown", handleClickOutside);
+        }, []);
+
+        const toggleMenu =  ()=> setMenuOpen((prev)=>!prev);
+        const toggleNoti =  ()=> setNotiOpen((prev)=>!prev);
+        
+          const handleLogout =()=>{
+            logout();
+            setMenuOpen(false);
+            navigate("/login");
+          }
+
+          const profileImg = userData?.profile_pic;
+          const fullname = userData?.full_name;
   
 
   return (
@@ -54,19 +87,21 @@ export default function TopBar() {
 
       <div className="flex items-center gap-4 text-[var(--color)]">
         <FunnelIcon size={24} />
-        {loggedInUser ? (
+        {userData ? (
           <>
           {/* the notifications  */}
-          <div className="relative cursor-pointer"
-          onClick={toggleNoti}
+          <div className="relative"
+          ref={notiRef}
           >
-            <BellIcon size={24} />
+            <BellIcon size={24}
+            onClick={toggleNoti}
+            className="cursor-pointer"
+            />
             {notifications.length>0 && (
               <span className="absolute top-0 right-0 block h-2 w-2 rounded-full ring-0 border border-[var(--border)]  bg-[var(--sbgc)]"></span>
             )}
-          </div>
           {notiOpen && (
-            <div className="absolute right-4 top-12 w-72 max-h-80 overflow-y-auto shadow-lg rounded-xl p-3 bg-[var(--sbgc)] text-[var(--color)] z-50">
+            <div className="absolute -mr-10 right-2 top-10 w-72 max-h-80 overflow-y-auto shadow-lg rounded-xl p-3 bg-[var(--sbgc)] text-[var(--color)] z-50">
               {notifications.length > 0 ? (
                 notifications.map((n,i)=>(
                   <div
@@ -86,32 +121,40 @@ export default function TopBar() {
                   No notifications
                 </p>
               )}
-
-
             </div>
           )}
-            <img
-              src={getFullUrl(loggedInUser.profile_picture)}
-              alt={loggedInUser.full_name}
+          </div>
+
+          <div
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={toggleMenu}
+          ref={menuRef}
+          >
+             <img
+              src={getFullUrl(profileImg)}
+              alt={fullname}
               className="w-7 h-7 rounded-full object-cover cursor-pointer drop-shadow-md"
-              onClick={toggleMenu}
             />
+           
+
             {menuOpen &&(
               <div className="absolute right-4 top-12  shadow-lg rounded-xl p-2 w-40 z-50 bg-[var(--sbgc)] text-[var(--color)]">
                 <NavLink
                 to="/settings"
                 className="block px-4 py-2 text-s hover:font-bold"
+                onClick={()=>setMenuOpen(false)}
                 >
                   Settings
                   </NavLink>
-                  <NavLink 
-                  to="/login"
-                className="block px-4 py-2 text-sm hover:font-bold"
+                  <button 
+                  onClick={handleLogout}
+                className="block px-4 py-2 text-sm hover:font-bold cursor-pointer"
                   >
                     Logout
-                  </NavLink>
+                  </button>
               </div>
             )}
+            </div>
           </>
         ) : (
           <NavLink

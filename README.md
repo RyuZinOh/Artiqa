@@ -15,3 +15,4 @@
 
 ## Integration with Backend
 - [x] User Registration
+- [x] Login

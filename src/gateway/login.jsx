@@ -1,12 +1,33 @@
 import loginIllustration from "/assets/forLogin/illustrationLogin.svg";
 import blackblob from "/assets/forLogin/blob.svg";
 import { EyesIcon, UserIcon } from "@phosphor-icons/react";
-import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLogin } from "./gateway";
+import { NavLink, useNavigate} from "react-router-dom";
+import { useAuth } from "../context/useAuth";
 
 export default function Login() {
-  const [showPass, setShowPass] = useState(false);
-  const navigate = useNavigate();
+  const[showPass, setShowPass] = useState(false);
+ const {auth} = useAuth();
+ const navigate = useNavigate();
+
+  const {
+    username,
+    setUsername,
+    password, 
+    setPassword,
+    loading,
+    handleLogin
+  } = useLogin();
+
+
+  useEffect(()=>{
+    if (auth?.token){
+      navigate("/");
+    }
+  })
+
+
   return (
     <div className="flex h-screen">
       {/* left side */}
@@ -20,10 +41,7 @@ export default function Login() {
             Enter your account details
           </p>
           <form
-          onSubmit= {(e)=>{
-            e.preventDefault();
-            navigate("/");
-          }}
+          onSubmit= {handleLogin}
             className="space-y-6 px-12 py-12 border-3 border-black 
           rounded-md"
           >
@@ -31,6 +49,8 @@ export default function Login() {
             <div className="relative group">
               <input
                 type="text"
+                value={username}
+                onChange={(e)=> setUsername(e.target.value)}
                 className="w-full p-3 pr-10 border-2 border-black rounded-md bg-transparent placeholder:text-black
                 transition duration-200 focus:outline-none focus:ring-2 focus:ring-black
                 "
@@ -46,6 +66,8 @@ export default function Login() {
             <div className="relative">
               <input
                 type={showPass ? "text" : "password"}
+                value={password}
+                onChange={(e)=> setPassword(e.target.value)}
                 className="w-full p-3 pr-10 border-2 border-black rounded-md bg-transparent placeholder:text-black
                 transition duration-200 focus:outline-none focus:ring-2 focus:ring-black 
                 "
@@ -67,13 +89,15 @@ export default function Login() {
             {/* loginbutton */}
             <button
               type="submit"
+              disabled={loading}
               className="w-full py-3 px-4 
           border-2 border-black bg-black  text-white rounded-md font-bold cursor-pointer
           hover:bg-white hover:text-black  transition duration-300
           "
+
             >
-              LOGIN
-            </button>
+         {loading ? "logging in...": "LOGIN"}  
+          </button>
 
             {/* //forget password */}
             <div className="flex justify-center">
