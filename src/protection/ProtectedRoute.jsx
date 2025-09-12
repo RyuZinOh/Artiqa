@@ -1,17 +1,20 @@
 import { Navigate } from "react-router-dom";
-import currentUser  from "../dummy/current_user.json";
-import users from "../dummy/user.json";
+import { useAuth } from "../context/useAuth";
 
+export default function ProtectedRoute({children, requireArtist= false, requireAdmin=false}){
+      const {auth, userData} = useAuth();
+  if (!auth?.token){
+        return <Navigate to="/login" replace/>
+      }
 
-export default function ProtectedRoute({children, requiredRole = ["artist", "superuser"]}){
-      const loggedInUser = currentUser?.username && currentUser.username.trim()!== ""?
-  users.find((u)=>u.username === currentUser.username):null;
-
-
-  if(!loggedInUser || !requiredRole.includes(loggedInUser.role)){
+  if(requireArtist && !userData?.is_artist){
+    return <Navigate to="/404" replace/>;
+  }
+  
+  if(requireAdmin && !userData?.is_admin){
     return <Navigate to="/404" replace/>
   }
+  
 return children;
-
 
 }

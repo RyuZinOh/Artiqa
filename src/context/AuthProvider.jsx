@@ -1,39 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AuthContext from "./AuthContext";
+import { getUserData } from "./getter";
 
 export function AuthProvider({children}){
     const[auth, setAuth] = useState(()=>{
         const token = localStorage.getItem("authToken");
-        const isAdmin = localStorage.getItem("isAdmin") === "true";
-        const isArtist = localStorage.getItem("isArtist") === "true";
         return token ? {
             token, 
-            isAdmin, 
-            isArtist
         } : null;
     });
 
-    const login = (data) =>{
-        localStorage.setItem("authToken", data.auth);
-        localStorage.setItem("isAdmin", data.is_admin);
-        localStorage.setItem("isArtist", data.is_artist);
+    const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-        setAuth({
-            token: data.auth,
-            isAdmin: data.is_admin,
-            isArtist: data.is_artist,
-        });
-    };
+    const login = (token) =>{
+      localStorage.setItem("authToken", token);
+      setAuth({token});
+    }
+    const logout = () =>{
+      localStorage.removeItem("authToken");
+      setAuth(null);
+      setUserData(null);
+    }
 
-        const logout = ()=>{
-            localStorage.removeItem("authToken");
-            localStorage.removeItem("isAdmin");
-            localStorage.removeItem("isArtist");
-            setAuth(null);
-        };
+    useEffect(()=>{
+      if (!auth?.token){
+        setUserData(null);
+        setLoading(null);
+        return;
+      }
+
+      const fetchUser = async()=>{
+        try{
+          setLoading(true);
+          const data = await getUserData(auth.token);
+          setUserData(data);
+        }catch(err){
+          console.error("failed to fetch", err);
+          logout();
+        }finally{
+          setLoading(false);
+        }
+      }
+      fetchUser();
+    }, [auth?.token]);
 
     return(
-            <AuthContext.Provider value={{auth, login, logout}}>
+            <AuthContext.Provider value={{auth, login, logout, userData, loading}}>
                 {children}
             </AuthContext.Provider>
         )    

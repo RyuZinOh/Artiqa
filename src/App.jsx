@@ -14,7 +14,6 @@ import Settings from "./pages/users/Settings";
 import Gallery from "./pages/users/artists/Gallery";
 import ProtectedRoute from "./protection/ProtectedRoute";
 import Top from "./pages/Top";
-import OnlyAdmin from "./protection/onlyAdmin";
 import ManageUsers from "./pages/admin/manageuser/ManageUsers";
 import AritstRequests from "./pages/admin/ArtistRequests";
 import CreateCompeition from "./pages/admin/CreateComp";
@@ -58,43 +57,33 @@ function App() {
         }/>
 
 
-      {/* 
-//this will have logic under certain criteria and auth but for now this is just it is what it is as frontend only defnese  */}
-
       <Route path="/statistics" element={
-        <ProtectedRoute>
+        <ProtectedRoute requireArtist={true}>
         <Statistics />
         </ProtectedRoute>
         
         }/>
 
       <Route path="/portfolio" element={
-        <ProtectedRoute>
+        <ProtectedRoute requireArtist={true}>
         <Portfolio />
         </ProtectedRoute>
         
         } />
 
 
-        
- 
-   
-
-
-        
-
       <Route path="/portfolio/gallery" element={
-        <ProtectedRoute>
+        <ProtectedRoute requireArtist={true}>
         <Gallery />
         </ProtectedRoute>
         } />
       <Route path="/collaboration" element={
-        <ProtectedRoute>
+        <ProtectedRoute requireArtist={true}>
         <Collaboration />
         </ProtectedRoute>
       } />
       <Route path="/management" element={
-        <ProtectedRoute>
+        <ProtectedRoute requireArtist={true}>
         <UserDashboard />
         </ProtectedRoute>
         } />
@@ -103,34 +92,34 @@ function App() {
 
         {/* //admin shiboinger */}
         <Route path="/manage-users" element={
-        <OnlyAdmin>
+        <ProtectedRoute requireAdmin={true}>
         <ManageUsers />
-        </OnlyAdmin>
+        </ProtectedRoute>
         } />
 
         <Route path="/review-artists" element={
-        <OnlyAdmin>
+        <ProtectedRoute requireAdmin={true}>
         <AritstRequests />
-        </OnlyAdmin>
+        </ProtectedRoute>
         } />
         
 
         <Route path="/manage-weekly" element={
-        <OnlyAdmin>
+        <ProtectedRoute requireAdmin={true}>
         <CreateCompeition />
-        </OnlyAdmin>
+        </ProtectedRoute>
         } />
 
           <Route path="/moderate-arts" element={
-        <OnlyAdmin>
+        <ProtectedRoute requireAdmin={true}>
         <ModerateArts />
-        </OnlyAdmin>
+        </ProtectedRoute>
         } />
         
           <Route path="/moderate-arts/art-report/:imagename" element={
-        <OnlyAdmin>
+        <ProtectedRoute requireAdmin={true}>
         <ArtReport />
-        </OnlyAdmin>
+        </ProtectedRoute>
         } />
         
 

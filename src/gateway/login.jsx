@@ -25,7 +25,7 @@ export default function Login() {
     if (auth?.token){
       navigate("/");
     }
-  })
+  }, [auth, navigate])
 
 
   return (

@@ -17,18 +17,16 @@ import {
   UserIcon,
   UsersThreeIcon,
 } from "@phosphor-icons/react";
-import users from "../../dummy/user.json";
 import { useTheme } from "../../theme/useTheme";
-import currentUser from "../../dummy/current_user.json";
+import { useAuth } from "../../context/useAuth";
 
 export default function SideBar() {
   const {theme} = useTheme();
+  const {userData} = useAuth();
   const sbgurl = theme["--sbgurl"];
   const opacity = theme["--opacity"];
   const blur = theme["--blur"];
 
-  const loggedInUser = currentUser?.username && currentUser.username.trim()!== ""?
-  users.find((u)=>u.username === currentUser.username):null;
 
 
   const navLinks = [
@@ -43,7 +41,7 @@ export default function SideBar() {
     { name: "Weekly", to: "/Weekly", icon: <CalendarCheckIcon size={32} /> },
   ];
 
-  const Artistry = [
+  const artistryLinks = [
     {
       name: "Management",
       to: "/management",
@@ -63,7 +61,7 @@ export default function SideBar() {
   ];
 
 
-  const superuser = [
+  const superuserLinks = [
     {
       name: "Artist Requests",
       to: "/Review-Artists",
@@ -150,12 +148,12 @@ export default function SideBar() {
         ))}
       </nav>
 
-      {/* //this one is accessble after becoming artist request is approved but as this frontend defense first so we arent integrating backend for those logics */}
-      {loggedInUser?.role === "artist" && (
+
+      {userData?.is_artist && (
         <>
           <h3 className="mt-40 font-bold text-lg text-[var(--color)]">Artistry</h3>
           <nav className="space-y-2 mt-1">
-            {Artistry.map((link) => (
+            {artistryLinks.map((link) => (
               <NavLink key={link.name} to={link.to}>
                 {({ isActive }) => (
                   <div
@@ -182,11 +180,11 @@ export default function SideBar() {
       )}
    
    {/* //for superuser or admin  */}
-      {loggedInUser?.role === "superuser" && (
+      {userData?.is_admin && (
         <>
           <h3 className="mt-40 font-bold text-lg text-[var(--color)]">Admin / Superuser</h3>
           <nav className="space-y-2 mt-1">
-            {superuser.map((link) => (
+            {superuserLinks.map((link) => (
               <NavLink key={link.name} to={link.to}>
                 {({ isActive }) => (
                   <div

@@ -16,3 +16,4 @@
 ## Integration with Backend
 - [x] User Registration
 - [x] Login
+- [x] working tokenbased protection

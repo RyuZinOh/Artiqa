@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/useAuth";
 
 //registrationcontrol
 export function useRegister(initialData){
@@ -74,8 +75,10 @@ export function useFavAfter(formData){
 export function useLogin(){
   const[username, setUsername] = useState("");
   const[password, setPassword] =  useState("");
-  const[loading, setLoading] = useState("");
+  const[loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const {login} = useAuth();
+
 
   const handleLogin = async(e)=>{
     e.preventDefault();
@@ -90,15 +93,16 @@ export function useLogin(){
             }        
       )
       const data = await res.json();
+      
       if(!res.ok){
         toast.error(data.detail || "Login Failed");
         setLoading(false);
         return;
       }
       
-        localStorage.setItem("authToken", data.auth);
-        localStorage.setItem("isAdmin", data.is_admin);
-        localStorage.setItem("isArtist", data.is_artist);
+
+
+        login(data.auth)
 
 
         toast.success(`Welcome, ${username}`);

@@ -119,6 +119,7 @@ def login_user (request:loginFormat, db: Session = Depends(get_db)):
 ## getting the user data
 def get_user_data(payload:dict, db:Session)->dict:
     
+    
     user_id = payload.get("id")
 
     if not user_id:
@@ -133,9 +134,9 @@ def get_user_data(payload:dict, db:Session)->dict:
 
     return{
         "user": UserOut.model_validate(user),
-        "is_admin": user.role_id == RoleFixed.superuser,
-        "is_artist": user.role_id == RoleFixed.artist,
-        "is_user": user.role_id == RoleFixed.user
+        "is_admin": user.role_id ==ROLENAMETOID[RoleFixed.superuser],
+        "is_artist": user.role_id == ROLENAMETOID[RoleFixed.artist],
+        "is_user": user.role_id == ROLENAMETOID[RoleFixed.user]
     }
 
     

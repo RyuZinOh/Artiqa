@@ -3,10 +3,9 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { getFullUrl } from "../../utils/urlHelpers";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../context/useAuth";
-import { toast } from "react-toastify";
 
 export default function TopBar() {
-  const {auth, logout} = useAuth();
+  const {auth, userData, logout} = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const label =
@@ -14,7 +13,6 @@ export default function TopBar() {
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [notiOpen, setNotiOpen] = useState(false);
-    const [userData, setUserData] = useState(null);
     const [notifications, setNotifications] = useState([]);
     
 
@@ -23,37 +21,15 @@ export default function TopBar() {
 
 
     useEffect(()=>{
-      if(!auth?.token){
-        setUserData(null);
+      if(userData){
+        setNotifications([
+          {username:"system", message:"welcome to artiqa!", pfp:"/something"}
+        ]);
+      }else{
         setNotifications([]);
-      return;
       }
-
-      const fetchUser = async()=>{
-        try{
-          const res = await fetch(
-            `${import.meta.env.VITE_STATIC_FAST_API_URL}/users/get_data`,{
-              headers:{Authorization: `Bearer ${auth.token}`},
-            });
-            if (!res.ok){
-              toast.error("failed to fetch user data");
-            }
-              const data = await res.json();
-              setUserData(data.user || null);
-
-              setNotifications([
-                {username: "system", Stuff: "hi", pfp:"/something"}
-              ]);
-            
-            }catch(err){
-              toast.error("error fetching data", err);
-              logout();
-              navigate("/login");
-            }
-        };
-        fetchUser();
-      },[auth, logout, navigate]);
-
+    },[userData]);
+      
       useEffect(()=>{
         const handleClickOutside = (e) =>{
           if(
@@ -87,7 +63,7 @@ export default function TopBar() {
 
       <div className="flex items-center gap-4 text-[var(--color)]">
         <FunnelIcon size={24} />
-        {userData ? (
+        {auth?.token && userData ? (
           <>
           {/* the notifications  */}
           <div className="relative"
@@ -107,11 +83,12 @@ export default function TopBar() {
                   <div
                    key={i} 
                   className="flex items-start gap-3 p-2">
-                    <img src={getFullUrl(n.pfp)} alt={n.username} 
+                    <img src={getFullUrl(n.pfp || " ")}
+                     alt={n.username} 
                     className="w-8 h-8 rounded-full object-cover border border-[var(--border)]" />
                     <div className="flex-1">
                       <p className="text-sm">{n.username}</p>
-                      <p className="text-sm">{n.Stuff}</p>
+                      <p className="text-sm">{n.message}</p>
                     </div>
 
                   </div>
@@ -131,7 +108,7 @@ export default function TopBar() {
           ref={menuRef}
           >
              <img
-              src={getFullUrl(profileImg)}
+              src={getFullUrl(profileImg || " ")}
               alt={fullname}
               className="w-7 h-7 rounded-full object-cover cursor-pointer drop-shadow-md"
             />
