@@ -24,19 +24,11 @@ class User(Base):
     role  =  relationship("Role", back_populates="users")
 
     role_requests =  relationship("RoleRequest", back_populates="user")
-
-    
-
-
-
-
-
-
-
-
-
-
-
+    arts = relationship("Art", back_populates="artist", cascade="all, delete-orphan")
+    hearts = relationship("Heart", back_populates="user", cascade="all, delete-orphan")
+    critiques = relationship("Critique", back_populates="user", cascade="all, delete-orphan")
+    reports = relationship("Report", back_populates="user", cascade="all, delete-orphan")
+ 
 
 
 
