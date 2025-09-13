@@ -24,15 +24,32 @@ import IsValid from "./protection/isValid";
 import HeLiked from "./pages/users/heLiked";
 import HeCommented from "./pages/users/heCommented";
 import PleaseRegisterOrLogin from "./pages/PleaseRegisterOrLogin";
+import Guester from "./protection/guester";
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/Explore" replace />} />
       <Route path="/Explore" element={<Explore/>} />
       <Route path="/Explore/:slug" element={<IndividualePost />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/forgetpassword" element={<ForgetPass />} />
+
+
+      <Route path="/login" element={
+        <Guester>
+        <Login />
+        </Guester>
+        } />
+      <Route path="/register" element={
+        <Guester>
+        <Register />
+        </Guester>
+        } />
+
+      <Route path="/forgetpassword" element={
+        <Guester>
+        <ForgetPass />
+        </Guester>
+        
+        } />
       <Route path="/weekly" element={<Weekly />} />
       <Route path="/Top" element={<Top />} />
       <Route path="/settings" element={<Settings/>} />

@@ -53,8 +53,8 @@ export default function TopBar() {
             navigate("/login");
           }
 
-          const profileImg = userData?.profile_pic;
-          const fullname = userData?.full_name;
+          const profileImg = userData?.user?.profile_pic;
+          const fullname = userData?.user?.full_name;
   
 
   return (

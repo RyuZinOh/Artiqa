@@ -123,3 +123,47 @@ export function useLogin(){
   }
 
 }
+
+
+//tokenforthepasswordreset && resetting
+export async function requestPasswordReset(email, fav_food){
+  const res = await fetch(
+            `${import.meta.env.VITE_STATIC_FAST_API_URL}/users/forgetpass/getresettoken`,
+            {
+              method: "POST",
+              headers:{"Content-Type": "application/json"},
+              body: JSON.stringify({email, fav_food})        
+            }
+      );
+
+      if (!res.ok){
+        const error = await res.json();
+        throw new Error(error.detail || "failed to request reset token");
+      }
+      return await res.json();
+}
+
+export async function resetPassword(token, new_password){
+   const res = await fetch(
+            `${import.meta.env.VITE_STATIC_FAST_API_URL}/users/forgetpass/resetpwd`,
+            {
+              method: "POST",
+              headers:{"Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+              },
+
+              body: JSON.stringify({new_password})        
+            }
+      );
+
+
+      
+      if (!res.ok){
+        const error = await res.json();
+        throw new Error(error.detail || "failed to reset Password");
+      }
+
+      return await res.json();
+  
+}
+
