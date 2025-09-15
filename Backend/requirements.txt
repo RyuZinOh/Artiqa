@@ -1,8 +1,10 @@
 annotated-types==0.7.0
 anyio==4.9.0
 bcrypt==4.3.0
+cffi==2.0.0
 click==8.1.8
 colorama==0.4.6
+cryptography==45.0.7
 dnspython==2.7.0
 email_validator==2.2.0
 fastapi==0.115.12
@@ -11,6 +13,7 @@ h11==0.16.0
 idna==3.10
 passlib==1.7.4
 psycopg2==2.9.10
+pycparser==2.23
 pydantic==2.11.4
 pydantic_core==2.33.2
 PyJWT==2.10.1

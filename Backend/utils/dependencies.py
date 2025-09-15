@@ -2,16 +2,19 @@ from fastapi import Depends, HTTPException, status, Header
 from fastapi.security import OAuth2PasswordBearer
 from utils.jwt_token import verify_token
  
-owo_auth  = OAuth2PasswordBearer(tokenUrl="/users/login/")
+owo_auth  = OAuth2PasswordBearer(tokenUrl="/users/login/", auto_error=False)
 
 
 #This checks the aunthetication and matches throught the verify function 
 def get_user_from_token(token:str = Depends(owo_auth)):
+    if not token:
+        return None
     try:
        payload = verify_token(token)
        return payload
     except HTTPException as e:
-        raise e
+        return None
+    
     
 def get_admin_token(token:str =  Depends(owo_auth)):
     try:

@@ -18,6 +18,8 @@ class CritiqueOut(BaseModel):
     critique_id: int
     user_id: int
     text: str
+    username: Optional[str] = None
+    userpfp : Optional[str] = None
     created_at: datetime
 
     model_config={
@@ -46,12 +48,18 @@ class ArtOut(BaseModel):
     visibility: str
     upload_date: datetime
     is_competing: bool
+    hearted_by_user: bool
 
 
     critiques: List[CritiqueOut] = []
     reports: List[ReportOut] = []
     critiques_count : int = 0
     hearts_count: int = 0
+
+
+    
+    username: Optional[str] = None
+    profile_picture : Optional[str] = None
 
 
     model_config={

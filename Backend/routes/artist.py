@@ -25,8 +25,11 @@ def get_all_arts(db: Session = Depends(get_db)):
 
 #by id
 @router.get("/art/{art_id}", response_model=ArtOut)
-def get_art(art_id: int, db: Session = Depends(get_db)):
-    return artist_controller.get_arts_by_id(art_id, db)
+def get_art(art_id: int,
+    payload = Depends(get_user_from_token),
+             db: Session = Depends(get_db)):
+    cur_id = payload.get("id") if payload else None
+    return artist_controller.get_arts_by_id(art_id, db, cur_id)
 
 
 ##through artists

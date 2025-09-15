@@ -9,7 +9,6 @@ from sqlalchemy.exc import IntegrityError
 
 load_dotenv()
 ARTS_PATH = os.getenv("ARTS_PATH")
-ALL_PATH = os.getenv("ALL_PATH")
 
 async def upload_art(payload: dict, file: UploadFile, description: str, status_str: str, visibility: str, is_competing:bool, db: Session) -> ArtOut:
     if payload.get("role_id") !=699:
@@ -21,13 +20,11 @@ async def upload_art(payload: dict, file: UploadFile, description: str, status_s
     username = payload.get("sub")
     user_fold = os.path.join(ARTS_PATH, username, "creations")
     os.makedirs(user_fold, exist_ok=True)
-    os.makedirs(ALL_PATH, exist_ok=True)
 
     ufp = os.path.join(user_fold, file.filename)
-    afp = os.path.join(ALL_PATH, file.filename)
 
     contents = await file.read()
-    for p in [ufp, afp]:
+    for p in [ufp]:
         with open(p, "wb") as f:
             f.write(contents)
     await file.close()
@@ -54,14 +51,32 @@ async def upload_art(payload: dict, file: UploadFile, description: str, status_s
 
 
 
-def serialize_art(art: Art)-> dict:
+def serialize_art(art: Art, cur_id: int = None ) -> dict:
     return{
         **art.__dict__, # this one is used to unpack the dictionary else we have to explicity define everything xd
-        "critiques": art.critiques,
+        "critiques":[
+              {
+                    "critique_id":x.critique_id,
+                    "text": x.text,
+                    "user_id": x.user_id,
+                    "username": x.user.username if x.user else None,
+                    "userpfp": x.user.profile_pic if x.user else None,
+                    "created_at": x.created_at
+                    }
+                  for x in art.critiques
+        ],
         "reports": art.reports,
         "critiques_count":len(art.critiques),
-        "hearts_count": len(art.hearts)
+        "hearts_count": len(art.hearts),
+        "profile_picture": art.artist.profile_pic if art.artist else None,
+        "username": art.artist.username if art.artist else None,
+        "hearted_by_user": any(h.user_id == cur_id for h in art.hearts) if cur_id  else False
+        
     }
+
+
+
+
 
 def get_all_arts(db: Session)->List[ArtOut]:
     arts = db.query(Art).all()
@@ -70,7 +85,7 @@ def get_all_arts(db: Session)->List[ArtOut]:
         results.append(ArtOut.model_validate(serialize_art(art)))
     return results    
 
-def get_arts_by_id(art_id: int, db: Session)->ArtOut:
+def get_arts_by_id(art_id: int, db: Session, cid: int= None)->ArtOut:
     art = db.query(Art).filter(Art.art_id == art_id).first()
     if not art:
         raise HTTPException(
@@ -78,7 +93,7 @@ def get_arts_by_id(art_id: int, db: Session)->ArtOut:
             detail=f"art with id {art_id} not found!"
         )
     
-    return ArtOut.model_validate(serialize_art(art))
+    return ArtOut.model_validate(serialize_art(art, cid))
 
 
 def get_my_arts(payload: dict, db: Session)->List[ArtOut]:
@@ -101,7 +116,15 @@ def add_critique(art_id: int, payload: dict, critique_in, db:Session)-> Critique
     db.add(critique)
     db.commit()
     db.refresh(critique)
-    return CritiqueOut.model_validate(critique)
+
+    return CritiqueOut.model_validate({
+        "critique_id": critique.critique_id,
+        "text": critique.text,
+        "user_id": user_id,
+        "username": critique.user.username if critique.user else None,
+        "userpfp": critique.user.profile_pic if critique.user else None,
+        "created_at": critique.created_at
+    })
 
 
 

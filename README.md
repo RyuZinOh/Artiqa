@@ -16,3 +16,4 @@
 ## Integration with Backend
 - [x] User Registration, Login, PasswordResetting
 - [x] Working tokenbased protection
+- [x] Critiqing, hearting and reporting

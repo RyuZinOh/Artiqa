@@ -1,34 +1,41 @@
 import { ChatCircleTextIcon, HeartIcon } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 import Layout from "../../components/layouts/layout";
-import users from "../../dummy/user.json";
 import { getFullUrl } from "../../utils/urlHelpers";
+import { useEffect, useState } from "react";
 
-function slugify(text) {
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-}
 export default function Explore() {
-  const publishedPosts  = users.flatMap(user=> 
-    user.overall_posts.filter(post=> post.status == "published").map(
-      post=> ({
-        ...post, 
-        username: user.username
-      })
-    )
-  )
+  const [arts, setArts] = useState([]);
+
+  useEffect(()=>{
+    const fetchArts  = async() =>{
+      try{
+                 const res = await fetch(
+            `${import.meta.env.VITE_STATIC_FAST_API_URL}/artists/all-arts`,);
+            if (!res.ok) throw new Error("Failed to fetch arts");
+            const data = await res.json();
+            setArts(data);
+
+      }catch(erro){
+        console.error(erro);
+      }
+    };
+    fetchArts();
+  },[]);
+
   return (
     <Layout>
       <div className=" min-h-screen columns-[375px]  gap-1 max-w-[1374px] mx-auto  box-border">
-        {publishedPosts.map((post, index) => (
+        {arts.map((art) => (
           <Link
-            key={index}
-            to={`/Explore/${slugify(post.image_name)}`}
+            key={art.art_id}
+            to={`/Explore/${art.art_id}`}
             className="relative mb-1 border-3 border-[var(--border)] group
             overflow-hidden block"
           >
             <img
-              src={getFullUrl(post.image_url)}
-              alt={`Image ${index + 1}`}
+              src={getFullUrl(art.image_url)}
+              alt={art.description}
               className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
               loading="lazy"
             />
@@ -40,12 +47,12 @@ export default function Explore() {
           
           select-none"
             >
-              <span className="text-white text-sm">{post.username}</span>
+              <span className="text-white text-sm">{art.username}</span>
 
               <div className="flex items-center text-white text-sm space-x-2">
                 <span className="flex items-center">
                   <HeartIcon size={20} weight="regular" className="mr-1" />
-                  {post.hearts}
+                  {art.hearts_count}
                 </span>
                 <span className="flex items-center">
                   <ChatCircleTextIcon
@@ -53,7 +60,7 @@ export default function Explore() {
                     weight="regular"
                     className="mr-1"
                   />
-                  {post.critiques.length}
+                  {art.critiques_count}
                 </span>
               </div>
             </div>
