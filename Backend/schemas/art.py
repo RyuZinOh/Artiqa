@@ -33,6 +33,13 @@ class ArtCritism(BaseModel):
         "from_attributes":True
     }    
     
+## 
+class ArtUpdate(BaseModel):
+    description: Optional[str] = None
+    status: Optional[str] = None
+    visibility: Optional[str] = None
+    is_competing: Optional[bool] = None
+        
 
 #responses....
 class CritiqueOut(BaseModel):

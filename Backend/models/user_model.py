@@ -28,6 +28,8 @@ class User(Base):
     hearts = relationship("Heart", back_populates="user", cascade="all, delete-orphan")
     critiques = relationship("Critique", back_populates="user", cascade="all, delete-orphan")
     reports = relationship("Report", back_populates="user", cascade="all, delete-orphan")
+    profile_cosmetic =  relationship("ProfileCosmetic", back_populates="user", cascade="all, delete-orphan", uselist=False)
+
  
 
 

@@ -3,7 +3,7 @@ from utils.dependencies import get_artist_token, get_user_from_token
 from sqlalchemy.orm import Session
 from database import get_db
 from controllers import artist_controller
-from schemas import ArtOut, CritiqueOut, CritiqueCreate, ReportCreate  , ReportOut, ArtThumb,ArtCritism
+from schemas import ArtOut, CritiqueOut, CritiqueCreate, ReportCreate  , ReportOut, ArtThumb,ArtCritism, ArtUpdate
 from typing import List
 
 
@@ -53,6 +53,21 @@ async def upload_art_route(
     return await artist_controller.upload_art(
         payload, file,description, status_str, visibility, is_competing, db, image_name 
     )
+
+##deleting the arts
+@router.delete("/delete/{art_id}", response_model=dict)
+def delete_my_art(art_id: int, payload=Depends(get_artist_token), db:Session = Depends(get_db)):
+    return artist_controller.delete_art(art_id, payload, db)
+
+##updting the art
+@router.patch("/update/{art_id}", response_model=ArtOut)
+def update_my_art(
+    art_id : int,
+    art_update: ArtUpdate,
+    payload =  Depends(get_artist_token),
+    db: Session = Depends(get_db)
+):
+    return artist_controller.update_art( art_id, payload, db, art_update)
 
 #critiqes giving to a specific art
 @router.post("/art/{art_id}/critique", response_model=CritiqueOut)

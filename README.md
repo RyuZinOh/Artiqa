@@ -1,5 +1,11 @@
 <samp>Only works when I from my localhost run artiqa else the link wont run.</samp>
 
+### Showcases
+<p float="left">
+  <img src="public/Showcases/explore.png" alt="Explore Showcase" width="250" style="margin-right:10px"/>
+  <img src="public/Showcases/individual.png" alt="Individual Showcase" width="250"/>
+</p>
+
 ### Tech Stack
 <table>
   <tr>
@@ -11,7 +17,6 @@
           
   </tr>
 </table>
-
 
 ## Integration with Backend
 - [x] User Registration, Login, PasswordResetting

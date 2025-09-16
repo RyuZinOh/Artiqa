@@ -2,13 +2,29 @@ import os
 from fastapi import UploadFile, HTTPException, status
 from sqlalchemy.orm import Session
 from models import Art, Critique, Heart, Report
-from schemas import ArtOut, CritiqueOut, ReportOut, ArtThumb, ArtCritism
+from schemas import ArtOut, CritiqueOut, ReportOut, ArtThumb, ArtCritism, ArtUpdate
 from dotenv import load_dotenv
 from typing import List
 from sqlalchemy.exc import IntegrityError
+from utils.update_streak import update_user_streak
 
 load_dotenv()
 ARTS_PATH = os.getenv("ARTS_PATH")
+
+def serialize_art_for_output(art: Art, cur_id: int = None) -> dict:
+    return {
+        "art_id": art.art_id,
+        "user_id": art.user_id,
+        "image_name": art.image_name,
+        "image_url": art.image_url,
+        "description": art.description,
+        "status": art.status,
+        "visibility": art.visibility,
+        "upload_date": art.upload_date,
+        "is_competing": art.is_competing,
+        "hearted_by_user": any(h.user_id == cur_id for h in art.hearts) if cur_id else False,
+    }
+
 
 async def upload_art(payload: dict, file: UploadFile, description: str, status_str: str, visibility: str, is_competing:bool, db: Session, image_name: str) -> ArtOut:
     if payload.get("role_id") !=699:
@@ -45,8 +61,11 @@ async def upload_art(payload: dict, file: UploadFile, description: str, status_s
     db.add(new_art)
     db.commit()
     db.refresh(new_art)
+
+
+    update_user_streak(payload.get("id"), db)
     
-    return  ArtOut.model_validate(serialize_art(new_art, cur_id = payload.get("id")))
+    return  ArtOut.model_validate(serialize_art_for_output(new_art, cur_id = payload.get("id")))
 
 
 
@@ -56,6 +75,7 @@ async def upload_art(payload: dict, file: UploadFile, description: str, status_s
 def serialize_art(art: Art, cur_id: int = None ) -> dict:
     return{
         **art.__dict__, # this one is used to unpack the dictionary else we have to explicity define everything xd
+        
         "critiques":[
               {
                     "critique_id":x.critique_id,
@@ -129,6 +149,63 @@ def add_critique(art_id: int, payload: dict, critique_in, db:Session)-> Critique
     })
 
 
+## deleting my arts
+def delete_art(art_id:int, payload: dict, db:Session)->dict:
+    user_id  = payload.get("id")
+    art = db.query(Art).filter(Art.art_id == art_id).first()
+
+    if not art:
+        raise HTTPException(
+            status_code=404,
+            detail="Art not found"
+        )
+    
+    if art.user_id != user_id:
+        raise HTTPException(
+            status_code=403,
+            detail="You can only delete your own art"
+        )
+    
+    try:
+        relative_path = art.image_url.replace("/Arts/","")
+        file_path = os.path.join(ARTS_PATH, relative_path)
+
+        if os.path.exists(file_path):
+            os.remove(file_path)
+    except Exception as e:
+        print(f"Could not delete the image file: {e}")        
+    
+    db.delete(art)
+    db.commit()
+    return {
+        "message": "Art deleted success!"
+    }
+
+##updating the art
+def update_art(
+    art_id: int,
+    payload: dict,
+    db: Session,
+    art_update: ArtUpdate
+)->ArtOut:
+    user_id = payload.get("id")
+    art = db.query(Art).filter(Art.art_id == art_id).first()
+    if not art:
+        raise HTTPException(status_code=404, detail="Art Not Found")
+    if art.user_id != user_id:
+        raise HTTPException(status_code=403, detail="You can only update your own art.")
+    
+    update_data = art_update.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(art, key, value)
+    
+    db.commit()
+    db.refresh(art)
+
+    return ArtOut.model_validate(serialize_art(art, cur_id=user_id))
+
+
+    
 
 ##hearting the art
 def add_heart(art_id: int, payload: dict, db:Session)->dict:
