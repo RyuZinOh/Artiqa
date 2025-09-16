@@ -1,29 +1,56 @@
 import Layout from "../../../components/layouts/layout";
 import {
+  EyeIcon,
   GreaterThanIcon,
   HashIcon,
   LessThanIcon,
   MagnifyingGlassIcon,
+  PencilIcon,
   PlusIcon,
+  TrashIcon,
+  XIcon,
 } from "@phosphor-icons/react";
-import users from "../../../dummy/user.json";
-import currentUser from "../../../dummy/current_user.json";
+import { useAuth } from "../../../context/useAuth";
+import { useEffect, useState } from "react";
+import CreateArt from "./createArt";
+import erzalearning from "/assets/mascot_emotes/erzalearning.svg";
 
-import { EyeIcon, PencilIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr";
+export default function UserDashboard(){
+    const {auth, userData} = useAuth();
+    const [userPosts, setUserPosts] = useState([]);
+    const [isModalOpen, setIsModelOpen] = useState(false);
 
 
-export default function  UserDashboard(){
-  const loggedInUser = currentUser?.username && currentUser.username.trim()!== ""?
-  users.find((u)=>u.username === currentUser.username):null;
+      useEffect(()=>{
+      if (!auth?.token) return;
+      const fetchMineArts = async () =>{
+         try{
+                        const res = await fetch(
+                            `${import.meta.env.VITE_STATIC_FAST_API_URL}/artists/arts/mine`,{
+                                headers:{
+                                    Authorization: `Bearer ${auth.token}`
+                                }
+                            }
+                        );
+                        if (!res.ok) throw new Error("failed to fetch arts");
+        
+                        const data = await res.json();
+                        setUserPosts(data);
+                    }catch(error){
+                        console.error(`error fetching ${error}`)
+                    }
+                
+      };
+       fetchMineArts();
+    }, [auth?.token]);
 
-
-const userPosts = loggedInUser?.overall_posts || [];
-const publishedCount  = userPosts.filter(
-    (post)=> post.status ==="published"
-).length;
-const draftCount  = userPosts.filter(
-    (post)=> post.status ==="draft"
-).length;
+    const publishedCount =userPosts.filter((p)=>p.status === "published").length;
+    const draftCount = userPosts.filter((p)=>p.status === "draft").length;
+    
+    const handleArtCreated = (newArt) =>{
+      setUserPosts((prev)=>[newArt, ...prev]);
+      setIsModelOpen(false);
+    }
 
   return (
   <Layout>
@@ -31,7 +58,7 @@ const draftCount  = userPosts.filter(
         <div className="flex justify-between items-center flex-wrap mb-6 gap-4">
             <div>
             <h1>
-            <span className="font-bold text-5xl drop-shadow-md">Hi, {loggedInUser?.username}</span> 
+            <span className="font-bold text-5xl drop-shadow-md">Hi, {userData?.username}</span> 
             </h1>
         <p className="mb-6 mt-5 italic drop-shadow-md text-2xl">
             You have overall {userPosts.length} arts created so far!
@@ -40,18 +67,13 @@ const draftCount  = userPosts.filter(
         </p>
         </div>
 
-        {/* creating post  */}
-        <div>
-            <button className="flex items-center space-x-3 px-6 py-4 border-3 border-[var(--border)] shadow-lg text-4xl cursor-pointer">
-                <span><PlusIcon
-                size={32}
-                weight="bold"
-                /></span>
-                <span className="drop-shadow-md ">Create Art</span>
-
-            </button>
-        </div>
-
+        <button className="flex rounded-full items-center space-x-3 px-6 border-3 border-[var(--border)] text-xl shadow-lg cursor-pointer bg-[var(--sbgc)] hover:bg-[var(--bgc)]"
+        onClick={()=>setIsModelOpen(true)}
+        ><PlusIcon size={24} weight="bold" className="mr-1 "/> create Art
+        </button>
+        <Modal isOpen={isModalOpen} onclose={()=>setIsModelOpen(false)}>
+          <CreateArt onArtCreated={handleArtCreated}/>
+        </Modal>
 
         </div>
       
@@ -104,19 +126,17 @@ const draftCount  = userPosts.filter(
           </thead>
 
           <tbody className="text-md">
-            {userPosts.map((post) => (
+            {userPosts.map((post, index) => (
               <tr
-                key={post.image_id}
+                key={post.image_id || index}
               >
                 <td className="px-3 py-3">
-                  <div className="flex justify-start">                   
-                      <span className="ml-1">{post.image_id}</span>
-                  </div>
+           {index+1}
                 </td>
                 <td className="py-4 px-4">{post.image_name}</td>
                 <td className="px-6 py-3 text-left">{post.status}</td>
                 <td className="px-4 py-3 text-right">{post.visibility}</td>
-                <td className="px-4 py-3 text-right pr-5">{post.upload_date}</td>
+                <td className="px-4 py-3 text-right pr-5">{new Date(post.upload_date).toLocaleDateString()}</td>
                 <td className="px-4 py-3 text-right">
                  <div className="flex justify-end items-center space-x-3">
                     <button>
@@ -139,5 +159,31 @@ const draftCount  = userPosts.filter(
         </div>
       </div>
     </Layout>
+  );
+}
+
+
+function Modal({ children, isOpen, onclose }) {
+  if (!isOpen) return null;
+  return (
+    <div className=" overflow-hidden fixed inset-0 z-50 flex items-center justify-center bg-[var(--bgc)]">
+      <div className="relative w-full max-w-4xl">
+        <img
+          src={erzalearning}
+          alt="Learning Mascot"
+          className="absolute top-60 left-170  w-140 h-140 object-contain pointer-events-none z-100"
+        />
+
+        <div className="rounded-xl bg-[var(--sbgc)] shadow-lg p-10 relative z-10">
+          <button
+            className="absolute top-3 right-3 text-xl font-bold text-[var(--color)] cursor-pointer"
+            onClick={onclose}
+          >
+            <XIcon size={24} weight="bold" />
+          </button>
+          {children}
+        </div>
+      </div>
+    </div>
   );
 }

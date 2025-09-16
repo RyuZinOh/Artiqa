@@ -13,6 +13,27 @@ class ReportCreate(BaseModel):
 
 
 
+##
+class ArtThumb(BaseModel):
+    art_id: int
+    image_url:str 
+    model_config={
+        "from_attributes": True
+    }
+
+
+
+##
+class ArtCritism(BaseModel):
+    art_id: int
+    image_url: str
+    critiques: List[str]
+
+    model_config ={
+        "from_attributes":True
+    }    
+    
+
 #responses....
 class CritiqueOut(BaseModel):
     critique_id: int
@@ -25,6 +46,8 @@ class CritiqueOut(BaseModel):
     model_config={
         "from_attributes": True
     }
+
+
 
 
 class ReportOut(BaseModel):

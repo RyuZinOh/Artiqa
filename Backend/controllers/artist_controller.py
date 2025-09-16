@@ -2,7 +2,7 @@ import os
 from fastapi import UploadFile, HTTPException, status
 from sqlalchemy.orm import Session
 from models import Art, Critique, Heart, Report
-from schemas import ArtOut, CritiqueOut, ReportOut
+from schemas import ArtOut, CritiqueOut, ReportOut, ArtThumb, ArtCritism
 from dotenv import load_dotenv
 from typing import List
 from sqlalchemy.exc import IntegrityError
@@ -10,7 +10,7 @@ from sqlalchemy.exc import IntegrityError
 load_dotenv()
 ARTS_PATH = os.getenv("ARTS_PATH")
 
-async def upload_art(payload: dict, file: UploadFile, description: str, status_str: str, visibility: str, is_competing:bool, db: Session) -> ArtOut:
+async def upload_art(payload: dict, file: UploadFile, description: str, status_str: str, visibility: str, is_competing:bool, db: Session, image_name: str) -> ArtOut:
     if payload.get("role_id") !=699:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -21,19 +21,21 @@ async def upload_art(payload: dict, file: UploadFile, description: str, status_s
     user_fold = os.path.join(ARTS_PATH, username, "creations")
     os.makedirs(user_fold, exist_ok=True)
 
-    ufp = os.path.join(user_fold, file.filename)
+    ext = os.path.splitext(file.filename)[1]
+    saved_fl = f"{image_name}{ext}"
+    file_path = os.path.join(user_fold, saved_fl)
+
 
     contents = await file.read()
-    for p in [ufp]:
-        with open(p, "wb") as f:
-            f.write(contents)
+    with open(file_path, "wb") as f:
+        f.write(contents)
     await file.close()
 
-    relative_path = f"/Arts/{username}/creations/{file.filename}"
+    relative_path = f"/Arts/{username}/creations/{saved_fl}"
 
     new_art = Art(
         user_id = payload.get("id"),
-        image_name = file.filename,
+        image_name = image_name,
         image_url = relative_path,
         description = description,
         status = status_str,
@@ -44,7 +46,7 @@ async def upload_art(payload: dict, file: UploadFile, description: str, status_s
     db.commit()
     db.refresh(new_art)
     
-    return  ArtOut.model_validate(new_art)
+    return  ArtOut.model_validate(serialize_art(new_art, cur_id = payload.get("id")))
 
 
 
@@ -155,9 +157,36 @@ def add_heart(art_id: int, payload: dict, db:Session)->dict:
     return{"message": "hearted!"}
 
 
-##unhearting [yet to add]
+##all thing I have hearted
+def get_user_hearted_arts(payload: dict, db: Session)-> List[ArtThumb]:
+    user_id = payload.get("id")
+
+    heartah = (
+        db.query(Art).join(Heart, Art.art_id == Heart.art_id).filter(Heart.user_id == user_id).all()
+    )
+
+    return [ArtThumb.model_validate(art) for art in heartah]
 
 
+##getting everything I commented on
+def get_user_critiqued_arts(payload: dict, db: Session)-> List[ArtCritism]:
+    user_id = payload.get("id")
+
+    critqqa = (
+        db.query(Art).join(Critique, Art.art_id == Critique.art_id).filter(Critique.user_id == user_id).all()
+    )
+
+    results = []
+    for art in critqqa:
+        u_c = [c.text for c in art.critiques if c.user_id == user_id]
+
+        results.append(ArtCritism(
+            art_id= art.art_id,
+            image_url = art.image_url,
+            critiques = u_c
+        ))
+
+    return results
 
 ##reporting the art
 def add_report(art_id: int, payload: dict, report_in , db:Session)-> ReportOut:
@@ -173,4 +202,8 @@ def add_report(art_id: int, payload: dict, report_in , db:Session)-> ReportOut:
     db.commit()
     db.refresh(report)
     return ReportOut.model_validate(report)
+
+
+
+
 

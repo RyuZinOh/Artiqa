@@ -17,3 +17,4 @@
 - [x] User Registration, Login, PasswordResetting
 - [x] Working tokenbased protection
 - [x] Critiqing, hearting and reporting
+- [x] Artist art upload / users like/ his critiques catering

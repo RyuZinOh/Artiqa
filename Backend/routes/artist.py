@@ -3,7 +3,7 @@ from utils.dependencies import get_artist_token, get_user_from_token
 from sqlalchemy.orm import Session
 from database import get_db
 from controllers import artist_controller
-from schemas import ArtOut, CritiqueOut, CritiqueCreate, ReportCreate  , ReportOut
+from schemas import ArtOut, CritiqueOut, CritiqueCreate, ReportCreate  , ReportOut, ArtThumb,ArtCritism
 from typing import List
 
 
@@ -42,6 +42,7 @@ def get_my_arts(payload=Depends(get_artist_token), db: Session  = Depends(get_db
 @router.post("/upload", response_model=ArtOut)
 async def upload_art_route(
     file: UploadFile,
+    image_name: str = Form(...),
     description: str = Form(...),
     status_str: str = Form("draft"),
     visibility: str = Form("public"),
@@ -50,7 +51,7 @@ async def upload_art_route(
     db: Session=  Depends(get_db)
 ):
     return await artist_controller.upload_art(
-        payload, file, description, status_str, visibility, is_competing, db
+        payload, file,description, status_str, visibility, is_competing, db, image_name 
     )
 
 #critiqes giving to a specific art
@@ -64,7 +65,7 @@ def critquing(art_id: int,
     return artist_controller.add_critique(art_id, payload, critique_in, db)
 
 
-##hearing the arts
+##hearting the arts
 @router.post("/art/{art_id}/heart")
 def hearting(
     art_id: int,
@@ -73,8 +74,23 @@ def hearting(
             ):
     return artist_controller.add_heart(art_id, payload, db)
 
+##getting all hearted by the user
+@router.get("/arts/hearted", response_model=List[ArtThumb])
+def get_hearted(
+    payload= Depends(get_user_from_token),
+    db:Session = Depends(get_db)
+):
+    return artist_controller.get_user_hearted_arts(payload, db)
 
-##placeholder ->[unhearting]
+##getting all hearted by the user
+@router.get("/arts/critiqued", response_model=List[ArtCritism])
+def get_hearted(
+    payload= Depends(get_user_from_token),
+    db:Session = Depends(get_db)
+):
+    return artist_controller.get_user_critiqued_arts(payload, db)
+
+
 
 
 

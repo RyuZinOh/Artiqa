@@ -1,37 +1,63 @@
-import users from "../../dummy/user.json";
-import ccp from "../../dummy/current_user.json";
 import { getFullUrl } from "../../utils/urlHelpers";
 import Layout from "../../components/layouts/layout";
-import { slugify } from "../../utils/slugify";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../context/useAuth";
+import { useEffect, useState } from "react";
 
 export default function HeLiked() {
 
+    const {auth}= useAuth();
+    const [likedArts, setLikedArts] = useState([]);
 
-    const user = Array.isArray(users) ? users.find((u)=> u.username === ccp.username) : users;
+    useEffect(()=>{
+        const fetchLikedArts = async()=>{
+            if(!auth.token) return;
 
-    const likedPosts = user?.liked_arts?.map((like)=>{
-        const artist = users.find((u)=> u.username === like.artist);
-        const post = artist?.overall_posts.find(
-            (p)=> p.image_url.trim() ===  like.art.trim()
+            try{
+                const res = await fetch(
+                    `${import.meta.env.VITE_STATIC_FAST_API_URL}/artists/arts/hearted`,{
+                        headers:{
+                            Authorization: `Bearer ${auth.token}`
+                        }
+                    }
+                );
+                if (!res.ok) throw new Error("failed to fetch liked arts");
+
+                const data = await res.json();
+                setLikedArts(data);
+            }catch(error){
+                console.error(`error fetching ${error}`)
+            }
+        }
+        fetchLikedArts();
+    }, [auth?.token]);
+
+
+    if (likedArts.length === 0){
+        return(
+        <Layout>
+            <p className="text-center text-[var(--color)] mt-10">
+            u dont have liked anything yet.
+            </p>
+        </Layout>
         )
-        return post ? { ...post, 
-            artist: artist.username,
-        }: null;
-    }).filter(Boolean) || [];
+
+    }
 
     return (
         <Layout>
               <div className=" min-h-screen columns-[375px]  gap-1 max-w-[1374px] mx-auto  box-border">
-        {likedPosts.map((post, index) => (
-                  <NavLink to={`/Explore/${slugify(post.image_name)}`}
+        {likedArts.map((post) => (
+                  <NavLink 
+                  key={post.art_id}
+                  to={`/Explore/${post.art_id}`}
                   className="relative mb-1 border-3 border-[var(--border)] group
             overflow-hidden block"
                   >
                 
             <img
               src={getFullUrl(post.image_url)}
-              alt={`Image ${index + 1}`}
+              alt={`Image ${post.art_id}`}
               className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
               loading="lazy"
             />
