@@ -44,6 +44,7 @@ def register_user(request: UserCreate, db:Session =  Depends(get_db))->UserOut:
         biography = request.biography,
         profile_pic = request.profile_pic,
         nationality = request.nationality,
+        speciality = request.speciality,
         gender = request.gender,
         password_id = new_password.password_id,
         role_id  =  ROLENAMETOID[RoleFixed.user],

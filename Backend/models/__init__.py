@@ -12,4 +12,6 @@ from .critiques_model import Critique
 from .hearts_model import Heart
 from .reports_model import Report
 from .profilecosmetic_model import ProfileCosmetic
+from .tags_model import Tag
+from .artisttags_model import ArtistTag
 from .asset_model import Asset

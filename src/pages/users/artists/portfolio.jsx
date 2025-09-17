@@ -79,7 +79,12 @@ export default function Portfolio() {
                         <h2 className="drop-shadow-md">Contact:{
                              " "} 
                             <span className="text-blue-500">{profile.email}</span></h2>
+                        <h2 className="drop-shadow-md">Specialty:{
+                             " "} 
+                            <span>{profile.speciality}</span></h2>
+                        
                         <h2 className="drop-shadow-md">Joined At: {new Date(profile.joined_date).toLocaleDateString()}</h2>
+                        
 
                         <NavLink
                         to="/portfolio/gallery"

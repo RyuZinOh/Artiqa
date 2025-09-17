@@ -2,7 +2,8 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, T
 from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
 from models import Base
-
+from models.tags_model import art_tags
+from models.artisttags_model import art_artist_tags
 class Art(Base):
     __tablename__ = "arts"
     art_id = Column(Integer, primary_key=True, index=True)
@@ -21,7 +22,8 @@ class Art(Base):
     hearts = relationship("Heart", back_populates="art", cascade="all, delete-orphan")
     critiques =  relationship("Critique", back_populates="art", cascade="all, delete-orphan")
     reports  =  relationship("Report", back_populates="art", cascade="all, delete-orphan")
-
+    global_tags = relationship("Tag", secondary=art_tags, back_populates="arts")
+    artist_tags = relationship("ArtistTag", secondary=art_artist_tags, back_populates="arts")
 
 
 

@@ -1,7 +1,7 @@
 import os
 from fastapi import UploadFile, HTTPException, status
 from sqlalchemy.orm import Session
-from models import Art, Critique, Heart, Report, ProfileCosmetic, Asset, User
+from models import Art, Critique, Heart, Report, ProfileCosmetic, Asset, User, Tag
 from schemas import ArtOut, CritiqueOut, ReportOut, ArtThumb, ArtCritism, ArtUpdate
 from dotenv import load_dotenv
 from typing import List
@@ -24,10 +24,11 @@ def serialize_art_for_output(art: Art, cur_id: int = None) -> dict:
         "upload_date": art.upload_date,
         "is_competing": art.is_competing,
         "hearted_by_user": any(h.user_id == cur_id for h in art.hearts) if cur_id else False,
+        "global_tags":[tag.name for tag in art.global_tags]
     }
 
 
-async def upload_art(payload: dict, file: UploadFile, description: str, status_str: str, visibility: str, is_competing:bool, db: Session, image_name: str) -> ArtOut:
+async def upload_art(payload: dict, file: UploadFile, description: str, status_str: str, visibility: str, is_competing:bool, db: Session, image_name: str, tag_names: list[str] = None) -> ArtOut:
     if payload.get("role_id") !=699:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -77,6 +78,20 @@ async def upload_art(payload: dict, file: UploadFile, description: str, status_s
         visibility = visibility,
         is_competing = is_competing,
     )
+
+    global_tags =  []
+    if tag_names:
+        for tag_name in tag_names:
+            tag = db.query(Tag).filter(Tag.name == tag_name).first()
+            if not tag:
+                tag = Tag(name = tag_name)
+                db.add(tag)
+                db.commit()
+                db.refresh(tag)
+            global_tags.append(tag)
+    new_art.global_tags = global_tags
+    
+                
     try:
         db.add(new_art)
         db.commit()
@@ -121,7 +136,9 @@ def serialize_art(art: Art, cur_id: int = None ) -> dict:
         "hearts_count": len(art.hearts),
         "profile_picture": art.artist.profile_pic if art.artist else None,
         "username": art.artist.username if art.artist else None,
-        "hearted_by_user": any(h.user_id == cur_id for h in art.hearts) if cur_id  else False
+        "hearted_by_user": any(h.user_id == cur_id for h in art.hearts) if cur_id  else False,
+        "global_tags":[tag.name for tag in art.global_tags]
+
         
     }
 
@@ -447,7 +464,8 @@ def get_my_profile(payload: dict, db: Session):
         "selected_background": profile_cos.selected_bg,
         "selected_card": profile_cos.selected_card,
         "badges": profile_cos.badges or [],
-        "joined_date": user.joined_date
+        "joined_date": user.joined_date,
+        "speciality": user.speciality
     }    
 
     return profile_data

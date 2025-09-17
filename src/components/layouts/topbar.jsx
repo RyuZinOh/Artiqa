@@ -1,4 +1,4 @@
-import { BellIcon, FunnelIcon} from "@phosphor-icons/react";
+import { BellIcon} from "@phosphor-icons/react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { getFullUrl } from "../../utils/urlHelpers";
 import { useEffect, useRef, useState } from "react";
@@ -62,7 +62,6 @@ export default function TopBar() {
       <div className="text-xl font-semibold text-[var(--color)]">{label}</div>
 
       <div className="flex items-center gap-4 text-[var(--color)]">
-        <FunnelIcon size={24} />
         {auth?.token && userData ? (
           <>
           {/* the notifications  */}

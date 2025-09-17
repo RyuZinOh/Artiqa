@@ -91,6 +91,8 @@ class ArtOut(BaseModel):
     username: Optional[str] = None
     profile_picture : Optional[str] = None
 
+    global_tags: List[str] = []
+
 
     model_config={
         "from_attributes": True

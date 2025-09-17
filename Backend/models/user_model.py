@@ -8,6 +8,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(50), unique=True, nullable=False)
+    speciality = Column(String(50), unique=True, nullable=True)
     full_name = Column(String(100))
     profile_pic = Column(String(255), nullable=True)
 
@@ -28,6 +29,7 @@ class User(Base):
     hearts = relationship("Heart", back_populates="user", cascade="all, delete-orphan")
     critiques = relationship("Critique", back_populates="user", cascade="all, delete-orphan")
     reports = relationship("Report", back_populates="user", cascade="all, delete-orphan")
+    artist_tags = relationship("ArtistTag", back_populates="artist", cascade="all, delete-orphan")
     profile_cosmetic =  relationship("ProfileCosmetic", back_populates="user", cascade="all, delete-orphan", uselist=False)
 
  

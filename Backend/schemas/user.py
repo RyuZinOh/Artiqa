@@ -14,6 +14,7 @@ class UserCreate(BaseModel):
     profile_pic : Optional[str] = None
     gender: Optional[str]  = None
     role_id: Optional[int] = None
+    speciality: Optional[str] = None
     fav_food: Optional[str] = None
 
 #sends output to client
@@ -26,6 +27,7 @@ class UserOut(BaseModel):
     profile_pic : Optional[str] 
     nationality: Optional[str]
     gender: Optional[str] 
+    speciality: Optional[str] = None
     is_verified: bool
     role_id: Optional[int]
     joined_date: datetime

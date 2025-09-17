@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 from controllers import artist_controller
 from schemas import ArtOut, CritiqueOut, CritiqueCreate, ReportCreate  , ReportOut, ArtThumb,ArtCritism, ArtUpdate
-from typing import List
+from typing import List, Optional
 
 
 router = APIRouter(
@@ -47,11 +47,12 @@ async def upload_art_route(
     status_str: str = Form("draft"),
     visibility: str = Form("public"),
     is_competing: bool = Form(False),
+    tag_names: Optional[List[str]] = Form(None),
     payload = Depends(get_artist_token),
     db: Session=  Depends(get_db)
 ):
     return await artist_controller.upload_art(
-        payload, file,description, status_str, visibility, is_competing, db, image_name 
+        payload, file,description, status_str, visibility, is_competing, db, image_name , tag_names
     )
 
 ##deleting the arts

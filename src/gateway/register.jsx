@@ -1,5 +1,5 @@
 import ladypaints from "/assets/forRegister/paintergirlillu.svg";
-import { AtIcon, EyesIcon, FeatherIcon, FlagIcon, IdentificationCardIcon, UserIcon } from "@phosphor-icons/react";
+import { AtIcon, DropIcon, EyesIcon, FeatherIcon, FlagIcon, IdentificationCardIcon, UserIcon } from "@phosphor-icons/react";
 import { NavLink } from "react-router-dom";
 import FavAfterRegister from "./favafterRegister";
 import { useRegister } from "./gateway";
@@ -26,7 +26,8 @@ const{
       biography: "",
       gender:"",
       nationality:"",
-      profile_pic: null
+      profile_pic: null,
+      speciality: ""
 })
 
   if(favFlow){
@@ -133,7 +134,24 @@ const{
               />
 </div>
 
-                
+                <div className="relative flex-1 mt-4">
+  <input
+    type="text"
+    placeholder="Speciality"
+    value={formData.speciality}
+    onChange={(e) => setFormData({ ...formData, speciality: e.target.value })}
+    className="
+      w-full p-3 pr-10 border-2 border-[var(--border)] rounded-md bg-[var(--bgc)] placeholder:text-[var(--color)]
+      transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)]
+    "
+  />
+  <DropIcon
+                size={24}
+                weight="regular"
+                className="absolute right-3 top-4 -translate-y-0.5"
+              />
+</div>
+
             
 {/* //password +bio */}
 <div className="flex space-x-4 " >
