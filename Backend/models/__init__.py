@@ -12,3 +12,4 @@ from .critiques_model import Critique
 from .hearts_model import Heart
 from .reports_model import Report
 from .profilecosmetic_model import ProfileCosmetic
+from .asset_model import Asset

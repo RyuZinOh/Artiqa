@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import Layout from "../../components/layouts/layout";
 import { FlagIcon, HeartIcon, PaperPlaneRightIcon } from "@phosphor-icons/react";
 import { ChatTeardropTextIcon } from "@phosphor-icons/react/dist/ssr";
@@ -197,7 +197,11 @@ const handleReport = async () =>{
                   loading="lazy"
                 />
                 )}
-                <span className="text-sm   text-[var(--color)] font-bold">{post.username}</span>
+                <span className="text-sm   hover:underline text-[var(--color)] font-bold">
+                    <NavLink to={`/profile/${post.username}`}>
+                    {post.username}
+                    </NavLink>
+                </span>
               </div>
 
               <div className="flex items-center space-x-1 text-sm text-[var(--color)]">
@@ -219,7 +223,8 @@ const handleReport = async () =>{
               </div>
 
             </div>
-            <p className="text-[var(--color)] mt-4">{post.description}</p>
+            <h2 className="text-[var(--color)] mt-4 font-bold">{post.image_name}</h2>
+            <p className="text-[var(--color)]">{post.description}</p>
           </div>
         </div>
       </div>

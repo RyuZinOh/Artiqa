@@ -123,7 +123,32 @@ def reporting(art_id: int,
 
 
 
+##selecting card/bg
+@router.post("/profile/select-asset/{asset_id}")
+def select_profile_asset(
+    asset_id: int,
+    asset_type: str ,
+    payload= Depends(get_artist_token),
+    db: Session = Depends(get_db)
+):
+    user_id = payload.get("id")
+    return artist_controller.update_bg_c(asset_id, asset_type, user_id, db)
+
+
+
+##getting all
+@router.get("/profile/assets")
+async def get_all_profile_asset(
+        db:Session = Depends(get_db),
+        payload = Depends(get_artist_token)
+):
+    return await artist_controller.list_profile_assets(db) 
 
 
 
 
+##getting portfolio details
+@router.get("/profile/mine")
+def profile_mine(payload: dict = Depends(get_artist_token), db: Session = Depends(get_db)):
+    
+    return artist_controller.get_my_profile(payload, db)

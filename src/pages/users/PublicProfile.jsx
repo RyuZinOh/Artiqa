@@ -1,17 +1,64 @@
-
-import users from "../../dummy/user.json";
+import { useAuth } from "../../context/useAuth";
 import { getFullUrl } from "../../utils/urlHelpers";
 import Layout from "../../components/layouts/layout";
 import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import PleaseRegisterOrLogin from "../PleaseRegisterOrLogin";
+
 export default function PublicProfile() {
     const {username} = useParams();
-    const user = users.find((u)=>u.username === username)
+    const [profile, setProfile]= useState(null);
+    const {auth}  = useAuth();
+    const [loading, setLoading] = useState(true);
+
+    useEffect(()=>{
+        if(!username || !auth?.token) return;
+
+        const fetchProfile = async ()=>{
+            setLoading(true);
+            try{
+                      const res = await fetch(
+                                            `${import.meta.env.VITE_STATIC_FAST_API_URL}/users/profile/${username}`,
+                                            {
+                                              headers:{
+                                                "Content-Type" :"application/json",
+                                                Authorization : `Bearer ${auth.token}`
+                                            },
+                                        }        
+                                      )
+                                      if (res.status === 404){
+                                        setProfile(null);
+                                      }else if(!res.ok) {
+                                        throw new Error("faiRled to fetch profile");
+                                      }else{
+                                        const data = await res.json();
+                                        if(!data.is_artist){
+                                      setProfile(null);
+                                        }else{
+                                      setProfile(data);
+
+                                        }
+                                      }
+            }catch(error){
+                toast.error(error);
+                setProfile(null);
+            }finally{
+                setLoading(false);
+            }
+        };
+         fetchProfile()
+    }, [username, auth?.token]);
+    if(!auth || !auth.token) return <PleaseRegisterOrLogin/>;
+    if (loading) return <Layout>loading profile..</Layout>
+    if(!profile) return <Layout>no artists profile found</Layout>
+  
     return(
      <Layout>
         <div className="w-full min-h-screen flex flex-col drop-shadow-md border-3 border-[var(--border)] relative text-[var(--color)]">
             <div className="w-full h-120 drop-shadow-md"
                style = {{
-                backgroundImage:`url(${getFullUrl(user.selected_bg)})`,
+                backgroundImage:`url(${getFullUrl(profile.selected_background)})`,
                 backgroundSize: "cover",
                 backgroundPosition:"center",
                 }}
@@ -19,7 +66,7 @@ export default function PublicProfile() {
 
                 {/* //userpfp  */}
                 <div className="absolute left-8 top-[22rem] z-10">
-                    <img src={getFullUrl(user.profile_picture)}
+                    <img src={getFullUrl(profile.profile_picture)}
                      alt="pfp" 
                      className="w-69 h-69 rounded-full shadow-xl object-cover border-3 border-[var(--border)]"
                      />
@@ -27,35 +74,46 @@ export default function PublicProfile() {
 
                 {/* //card  */}
                 <div className="absolute right-18 top-[4rem] z-10 transform rotate-12">
-                    <img src={getFullUrl(user.selected_card)}
+                    <img src={getFullUrl(profile.selected_card)}
                      alt="selected card by user" 
                      className="w-90 h-150  shadow-xl object-cover border-3 border-[var(--border)]"
                      />
                 </div>
                 
                 <div className="flex-1 ml-80">
-                    <h2 className="text-xl drop-shadow-md">{user.full_name}{" / "}
-                        {user.nationality}
+                    <h2 className="text-xl drop-shadow-md">{profile.full_name}{" / "}
+                        {profile.nationality}
                     </h2>
                     <h2 className="italic drop-shadow-md">
-                        "{user.biography}"</h2>
-                        <h2 className="drop-shadow-md">Speciality: {user.speciality}</h2>
+                        "{profile.biography}"</h2>
                         <h2 className="drop-shadow-md">Contact:{
                              " "} 
-                            <span className="text-blue-500">{user.email}</span></h2>
-                        <h2 className="drop-shadow-md">Joined At: {user.joined_date}</h2>
+                            <span className="text-blue-500">{profile.email}</span></h2>
+                        <h2 className="drop-shadow-md">Joined At: {new Date(profile.joined_date).toLocaleDateString()}</h2>
+
                 </div>
                 <div className="flex-1 bottom-10 absolute">
-                    <h1 className="font-bold text-4xl drop-shadow-md pl-6 mb-4">BADGES</h1>
-                    <div className="flex flex-wrap gap-0">{user.badges.map((badge,i)=>(
+                    {profile.badges && profile.badges.length > 0 ? (
+
+                    <div className="flex flex-wrap gap-0">{profile.badges.map((badge,i)=>(
                         <img 
                         key={i}
                         src={getFullUrl(badge)}
-                        className="w-44 -m-8"
-                        />
+                        className="w-66 -m-8"
 
+                        />
                     ))}
                     </div>
+                    ):(
+                         <div className="flex items-center justify-center w-full">
+              <div className="text-center p-8 border-3 border-dashed border-[var(--border)] rounded-lg ml-2">
+                <p className="text-xl text-gray-500">No badges yet</p>
+                <p className="text-sm text-gray-400 mt-2">
+                  Earn badges by completing achievements
+                </p>
+              </div>
+            </div>
+                    )}
                 </div>
          
 

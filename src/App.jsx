@@ -54,9 +54,9 @@ function App() {
       <Route path="/Top" element={<Top />} />
       <Route path="/settings" element={<Settings/>} />
       <Route path="/plead" element={<PleaseRegisterOrLogin/>} />
-
-
       <Route path="/profile/:username" element={<PublicProfile/>}/>
+
+
 
 
 

@@ -1,7 +1,7 @@
 import os
 from fastapi import UploadFile, HTTPException, status
 from sqlalchemy.orm import Session
-from models import Art, Critique, Heart, Report
+from models import Art, Critique, Heart, Report, ProfileCosmetic, Asset, User
 from schemas import ArtOut, CritiqueOut, ReportOut, ArtThumb, ArtCritism, ArtUpdate
 from dotenv import load_dotenv
 from typing import List
@@ -282,5 +282,98 @@ def add_report(art_id: int, payload: dict, report_in , db:Session)-> ReportOut:
 
 
 
+##Listing every assets beside badge
+async def list_profile_assets(db: Session):
+
+    
+    bgs  = db.query(Asset).filter(Asset.type == "background").all()
+    cards  = db.query(Asset).filter(Asset.type == "card").all()
+
+    assets = bgs + cards
 
 
+    if not assets:
+        return []
+    
+    asset_lisst = []
+    for a in assets:
+        asset_lisst.append({
+            "id":a.id,
+            "name": a.name,
+            "url": a.file_path,
+            "type": a.type
+        })
+
+    return asset_lisst     
+ 
+
+##setting up the background / cards here
+def update_bg_c(asset_id: int, asset_type: str, user_id:int, db: Session):
+    if asset_type not in ["background", "card"]:
+        raise HTTPException(status_code=400, detail="invalid field")
+    
+    asset = db.query(Asset).filter(Asset.id == asset_id, Asset.type == asset_type).first()
+
+    if not asset:
+        raise HTTPException(status_code=404, detail=f"{asset_type} not found")
+    
+    profile = db.query(ProfileCosmetic).filter(ProfileCosmetic.user_id ==  user_id).first()
+
+    if not profile:
+        profile = ProfileCosmetic(user_id=user_id)
+        db.add(profile)
+
+    if asset_type == "background":
+        profile.selected_bg = asset.file_path
+    elif asset_type == "card":
+        profile.selected_card = asset.file_path
+
+    db.commit()
+    db.refresh(profile)
+
+    return{
+        "message": f"{asset_type} updated success",
+        "selected_bg": profile.selected_bg,
+        "selected_card": profile.selected_card
+    }            
+
+
+##getting my portfolio
+def get_my_profile(payload: dict, db: Session):
+    user_id = payload.get("id")
+
+    if not user_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="invalid token"
+        )
+    
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="user not found"
+        )
+    
+    profile_cos = db.query(ProfileCosmetic).filter(ProfileCosmetic.user_id ==  user_id).first()
+    if not profile_cos:
+        profile_cos = ProfileCosmetic(user_id = user_id)
+        db.add(profile_cos)
+        db.commit()
+        db.refresh(profile_cos)
+
+
+    profile_data = {
+        "username": user.username,
+        "full_name": user.full_name,
+        "profile_picture": user.profile_pic,
+        "email": user.email,
+        "nationality": user.nationality,
+        "biography": user.biography,
+        "selected_background": profile_cos.selected_bg,
+        "selected_card": profile_cos.selected_card,
+        "badges": profile_cos.badges or [],
+        "joined_date": user.joined_date
+    }    
+
+    return profile_data

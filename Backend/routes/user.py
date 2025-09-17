@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from controllers import user_controller 
 from utils.dependencies import get_user_from_token, get_bearer_token
@@ -63,5 +63,13 @@ def request_role_chang(payload:dict= Depends(get_user_from_token), db:Session = 
     return user_controller.request_role_change(payload, db)
 
 
+#public profile
+@router.get("/profile/{username}")
+def profile_public(username: str, db: Session = Depends(get_db), payload=Depends(get_user_from_token)):
 
-
+    if payload is None:
+        return HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail = "not authenticated"
+        )
+    return user_controller.get_p_profile(username, db)

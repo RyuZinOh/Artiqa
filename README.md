@@ -1,10 +1,5 @@
 <samp>Only works when I from my localhost run artiqa else the link wont run.</samp>
 
-### Showcases
-<p float="left">
-  <img src="public/Showcases/explore.png" alt="Explore Showcase" width="250" style="margin-right:10px"/>
-  <img src="public/Showcases/individual.png" alt="Individual Showcase" width="250"/>
-</p>
 
 ### Tech Stack
 <table>
@@ -22,4 +17,13 @@
 - [x] User Registration, Login, PasswordResetting
 - [x] Working tokenbased protection
 - [x] Critiqing, hearting and reporting
-- [x] Artist art upload / users like/ his critiques catering
+- [x] Artist art upload & deletion / users like/ his critiques catering
+- [x] Portfolio [personal and public both]
+
+
+
+### Showcases
+![userdashboard](public/Showcases/dashboard_user.png)
+![explore](public/Showcases/explore.png)
+![individualpost](public/Showcases/individual.png)
+![portfolio](public/Showcases/portfolio.png)

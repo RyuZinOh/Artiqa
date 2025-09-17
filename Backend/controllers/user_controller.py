@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status, Depends
 from sqlalchemy.orm import Session
-from models import User, Password, RoleRequest
+from models import User, Password, RoleRequest, ProfileCosmetic
 from schemas import UserCreate, UserOut, RoleFixed, loginFormat, ForgetPasswordVerify, ForgetPasswordReset
 from utils.hashing import get_pwd_hash, verify_password
 from database import get_db
@@ -217,3 +217,44 @@ def request_role_change(payload: dict, db:Session)->dict:
     
 
 
+## getting public profile
+
+def get_p_profile(username: str, db: Session):
+    
+    user = db.query(User).filter(User.username == username).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="user not found"
+        )
+    is_artist = user.role_id == ROLENAMETOID[RoleFixed.artist]
+    if user.role_id != ROLENAMETOID[RoleFixed.artist]:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="not an artist"
+        )
+    
+    profile_cos = db.query(ProfileCosmetic).filter(ProfileCosmetic.user_id ==  user.id).first()
+    if not profile_cos:
+        profile_cos = ProfileCosmetic(user_id = user.id)
+        db.add(profile_cos)
+        db.commit()
+        db.refresh(profile_cos)
+
+
+
+    profile_data = {
+        "username": user.username,
+        "full_name": user.full_name,
+        "profile_picture": user.profile_pic,
+        "email": user.email,
+        "nationality": user.nationality,
+        "biography": user.biography,
+        "selected_background": profile_cos.selected_bg,
+        "selected_card": profile_cos.selected_card,
+        "badges": profile_cos.badges or [],
+        "joined_date": user.joined_date,
+        "is_artist": is_artist
+    }    
+
+    return profile_data

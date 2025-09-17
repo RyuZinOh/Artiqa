@@ -1,21 +1,49 @@
 import { NavLink } from "react-router-dom";
 import Layout from "../../../components/layouts/layout";
-import users from "../../../dummy/user.json";
-import currentUser from "../../../dummy/current_user.json";
 import { useTheme } from "../../../theme/useTheme";
 import { getFullUrl } from "../../../utils/urlHelpers";
+import { useAuth } from "../../../context/useAuth";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Portfolio() {
-    const loggedInUser = currentUser?.username && currentUser.username.trim()!== ""?
-  users.find((u)=>u.username === currentUser.username):null;
-
+    const {auth} = useAuth();
     const {theme} = useTheme();
+    const [profile, setProfile] = useState(null);
+
+    useEffect(()=>{
+        if (!auth?.token)  return;
+
+        const fetchProfile  = async()=>{
+            try {
+                  const res = await fetch(
+                            `${import.meta.env.VITE_STATIC_FAST_API_URL}/artists/profile/mine`,
+                            {
+                              headers:{
+                                Authorization : `Bearer ${auth.token}`
+                            },
+                        }        
+                      )
+                      
+                      if(!res.ok) throw new toast.error("failed to fetch profile");
+                      const data = await res.json();
+                      setProfile(data);
+            } catch (error) {
+                toast.error(error)
+            }
+        };
+        fetchProfile();
+    }, [auth?.token]);
+
+    if (!profile) return <Layout>No profile found.</Layout>
+    const hasBadges = profile.badges && profile.badges.length> 0;
+
     return(
      <Layout>
         <div className="w-full min-h-screen flex flex-col drop-shadow-md border-3 border-[var(--border)] relative text-[var(--color)]">
             <div className="w-full h-120 drop-shadow-md"
                style = {{
-                backgroundImage:`url(${getFullUrl(loggedInUser.selected_bg)})`,
+                backgroundImage:`url(${getFullUrl(profile.selected_background)})`,
                 backgroundSize: "cover",
                 backgroundPosition:"center",
                 }}
@@ -23,7 +51,7 @@ export default function Portfolio() {
 
                 {/* //userpfp  */}
                 <div className="absolute left-8 top-[22rem] z-10">
-                    <img src={getFullUrl(loggedInUser.profile_picture)}
+                    <img src={getFullUrl(profile.profile_picture)}
                      alt="pfp" 
                      className="w-69 h-69 rounded-full shadow-xl object-cover border-3 border-[var(--border)]"
                      />
@@ -31,7 +59,7 @@ export default function Portfolio() {
 
                 {/* //card  */}
                 <div className="absolute right-18 top-[4rem] z-10 transform rotate-12">
-                    <img src={getFullUrl(loggedInUser.selected_card)}
+                    <img src={getFullUrl(profile.selected_card)}
                      alt="selected card by user" 
                      className="w-90 h-150  shadow-xl object-cover border-3 border-[var(--border)]"
                      />
@@ -43,47 +71,50 @@ export default function Portfolio() {
 
 
 
-                    <h2 className="text-xl drop-shadow-md">{loggedInUser.full_name}{" / "}
-                        {loggedInUser.nationality}
+                    <h2 className="text-xl drop-shadow-md">{profile.full_name}{" / "}
+                        {profile.nationality}
                     </h2>
                     <h2 className="italic drop-shadow-md">
-                        "{loggedInUser.biography}"</h2>
-                        <h2 className="drop-shadow-md">Speciality: {loggedInUser.speciality}</h2>
+                        "{profile.biography}"</h2>
                         <h2 className="drop-shadow-md">Contact:{
                              " "} 
-                            <span className="text-blue-500">{loggedInUser.email}</span></h2>
-                        <h2 className="drop-shadow-md">Joined At: {loggedInUser.joined_date}</h2>
+                            <span className="text-blue-500">{profile.email}</span></h2>
+                        <h2 className="drop-shadow-md">Joined At: {new Date(profile.joined_date).toLocaleDateString()}</h2>
+
+                        <NavLink
+                        to="/portfolio/gallery"
+                        className="text-sm text-[var(--primary)] mt-1 inline-block hover:underline"
+                        style={{
+                            color: theme["--color"]
+                        }}
+                        >View Gallery
+                        </NavLink>
                 </div>
+
                 <div className="flex-1 bottom-10 absolute">
-                    <h1 className="font-bold text-4xl drop-shadow-md pl-6 mb-4">BADGES</h1>
-                    <div className="flex flex-wrap gap-0">{loggedInUser.badges.map((badge,i)=>(
+                    {hasBadges ? (
+                         <div className="flex flex-wrap gap-0">{profile.badges.map((badge,i)=>(
                         <img 
                         key={i}
                         src={getFullUrl(badge)}
-                        className="w-44 -m-8"
+                        className="w-66 -m-8"
                         />
-
                     ))}
-
-       
-                    <h2 className=" mt-8 font-bold text-5xl drop-shadow-md"
-                    style={{
-                        color: theme["--primary"]
-                    }}
-                    >   
-                      <div className="absolute left-0 -top-15 h-40 border-l-4 border-[var(--border)]" />
-                      <div className="absolute left-4 -top-15 h-40 border-l-4 border-[var(--border)]" />
-                <NavLink to="/portfolio/gallery" >
-                          {/* //label for now but it will be link to user gallary */}
-                        <span className="ml-10 hover:underline">Gallery</span>
-                
-                    </NavLink>
-</h2>
-
                     </div>
-                </div>
-         
+                    ):(
+                          <div className="flex items-center justify-center w-full ">
+              <div className="text-center p-8 border-3 border-dashed border-[var(--border)] rounded-lg ml-2">
+                <p className="text-xl text-gray-500">No badges yet</p>
+                <p className="text-sm text-gray-400 mt-2">
+                  Earn badges by completing achievements
+                </p>
+              </div>
+            </div>
 
+             )}
+            </div>
+       
+                    
          {/* top  */}
          <div className="absolute bottom-4 right-4 ">
             Top [x%] 
@@ -91,17 +122,12 @@ export default function Portfolio() {
          </div>
 
          <div className="absolute bottom-10 right-4 font-bold text-[var(--color)]">
-                    <NavLink to={`/profile/${loggedInUser.username}`}>
+                    <NavLink to={`/profile/${profile.username}`}>
         Public View
     </NavLink>
 
          </div>
-
-
-
-
-                </div>
+         </div>
     </Layout>
-
     );
 }

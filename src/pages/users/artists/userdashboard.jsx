@@ -14,11 +14,39 @@ import { useAuth } from "../../../context/useAuth";
 import { useEffect, useState } from "react";
 import CreateArt from "./createArt";
 import erzalearning from "/assets/mascot_emotes/erzalearning.svg";
+import { toast } from "react-toastify";
 
 export default function UserDashboard(){
     const {auth, userData} = useAuth();
     const [userPosts, setUserPosts] = useState([]);
     const [isModalOpen, setIsModelOpen] = useState(false);
+
+    const handleDelete = async(artId, artName)=>{
+      const confirmDelete = window.confirm(
+        `Are you sure you want to delete "${artName}" ?`
+      );
+      if (!confirmDelete) return;
+
+      try{
+             const res = await fetch(
+                            `${import.meta.env.VITE_STATIC_FAST_API_URL}/artists/delete/${artId}`,{
+                              method:"DELETE",
+                                headers:{
+                                    Authorization: `Bearer ${auth.token}`
+                                }
+                            }
+                        );
+                        if (!res.ok) throw new Error("failed to delete arts");
+                        setUserPosts((prev) => prev.filter((p)=>p.art_id !== artId));
+                   toast.success(`"${artName}" deleted successfully`);
+
+                      }catch(error){
+                        console.error(`error fetching ${error}`)
+                        toast.error("failed to delete art");
+          }
+           
+      }
+  
 
 
       useEffect(()=>{
@@ -58,7 +86,7 @@ export default function UserDashboard(){
         <div className="flex justify-between items-center flex-wrap mb-6 gap-4">
             <div>
             <h1>
-            <span className="font-bold text-5xl drop-shadow-md">Hi, {userData?.username}</span> 
+            <span className="font-bold text-5xl drop-shadow-md">Hi, {userData?.user?.username}</span> 
             </h1>
         <p className="mb-6 mt-5 italic drop-shadow-md text-2xl">
             You have overall {userPosts.length} arts created so far!
@@ -145,7 +173,11 @@ export default function UserDashboard(){
                     <button>
                         <PencilIcon size={24} weight="regular"/> 
                     </button>
-                    <button>
+
+                    <button title="Delete"
+                    onClick={()=> handleDelete(post.art_id, post.image_name)}
+                    className="cursor-pointer"
+                    >
                         <TrashIcon size={24} weight="regular"/> 
                     </button>
              
@@ -166,7 +198,7 @@ export default function UserDashboard(){
 function Modal({ children, isOpen, onclose }) {
   if (!isOpen) return null;
   return (
-    <div className=" overflow-hidden fixed inset-0 z-50 flex items-center justify-center bg-[var(--bgc)]">
+    <div className=" overflow-hidden  fixed inset-0 z-50 flex items-center justify-center bg-[var(--bgc)]">
       <div className="relative w-full max-w-4xl">
         <img
           src={erzalearning}
