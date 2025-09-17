@@ -17,7 +17,7 @@
 - [x] User Registration, Login, PasswordResetting
 - [x] Working tokenbased protection
 - [x] Critiqing, hearting and reporting
-- [x] Artist art upload & deletion / users like/ his critiques catering
+- [x] Artist art upload & deletion & editin & viewing [full CRUD] / users like/ his critiques catering
 - [x] Portfolio [personal and public both]
 
 
