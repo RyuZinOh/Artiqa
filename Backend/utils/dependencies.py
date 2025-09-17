@@ -6,7 +6,7 @@ owo_auth  = OAuth2PasswordBearer(tokenUrl="/users/login/", auto_error=False)
 
 
 #This checks the aunthetication and matches throught the verify function 
-def get_user_from_token(token:str = Depends(owo_auth)):
+def get_user_from_token_for_arts(token:str = Depends(owo_auth)):
     if not token:
         return None
     try:
@@ -14,6 +14,18 @@ def get_user_from_token(token:str = Depends(owo_auth)):
        return payload
     except HTTPException as e:
         return None
+    
+
+#This checks the aunthetication and matches throught the verify function 
+def get_user_from_token(token:str = Depends(owo_auth)):
+    if not token:
+        raise HTTPException(status_code=401, detail="unauthorized")
+    try:
+       payload = verify_token(token)
+       return payload
+    except HTTPException:
+        raise HTTPException(status_code=401, detail="unauthrized")
+        
     
     
 def get_admin_token(token:str =  Depends(owo_auth)):

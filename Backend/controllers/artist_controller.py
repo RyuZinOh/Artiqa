@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from typing import List
 from sqlalchemy.exc import IntegrityError
 from utils.update_streak import update_user_streak
+from utils.check_access import check_art_access
 
 load_dotenv()
 ARTS_PATH = os.getenv("ARTS_PATH")
@@ -33,6 +34,24 @@ async def upload_art(payload: dict, file: UploadFile, description: str, status_s
             detail="only aritists!"
         )  
     
+    if status_str == "draft" and visibility == "public":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Drafted artworks can't be public"
+        )
+    
+    if status_str == "published" and visibility == "private":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="published artworks can't be private"
+        )
+    
+    if is_competing and (status_str=="draft" or visibility=="private"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="draft or private artworks can't be entered into any competition"
+        ) 
+    
     username = payload.get("sub")
     user_fold = os.path.join(ARTS_PATH, username, "creations")
     os.makedirs(user_fold, exist_ok=True)
@@ -58,9 +77,19 @@ async def upload_art(payload: dict, file: UploadFile, description: str, status_s
         visibility = visibility,
         is_competing = is_competing,
     )
-    db.add(new_art)
-    db.commit()
-    db.refresh(new_art)
+    try:
+        db.add(new_art)
+        db.commit()
+        db.refresh(new_art)
+
+    except Exception as e:
+        if os.path.exists(file_path):
+            os.remove(file_path)    
+        db.rollback()
+        raise HTTPException(
+            status_code= status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"failed to upload, {e}"
+        )
 
 
     update_user_streak(payload.get("id"), db)
@@ -101,7 +130,10 @@ def serialize_art(art: Art, cur_id: int = None ) -> dict:
 
 
 def get_all_arts(db: Session)->List[ArtOut]:
-    arts = db.query(Art).all()
+    arts = db.query(Art).filter(
+        Art.status !="draft",
+        Art.visibility == "public"
+    ).all()
     results = []
     for art in arts:
         results.append(ArtOut.model_validate(serialize_art(art)))
@@ -114,6 +146,13 @@ def get_arts_by_id(art_id: int, db: Session, cid: int= None)->ArtOut:
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"art with id {art_id} not found!"
         )
+    
+    if cid is None or art.user_id!=cid:
+        if art.status != "published" or art.visibility !="public":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You don't have access to this art"
+            )
     
     return ArtOut.model_validate(serialize_art(art, cid))
 
@@ -134,6 +173,8 @@ def add_critique(art_id: int, payload: dict, critique_in, db:Session)-> Critique
             status_code=404,
             detail="Art not found"
         )
+    
+    check_art_access(art, user_id)
     critique = Critique(art_id=art_id, user_id=user_id, text=critique_in.text)
     db.add(critique)
     db.commit()
@@ -190,11 +231,40 @@ def update_art(
 )->ArtOut:
     user_id = payload.get("id")
     art = db.query(Art).filter(Art.art_id == art_id).first()
+    update_data = art_update.model_dump(exclude_unset=True)
+
+    status_str = update_data.get("status", art.status)
+    visibility = update_data.get("visibility", art.visibility)
+    is_competing = update_data.get("is_competing", art.is_competing)
+
+    if status_str not in ["draft", "published"]:
+        raise HTTPException(status_code=400, detail="invalid")
+    if visibility not in ["public", "private"]:
+        raise HTTPException(status_code=400, detail="invalid")
+
+        
+
     if not art:
         raise HTTPException(status_code=404, detail="Art Not Found")
     if art.user_id != user_id:
         raise HTTPException(status_code=403, detail="You can only update your own art.")
+    if status_str == "draft" and visibility == "public":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Drafted artworks can't be public"
+        )
     
+    if status_str == "published" and visibility == "private":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="published artworks can't be private"
+        )
+    
+    if is_competing and (status_str=="draft" or visibility=="private"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="draft or private artworks can't be entered into any competition"
+        ) 
     update_data = art_update.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         setattr(art, key, value)
@@ -217,6 +287,8 @@ def add_heart(art_id: int, payload: dict, db:Session)->dict:
             status_code=404,
             detail="Art not found"
         )
+    
+    check_art_access(art, user_id)
     
     heart = Heart(user_id=user_id, art_id=art_id)
     db.add(heart)
@@ -274,6 +346,8 @@ def add_report(art_id: int, payload: dict, report_in , db:Session)-> ReportOut:
             status_code=404,
             detail="Art not found"
         )
+    
+    check_art_access(art, user_id)
     report = Report(art_id=art_id, user_id=user_id, reason=report_in.reason)
     db.add(report)
     db.commit()

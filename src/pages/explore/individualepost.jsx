@@ -1,4 +1,4 @@
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import Layout from "../../components/layouts/layout";
 import { FlagIcon, HeartIcon, PaperPlaneRightIcon } from "@phosphor-icons/react";
 import { ChatTeardropTextIcon } from "@phosphor-icons/react/dist/ssr";
@@ -16,6 +16,7 @@ export default function IndividualePost() {
   const {auth} = useAuth();
   const [newCritique, setNewCritique] = useState("");
   const {artId} = useParams();
+  const navigate = useNavigate();
 
 
   useEffect(()=>{
@@ -29,16 +30,30 @@ export default function IndividualePost() {
                 : {}
 
             });
-            if (!res.ok) throw new Error("Failed to fetch arts");
+
+            if (!res.ok){
+              const errData = await res.json().catch(()=>null);
+              const msg = errData?.detail || "failed to load art";
+              toast.error(msg);
+
+               if (res.status ===403){
+              navigate("/");
+            }
+
+            throw new Error(msg);
+
+            }
+            
             const data = await res.json();
             setPost(data);
       }catch(erro){
         console.error(erro);
+        navigate("/");
       }
     };
     fetchArt();
   
-  },[artId, auth?.token]);
+  },[artId, auth?.token, navigate]);
   
 
 //handling the critiques

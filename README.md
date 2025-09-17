@@ -21,9 +21,3 @@
 - [x] Portfolio [personal and public both]
 
 
-
-### Showcases
-![userdashboard](public/Showcases/dashboard_user.png)
-![explore](public/Showcases/explore.png)
-![individualpost](public/Showcases/individual.png)
-![portfolio](public/Showcases/portfolio.png)

@@ -25,6 +25,7 @@ import HeLiked from "./pages/users/heLiked";
 import HeCommented from "./pages/users/heCommented";
 import PleaseRegisterOrLogin from "./pages/PleaseRegisterOrLogin";
 import Guester from "./protection/guester";
+import ViewArt from "./pages/users/artists/viewArt";
 function App() {
   return (
     <Routes>
@@ -102,6 +103,13 @@ function App() {
       <Route path="/management" element={
         <ProtectedRoute requireArtist={true}>
         <UserDashboard />
+        </ProtectedRoute>
+        } />
+
+        
+      <Route path="/management/art/:artId" element={
+        <ProtectedRoute requireArtist={true}>
+        <ViewArt />
         </ProtectedRoute>
         } />
 
