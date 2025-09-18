@@ -1,4 +1,4 @@
-from fastapi import HTTPException, status, Depends
+from fastapi import HTTPException, status, Depends, UploadFile
 from sqlalchemy.orm import Session
 from models import User, Password, RoleRequest, ProfileCosmetic
 from schemas import UserCreate, UserOut, RoleFixed, loginFormat, ForgetPasswordVerify, ForgetPasswordReset
@@ -6,6 +6,7 @@ from utils.hashing import get_pwd_hash, verify_password
 from database import get_db
 from utils.jwt_token import create_token, password_token_create, password_token_verfiy
 import os
+
 
 
 
@@ -249,6 +250,7 @@ def get_p_profile(username: str, db: Session):
         "full_name": user.full_name,
         "profile_picture": user.profile_pic,
         "email": user.email,
+        "speciality":user.speciality,
         "nationality": user.nationality,
         "biography": user.biography,
         "selected_background": profile_cos.selected_bg,
@@ -259,3 +261,32 @@ def get_p_profile(username: str, db: Session):
     }    
 
     return profile_data
+
+
+
+
+def update_user_setting(user_id: int, db: Session,  full_name: str, email: str, biography: str, profile_pic: UploadFile, nationality:str , spec: str):
+    user = db.query(User).filter(User.id ==  user_id).first()
+    
+    if not user:
+        raise HTTPException(
+            status_code=404, detail="user not available"
+    )
+    
+    if full_name:
+        user.full_name = full_name
+    elif email:
+        user.email = email
+    elif biography:
+        user.biography = biography
+    elif nationality:
+        user.nationality = nationality
+     
+    db.commit()
+    db.refresh(user)
+    
+    return UserOut.model_validate(User)
+        
+    
+
+

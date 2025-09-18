@@ -51,7 +51,7 @@ export default function Portfolio() {
 
                 {/* //userpfp  */}
                 <div className="absolute left-8 top-[22rem] z-10">
-                    <img src={getFullUrl(profile.profile_picture)}
+                    <img src={getFullUrl(profile?.profile_picture) }
                      alt="pfp" 
                      className="w-69 h-69 rounded-full shadow-xl object-cover border-3 border-[var(--border)]"
                      />
