@@ -4,6 +4,8 @@ from datetime import datetime, timezone
 from models import Base
 from models.tags_model import art_tags
 from models.artisttags_model import art_artist_tags
+from models.competition_model import competition_art_link
+
 class Art(Base):
     __tablename__ = "arts"
     art_id = Column(Integer, primary_key=True, index=True)
@@ -24,7 +26,13 @@ class Art(Base):
     reports  =  relationship("Report", back_populates="art", cascade="all, delete-orphan")
     global_tags = relationship("Tag", secondary=art_tags, back_populates="arts")
     artist_tags = relationship("ArtistTag", secondary=art_artist_tags, back_populates="arts")
-    competitions = relationship("Competition", secondary="competition_art_link", back_populates="participating_arts")
+
+
+    competitions =relationship(
+        "Competition",
+        secondary=competition_art_link,
+        back_populates="participating_arts"
+    )
 
 
 
