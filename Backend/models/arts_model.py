@@ -24,6 +24,8 @@ class Art(Base):
     reports  =  relationship("Report", back_populates="art", cascade="all, delete-orphan")
     global_tags = relationship("Tag", secondary=art_tags, back_populates="arts")
     artist_tags = relationship("ArtistTag", secondary=art_artist_tags, back_populates="arts")
+    competitions = relationship("Competition", secondary="competition_art_link", back_populates="participating_arts")
+
 
 
 

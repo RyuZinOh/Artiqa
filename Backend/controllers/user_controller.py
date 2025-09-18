@@ -1,4 +1,4 @@
-from fastapi import HTTPException, status, Depends, UploadFile
+from fastapi import HTTPException, status, Depends
 from sqlalchemy.orm import Session
 from models import User, Password, RoleRequest, ProfileCosmetic
 from schemas import UserCreate, UserOut, RoleFixed, loginFormat, ForgetPasswordVerify, ForgetPasswordReset
@@ -6,11 +6,12 @@ from utils.hashing import get_pwd_hash, verify_password
 from database import get_db
 from utils.jwt_token import create_token, password_token_create, password_token_verfiy
 import os
-
+from shutil import copyfileobj
 
 
 
 A_F = os.getenv("ARTS_PATH")
+BASE_PATH = os.getenv("ARTIQA_BASE")
 
 
 ## defining their for roles
@@ -264,29 +265,102 @@ def get_p_profile(username: str, db: Session):
 
 
 
+##updating in chunks
+##profile_pic
+def update_user_avatar(user_id: int, file:str, db: Session):
+    user = db.query(User).filter(User.id == user_id).first()
 
-def update_user_setting(user_id: int, db: Session,  full_name: str, email: str, biography: str, profile_pic: UploadFile, nationality:str , spec: str):
-    user = db.query(User).filter(User.id ==  user_id).first()
-    
     if not user:
-        raise HTTPException(
-            status_code=404, detail="user not available"
-    )
+        raise HTTPException(status_code=404, detail="User not found")
     
-    if full_name:
-        user.full_name = full_name
-    elif email:
-        user.email = email
-    elif biography:
-        user.biography = biography
-    elif nationality:
-        user.nationality = nationality
-     
-    db.commit()
-    db.refresh(user)
-    
-    return UserOut.model_validate(User)
+
+    fd = os.path.join(A_F, user.username)
+    if not os.path.exists(fd):
+        os.makedirs(fd, exist_ok=True)
+
+    ext = os.path.splitext(file.filename)[1]
+    new_path= os.path.join(fd, f"{user.username}{ext}")
+
+    for e in os.listdir(fd):
+        if e.startswith(user.username):
+            os.remove(os.path.join(fd, e))
+
+    with open(new_path, "wb") as buffer:
+        copyfileobj(file.file, buffer)
+
+
+    relative_path = os.path.relpath(new_path, BASE_PATH).replace("\\","/")
         
     
+    user.profile_pic = relative_path
+    db.commit()
+    db.refresh(user)
+
+    return {
+        "msg": "profile picture updated success",
+        "profile_pic": user.profile_pic
+    }
+    
+##email
+def update_user_email(user_id: int, email: str, db: Session):
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    existing = db.query(User).filter(User.email == email, User.id != user_id).first()
+
+    if existing:
+        raise HTTPException(status_code=400, detail="Email already in use")
+    
+
+    user.email = email
+    db.commit()
+    db.refresh(user)
+
+    return{
+        "msg": "email updated success",
+        "email": user.email
+    }
+
+##full_name
+def update_full_name(user_id: int, full_name: str, db: Session):
+    user  = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    user.full_name = full_name       
+    db.commit()
+    db.refresh(user)
+
+    return{
+        "msg":"full name updated success",
+            "full_name": user.full_name 
+    }
+
+#password
+def update_password(user_id: int, old_password: str, new_password: str, db: Session):
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    pass_obj = db.query(Password).filter(Password.password_id == user.password_id).first()
+    if not pass_obj:
+        raise HTTPException(status_code=404, detail="Password not found")
+    
+    if not verify_password(old_password, pass_obj.password_hash):
+        raise HTTPException(status_code=401, detail="old  password is incorrect")
+    
+    pass_obj.password_hash = get_pwd_hash(new_password)
+    db.commit()
+    db.refresh(pass_obj)
+
+    return{
+        "msg": "password update success"
+    }
 
 
+
+    

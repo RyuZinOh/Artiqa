@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Form, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
 from sqlalchemy.orm import Session
 from controllers import user_controller 
 from utils.dependencies import get_user_from_token, get_bearer_token
 from database import get_db
-from schemas import UserOut, UserCreate, loginFormat
+from schemas import UserOut, UserCreate, loginFormat, EmailUpdate, FullNameUpdate, PasswordChange
 
 
 router = APIRouter(
@@ -76,32 +76,59 @@ def profile_public(username: str, db: Session = Depends(get_db), payload=Depends
 
 
 
+##updatin in chunks
+#profilepic
+@router.put("/update/avatar")
+def update_avatar(
+    avatar: UploadFile = File(...),
+    paylod: dict = Depends(get_user_from_token),
+    db: Session  = Depends(get_db)
+):
+    if paylod is None:
+        raise HTTPException(status_code=401, detail="Not authorized")
+    
+    return user_controller.update_user_avatar(paylod['id'], avatar, db)
 
-#editing stuff from user
-@router.put("/profileupdate")
-def change_user_setting(
-    user_id: int,
-    db: Session,
-    full_name: str = Form(...),
-    email: str =  Form(...),
-    biography: str =  Form(...),
-    profile_pic: UploadFile =  Form(...),
-    nationality:str =  Form(...),
-    spec: str =  Form(...),
-    payload: Depends=(get_user_from_token)
-    ):
+
+#email
+@router.put("/update/mail")
+def update_avatar(
+    data: EmailUpdate,
+    paylod: dict = Depends(get_user_from_token),
+    db: Session  = Depends(get_db)
+):
+    if paylod is None:
+        raise HTTPException(status_code=401, detail="Not authorized")
     
-    if db.get("id")!= None:
-        raise HTTPException(
-            status_code=404,
-            detail="not available the token, unauthorized"
-        )
+    return user_controller.update_user_email(paylod['id'], data.email, db)
+
+
+##fullname
+@router.put("/update/fullname")
+def update_fullname(
+    data: FullNameUpdate,
+    paylod: dict = Depends(get_user_from_token),
+    db: Session  = Depends(get_db)
+):
+    if paylod is None:
+        raise HTTPException(status_code=401, detail="Not authorized")
     
-    return user_controller.update_user_setting( 
-    full_name,
-    email,
-    biography,
-    profile_pic,
-    nationality,
-    spec
-    )
+    return user_controller.update_full_name(paylod['id'], data.full_name, db)
+
+
+##Password
+@router.put("/update/password")
+def update_password(
+    data: PasswordChange,
+    paylod: dict = Depends(get_user_from_token),
+    db: Session  = Depends(get_db)
+):
+    if paylod is None:
+        raise HTTPException(status_code=401, detail="Not authorized")
+    
+    return user_controller.update_password(
+        user_id=paylod['id'],
+          old_password=data.old_password,
+          new_password=data.new_password
+          ,db=db)
+

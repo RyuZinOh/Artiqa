@@ -44,3 +44,9 @@ class loginFormat(BaseModel):
     username : str
     password: str
 
+##email
+class EmailUpdate(BaseModel):
+    email: EmailStr
+#fullname
+class FullNameUpdate(BaseModel):
+    full_name : str 

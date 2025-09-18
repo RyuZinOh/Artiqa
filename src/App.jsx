@@ -53,7 +53,6 @@ function App() {
         } />
       <Route path="/weekly" element={<Weekly />} />
       <Route path="/Top" element={<Top />} />
-      <Route path="/settings" element={<Settings/>} />
       <Route path="/plead" element={<PleaseRegisterOrLogin/>} />
       <Route path="/profile/:username" element={<PublicProfile/>}/>
 
@@ -73,6 +72,13 @@ function App() {
         </IsValid>
         
         }/>
+
+      <Route path="/settings" element={
+        <IsValid>
+        <Settings/>
+        </IsValid>
+      } />
+
 
 
       <Route path="/statistics" element={
