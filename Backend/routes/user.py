@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Form, UploadFile
 from sqlalchemy.orm import Session
 from controllers import user_controller 
 from utils.dependencies import get_user_from_token, get_bearer_token
@@ -73,3 +73,35 @@ def profile_public(username: str, db: Session = Depends(get_db), payload=Depends
             detail = "not authenticated"
         )
     return user_controller.get_p_profile(username, db)
+
+
+
+
+#editing stuff from user
+@router.put("/profileupdate")
+def change_user_setting(
+    user_id: int,
+    db: Session,
+    full_name: str = Form(...),
+    email: str =  Form(...),
+    biography: str =  Form(...),
+    profile_pic: UploadFile =  Form(...),
+    nationality:str =  Form(...),
+    spec: str =  Form(...),
+    payload: Depends=(get_user_from_token)
+    ):
+    
+    if db.get("id")!= None:
+        raise HTTPException(
+            status_code=404,
+            detail="not available the token, unauthorized"
+        )
+    
+    return user_controller.update_user_setting( 
+    full_name,
+    email,
+    biography,
+    profile_pic,
+    nationality,
+    spec
+    )
