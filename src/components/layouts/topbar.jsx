@@ -106,11 +106,17 @@ export default function TopBar() {
           onClick={toggleMenu}
           ref={menuRef}
           >
-             <img
-              src={getFullUrl(profileImg || " ")}
+            {profileImg ?(
+              <img
+              src={getFullUrl(profileImg)}
               alt={fullname}
               className="w-7 h-7 rounded-full object-cover cursor-pointer drop-shadow-md"
-            />
+              />
+            ): (
+              <div className="w-7 h-7 rounded-full flex items-center justify-center">
+                {fullname?.[0] || "U"}
+              </div>
+            )}
            
 
             {menuOpen &&(

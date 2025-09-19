@@ -7,6 +7,7 @@ import {
   ChatTeardropTextIcon,
   CompassIcon,
   HeartIcon,
+  ImageIcon,
   KanbanIcon,
   ListChecksIcon,
   MagnifyingGlassIcon,
@@ -46,6 +47,11 @@ export default function SideBar() {
       name: "Management",
       to: "/management",
       icon: <PaintBrushIcon size={32} />,
+    },
+    {
+      name: "Perks",
+      to: "/perks",
+      icon: <ImageIcon size={32} />,
     },
     {
       name: "Statistics",

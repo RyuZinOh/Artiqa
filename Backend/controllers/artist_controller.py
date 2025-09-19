@@ -8,6 +8,8 @@ from typing import List
 from sqlalchemy.exc import IntegrityError
 from utils.update_streak import update_user_streak
 from utils.check_access import check_art_access
+from datetime import datetime, timedelta, timezone
+from sqlalchemy import func
 
 load_dotenv()
 ARTS_PATH = os.getenv("ARTS_PATH")
@@ -469,3 +471,101 @@ def get_my_profile(payload: dict, db: Session):
     }    
 
     return profile_data
+
+
+
+##getting all tags
+def get_all_tags(db:Session):
+    tags = db.query(Tag).all()
+    return [{
+        "id": tag.id,
+        "name": tag.name
+    } for tag in tags]
+
+### getting arts by tags[public one]
+def get_arts_by_tags(tag_names: str, db: Session, cur_id: int=None):
+
+    tags = tag_names.split(",")
+    clean_tags = []
+    for t in tags:
+        t = t.strip()
+        if t:
+            clean_tags.append(t)
+
+    tag_list = clean_tags        
+
+    if not tag_list:
+        raise HTTPException(status_code=400, detail="No tags provided")
+    
+    arts = (db.query(Art).join(Art.global_tags).filter(Art.status == "published", Art.visibility == "public", Tag.name.in_(tag_list)).distinct().all())
+
+    return [serialize_art_for_output(art, cur_id) for art in arts]
+
+
+
+##statistics
+def get_user_stats(db: Session, user_id: int):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="user not found")
+    
+    profile  = user.profile_cosmetic
+    if not profile:
+        profile = ProfileCosmetic(user_id=user.id)
+        db.add(profile)
+        db.commit()
+        db.refresh(profile)
+
+
+
+    today = datetime.now(timezone.utc).date()
+    last_active = profile.last_active_date.date() if profile.last_active_date else today
+
+    streak_days = [last_active  - timedelta(days=i) for i in range(profile.current_streak)]
+    streak_days = [d for d in streak_days if d>= today -  timedelta(days=365)]
+
+    heatmap_data = [
+        {
+            "date": d.isoformat(),
+            "count": 1 
+        } for  d in streak_days
+    ]
+
+
+
+   
+
+    monthly_likes_query = (
+        db.query(
+            func.date_format(Art.upload_date, "%Y-%m").label("month"),
+            func.count(Heart.heart_id).label("likes")
+         )
+         .join(Heart, Heart.art_id == Art.art_id).filter(Art.user_id == user_id).group_by("month").order_by("month").all()
+    )
+
+    monthly_likes = {
+        "labels": [datetime.strptime(m.month, "%Y-%m").strftime("%b %Y") for m in monthly_likes_query],
+        "data": [m.likes for m in monthly_likes_query]
+    }
+
+
+
+    radar = {
+        "total_arts": profile.total_arts,
+        "total_wins": profile.total_wins,
+        "current_streak": profile.current_streak,
+        "hearts_received": sum(len(art.hearts) for art in user.arts),
+        "critiques_received": sum(len(art.critiques) for art in user.arts)
+    }
+
+    return {
+        "username": user.username,
+        "profile_picture": user.profile_pic,
+        "joined_date": user.joined_date,
+        "level": profile.level,
+        "progress": profile.progress,
+        "recent_victories": profile.recent_victories,
+        "heatmap": heatmap_data,
+        "monthly_likes": monthly_likes,
+        "radar": radar
+    }

@@ -8,7 +8,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(50), unique=True, nullable=False)
-    speciality = Column(String(50), unique=True, nullable=True)
+    speciality = Column(String(50), nullable=True)
     full_name = Column(String(100))
     profile_pic = Column(String(255), nullable=True)
 

@@ -2,9 +2,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../../context/useAuth";
 import { toast } from "react-toastify";
 import { EyeClosedIcon, EyeIcon, ImageIcon, TextboxIcon, TrophyIcon, UploadIcon, XIcon } from "@phosphor-icons/react";
+import { useStatistics } from "./context/statisticswala/useStatistics";
+import { useMineArts } from "./context/minearts/useMineArts";
 
 export default function CreateArt({ onArtCreated }) {
   const { auth } = useAuth();
+  const {refreshMineArts} = useMineArts();
+  const {refreshStats} = useStatistics();
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
   const [imageName, setImageName] = useState("");
@@ -78,6 +82,8 @@ export default function CreateArt({ onArtCreated }) {
       const newArt = await res.json();
       onArtCreated(newArt);
       resetForm();
+      refreshStats(); //the uploadig wont refresh because we are using the chron job there so it have to be manually or along with be handled.
+      refreshMineArts();
       toast.success("Artwork uploaded successfully!");
     } catch (error) {
       toast.error("Upload error: " + error.message);

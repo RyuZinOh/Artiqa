@@ -10,15 +10,17 @@ import {
   XIcon,
 } from "@phosphor-icons/react";
 import { useAuth } from "../../../context/useAuth";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import CreateArt from "./createArt";
 import erzalearning from "/assets/mascot_emotes/erzalearning.svg";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useMineArts } from "./context/minearts/useMineArts";
 
 export default function UserDashboard() {
   const navigate = useNavigate();
   const { auth, userData } = useAuth();
+  const {mineArts} = useMineArts();
   const [userPosts, setUserPosts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDescription, setEditingDescription] = useState(null);
@@ -166,28 +168,12 @@ export default function UserDashboard() {
     }
   };
 
-  useEffect(() => {
-    if (!auth?.token) return;
-    const fetchMineArts = async () => {
-      try {
-        const res = await fetch(
-          `${import.meta.env.VITE_STATIC_FAST_API_URL}/artists/arts/mine`,
-          { headers: { Authorization: `Bearer ${auth.token}` } }
-        );
-        if (!res.ok) throw new Error("Failed to fetch arts");
-        const data = await res.json();
-        setUserPosts(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchMineArts();
-  }, [auth?.token]);
-
-  const publishedCount = userPosts.filter((p) => p.status === "published").length;
-  const draftCount = userPosts.filter((p) => p.status === "draft").length;
   
-  const filteredPosts = userPosts.filter(post => 
+
+  const publishedCount = mineArts.filter((p) => p.status === "published").length;
+  const draftCount = mineArts.filter((p) => p.status === "draft").length;
+  
+  const filteredPosts = mineArts.filter(post => 
     post.image_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     post.description.toLowerCase().includes(searchQuery.toLowerCase())
   );

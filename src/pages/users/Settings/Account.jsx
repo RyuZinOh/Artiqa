@@ -33,13 +33,18 @@ export default function Account(){
     const [fnInput, setFnInput] = useState("");
     const [oldPwdInput, setOldPwdInput] = useState("");
     const [newPwdInput, setNewPwdInput] = useState("");
-    const {auth, logout} = useAuth();
+    const {auth, logout, setUserData} = useAuth();
     const navigate = useNavigate();
 
     const handleAvatarUpdate = async()=>{
         if (!avatarFile) return toast.error("Select a file first");
         try{
-            await updateAvatar(avatarFile, auth?.token);
+            const response = await updateAvatar(avatarFile, auth?.token);
+            setUserData(prev => ({
+                ...prev,
+                user: response.user
+            }));
+
             toast.success("avatar updated succession");
         }catch(erro){
             toast.error(erro.message)

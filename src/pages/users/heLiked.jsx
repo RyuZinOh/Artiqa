@@ -1,37 +1,11 @@
 import { getFullUrl } from "../../utils/urlHelpers";
 import Layout from "../../components/layouts/layout";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../../context/useAuth";
-import { useEffect, useState } from "react";
+import { useHeDone } from "./context/useHeDone";
 
 export default function HeLiked() {
 
-    const {auth}= useAuth();
-    const [likedArts, setLikedArts] = useState([]);
-
-    useEffect(()=>{
-        const fetchLikedArts = async()=>{
-            if(!auth.token) return;
-
-            try{
-                const res = await fetch(
-                    `${import.meta.env.VITE_STATIC_FAST_API_URL}/artists/arts/hearted`,{
-                        headers:{
-                            Authorization: `Bearer ${auth.token}`
-                        }
-                    }
-                );
-                if (!res.ok) throw new Error("failed to fetch liked arts");
-
-                const data = await res.json();
-                setLikedArts(data);
-            }catch(error){
-                console.error(`error fetching ${error}`)
-            }
-        }
-        fetchLikedArts();
-    }, [auth?.token]);
-
+    const {likedArts} = useHeDone();
 
     if (likedArts.length === 0){
         return(

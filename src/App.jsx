@@ -26,6 +26,8 @@ import HeCommented from "./pages/users/heCommented";
 import PleaseRegisterOrLogin from "./pages/PleaseRegisterOrLogin";
 import Guester from "./protection/guester";
 import ViewArt from "./pages/users/artists/viewArt";
+import Perks from "./pages/users/artists/perks";
+
 function App() {
   return (
     <Routes>
@@ -94,7 +96,12 @@ function App() {
         </ProtectedRoute>
         
         } />
-
+        
+        <Route path="/perks" element={
+        <ProtectedRoute requireArtist={true}>
+        <Perks />    
+        </ProtectedRoute>
+        } />
 
       <Route path="/portfolio/gallery" element={
         <ProtectedRoute requireArtist={true}>

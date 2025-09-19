@@ -298,7 +298,8 @@ def update_user_avatar(user_id: int, file:str, db: Session):
 
     return {
         "msg": "profile picture updated success",
-        "profile_pic": user.profile_pic
+        "profile_pic": user.profile_pic,
+        "user": UserOut.model_validate(user)
     }
     
 ##email

@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File , Query
 from sqlalchemy.orm import Session
-from controllers import user_controller 
+from controllers import user_controller, artist_controller 
 from utils.dependencies import get_user_from_token, get_bearer_token
 from database import get_db
-from schemas import UserOut, UserCreate, loginFormat, EmailUpdate, FullNameUpdate, PasswordChange
-
+from schemas import UserOut, UserCreate, loginFormat, EmailUpdate, FullNameUpdate, PasswordChange, ArtOut
+from typing import List
 
 router = APIRouter(
     prefix="/users",
@@ -131,4 +131,22 @@ def update_password(
           old_password=data.old_password,
           new_password=data.new_password
           ,db=db)
+
+
+###geting all tags
+@router.get("/arts/tags")
+def list_all_tags(
+    db:Session = Depends(get_db)
+):
+    return artist_controller.get_all_tags(db)
+
+##getting artis related to that tags
+@router.get("/arts/by-tags", response_model=List[ArtOut])
+def get_arts_by_tags(
+    tag_names:str = Query(..., description="sepereate by comman ?tag_names=a,b,c"),
+    db: Session = Depends(get_db),
+    payload: dict = Depends(get_user_from_token)
+):
+    cur_id = payload.get("id") if payload else None
+    return artist_controller.get_arts_by_tags(tag_names, db, cur_id)
 

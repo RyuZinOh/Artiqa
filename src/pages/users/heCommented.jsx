@@ -1,34 +1,10 @@
 import Layout from "../../components/layouts/layout";
 import { NavLink } from "react-router-dom";
 import { getFullUrl } from "../../utils/urlHelpers";
-import { useAuth } from "../../context/useAuth";
-import { useEffect, useState } from "react";
+import { useHeDone } from "./context/useHeDone";
 
 export default function HeCommented(){
-  const {auth} = useAuth();
-  const [commentedArts, setCommentedArts] = useState([]);
-   
-  useEffect(()=>{
-    const fetchCommentedArts = async () =>{
-      if (!auth?.token)  return;
-          try{
-                      const res = await fetch(
-                          `${import.meta.env.VITE_STATIC_FAST_API_URL}/artists/arts/critiqued`,{
-                              headers:{
-                                  Authorization: `Bearer ${auth.token}`
-                              }
-                          }
-                      );
-                      if (!res.ok) throw new Error("failed to fetch commented arts");
-      
-                      const data = await res.json();
-                      setCommentedArts(data);
-                  }catch(error){
-                      console.error(`error fetching ${error}`)
-                  }
-    };
-    fetchCommentedArts();
-  }, [auth?.token]);
+  const {commentedArts} = useHeDone();
 
 
   if(commentedArts.length == 0){

@@ -1,5 +1,4 @@
-const API_BASE = import.meta.env.VITE_STATIC_FAST_API_URL;
-
+import { API_BASE } from "../../../utils/api";
 export async function updateAvatar(file, token) {
     if(!file) throw new Error("No file provided");
 

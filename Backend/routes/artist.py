@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, UploadFile, Form
+from fastapi import APIRouter, Depends, UploadFile, Form, HTTPException
 from utils.dependencies import get_artist_token, get_user_from_token, get_user_from_token_for_arts
 from sqlalchemy.orm import Session
 from database import get_db
@@ -153,3 +153,17 @@ async def get_all_profile_asset(
 def profile_mine(payload: dict = Depends(get_artist_token), db: Session = Depends(get_db)):
     
     return artist_controller.get_my_profile(payload, db)
+
+
+##getting artists stats
+@router.get("/stats/mine")
+def get_my_stats(
+        db: Session = Depends(get_db),
+        payload: dict = Depends(get_artist_token)
+):
+    if not payload:
+        raise HTTPException(status_code=401, detail="not authenticated as artist")
+    
+    user_id = payload.get("id")
+    return artist_controller.get_user_stats(db, user_id)
+    

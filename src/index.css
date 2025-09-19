@@ -18,3 +18,14 @@ input::-webkit-credentials-auto-fill-button {
   height: 0;
   width: 0;
 }
+
+
+@keyframes progress-grow {
+  from { width: 0%; }
+  to { width: var(--final-width); }
+}
+
+.animated-progress {
+  animation: progress-grow 1.5s ease-out forwards;
+  animation-delay: 0.3s;
+}

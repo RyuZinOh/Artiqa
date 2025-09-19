@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from sqlalchemy.orm import Session
-from models import ProfileCosmetic, User
+from models import ProfileCosmetic
 
 
 def update_user_streak(user_id: int, db:Session)-> None:
