@@ -7,6 +7,7 @@ from database import get_db
 from utils.jwt_token import create_token, password_token_create, password_token_verfiy
 import os
 from shutil import copyfileobj
+import time
 
 
 
@@ -279,10 +280,12 @@ def update_user_avatar(user_id: int, file:str, db: Session):
         os.makedirs(fd, exist_ok=True)
 
     ext = os.path.splitext(file.filename)[1]
-    new_path= os.path.join(fd, f"{user.username}{ext}")
+    timestamp = int(time.time())
+    new_filename = f"avatar_{timestamp}{ext}"
+    new_path= os.path.join(fd, new_filename)
 
     for e in os.listdir(fd):
-        if e.startswith(user.username):
+        if e.startswith("avatar_"):
             os.remove(os.path.join(fd, e))
 
     with open(new_path, "wb") as buffer:
@@ -301,7 +304,21 @@ def update_user_avatar(user_id: int, file:str, db: Session):
         "profile_pic": user.profile_pic,
         "user": UserOut.model_validate(user)
     }
+
+#->getting thepfp
+def get_pfp(payload: dict, db: Session):
+    if not payload:
+        raise HTTPException(status_code=401, detail=" not authorized")
     
+    user  = db.query(User).filter(User.id == payload["id"]).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="user not found")
+    
+    return {
+        "profile_pic": user.profile_pic
+    }
+
 ##email
 def update_user_email(user_id: int, email: str, db: Session):
     user = db.query(User).filter(User.id == user_id).first()

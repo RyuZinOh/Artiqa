@@ -16,16 +16,22 @@ import erzalearning from "/assets/mascot_emotes/erzalearning.svg";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useMineArts } from "./context/minearts/useMineArts";
+import { useExplore } from "../../context/Exploration/useExplore";
+import { useHeDone } from "../context/useHeDone";
 
 export default function UserDashboard() {
   const navigate = useNavigate();
   const { auth, userData } = useAuth();
-  const {mineArts} = useMineArts();
+  const {mineArts, refreshMineArts} = useMineArts();
   const [userPosts, setUserPosts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDescription, setEditingDescription] = useState(null);
   const [editedDescription, setEditedDescription] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const {refreshArts} = useExplore();
+  const {refreshHeDone}  = useHeDone();
+  
+  
 
   const truncateText = (text, length = 15) =>
     text?.length > length ? text.slice(0, length) + "..." : text;
@@ -49,6 +55,7 @@ export default function UserDashboard() {
         prev.map((p) => (p.art_id === artId ? updatedArt : p))
       );
       setEditingDescription(null);
+      refreshMineArts();
       toast.success("Description updated");
     } catch (error) {
       console.error(error);
@@ -83,6 +90,10 @@ export default function UserDashboard() {
       setUserPosts((prev) =>
         prev.map((p) => (p.art_id === artId ? updatedArt : p))
       );
+      refreshMineArts();
+      refreshArts();
+      refreshHeDone();
+
       toast.success("Status updated");
     } catch (error) {
       console.error(error);
@@ -117,6 +128,10 @@ export default function UserDashboard() {
       setUserPosts((prev) =>
         prev.map((p) => (p.art_id === artId ? updatedArt : p))
       );
+      refreshMineArts();
+      refreshArts();
+      refreshHeDone();
+
       toast.success("Visibility updated");
     } catch (error) {
       console.error(error);
@@ -142,6 +157,7 @@ export default function UserDashboard() {
       setUserPosts((prev) =>
         prev.map((p) => (p.art_id === artId ? updatedArt : p))
       );
+      refreshMineArts();
       toast.success("Competing status updated");
     } catch (error) {
       console.error(error);
@@ -161,6 +177,9 @@ export default function UserDashboard() {
       );
       if (!res.ok) throw new Error("Failed to delete art");
       setUserPosts((prev) => prev.filter((p) => p.art_id !== artId));
+      refreshMineArts();
+      refreshArts();
+      refreshHeDone();
       toast.success(`"${artName}" deleted`);
     } catch (error) {
       console.error(error);

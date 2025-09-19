@@ -4,10 +4,12 @@ import { toast } from "react-toastify";
 import { EyeClosedIcon, EyeIcon, ImageIcon, TextboxIcon, TrophyIcon, UploadIcon, XIcon } from "@phosphor-icons/react";
 import { useStatistics } from "./context/statisticswala/useStatistics";
 import { useMineArts } from "./context/minearts/useMineArts";
+import { useExplore } from "../../context/Exploration/useExplore";
 
 export default function CreateArt({ onArtCreated }) {
   const { auth } = useAuth();
   const {refreshMineArts} = useMineArts();
+  const {refreshArts} = useExplore();
   const {refreshStats} = useStatistics();
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
@@ -84,6 +86,7 @@ export default function CreateArt({ onArtCreated }) {
       resetForm();
       refreshStats(); //the uploadig wont refresh because we are using the chron job there so it have to be manually or along with be handled.
       refreshMineArts();
+      refreshArts();
       toast.success("Artwork uploaded successfully!");
     } catch (error) {
       toast.error("Upload error: " + error.message);

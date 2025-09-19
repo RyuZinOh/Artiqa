@@ -3,9 +3,11 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { getFullUrl } from "../../utils/urlHelpers";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../context/useAuth";
+import { useUser } from "../../pages/users/context/UserHoni/useUser";
 
 export default function TopBar() {
-  const {auth, userData, logout} = useAuth();
+  const {auth,userData, logout} = useAuth();
+  const {profilePic} = useUser();
   const navigate = useNavigate();
   const location = useLocation();
   const label =
@@ -21,14 +23,14 @@ export default function TopBar() {
 
 
     useEffect(()=>{
-      if(userData){
+      if(auth){
         setNotifications([
           {username:"system", message:"welcome to artiqa!", pfp:"/something"}
         ]);
       }else{
         setNotifications([]);
       }
-    },[userData]);
+    },[auth]);
       
       useEffect(()=>{
         const handleClickOutside = (e) =>{
@@ -53,7 +55,6 @@ export default function TopBar() {
             navigate("/login");
           }
 
-          const profileImg = userData?.user?.profile_pic;
           const fullname = userData?.user?.full_name;
   
 
@@ -106,9 +107,9 @@ export default function TopBar() {
           onClick={toggleMenu}
           ref={menuRef}
           >
-            {profileImg ?(
+            {profilePic ?(
               <img
-              src={getFullUrl(profileImg)}
+              src={getFullUrl(profilePic)}
               alt={fullname}
               className="w-7 h-7 rounded-full object-cover cursor-pointer drop-shadow-md"
               />

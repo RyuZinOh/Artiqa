@@ -1,56 +1,16 @@
 import { useAuth } from "../../context/useAuth";
 import { getFullUrl } from "../../utils/urlHelpers";
 import Layout from "../../components/layouts/layout";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import PleaseRegisterOrLogin from "../PleaseRegisterOrLogin";
+import usePortfolio from "./artists/context/portfolio/userPortfolio";
 
 export default function PublicProfile() {
-    const {username} = useParams();
-    const [profile, setProfile]= useState(null);
+        const {profile}  = usePortfolio();
+    
     const {auth}  = useAuth();
-    const [loading, setLoading] = useState(true);
 
-    useEffect(()=>{
-        if(!username || !auth?.token) return;
 
-        const fetchProfile = async ()=>{
-            setLoading(true);
-            try{
-                      const res = await fetch(
-                                            `${import.meta.env.VITE_STATIC_FAST_API_URL}/users/profile/${username}`,
-                                            {
-                                              headers:{
-                                                "Content-Type" :"application/json",
-                                                Authorization : `Bearer ${auth.token}`
-                                            },
-                                        }        
-                                      )
-                                      if (res.status === 404){
-                                        setProfile(null);
-                                      }else if(!res.ok) {
-                                        throw new Error("faiRled to fetch profile");
-                                      }else{
-                                        const data = await res.json();
-                                        if(!data.is_artist){
-                                      setProfile(null);
-                                        }else{
-                                      setProfile(data);
-
-                                        }
-                                      }
-            }catch(error){
-                toast.error(error);
-                setProfile(null);
-            }finally{
-                setLoading(false);
-            }
-        };
-         fetchProfile()
-    }, [username, auth?.token]);
     if(!auth || !auth.token) return <PleaseRegisterOrLogin/>;
-    if (loading) return <Layout>loading profile..</Layout>
     if(!profile) return <Layout>no artists profile found</Layout>
   
     return(

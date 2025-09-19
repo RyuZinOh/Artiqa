@@ -88,7 +88,13 @@ def update_avatar(
         raise HTTPException(status_code=401, detail="Not authorized")
     
     return user_controller.update_user_avatar(paylod['id'], avatar, db)
-
+#-getting
+@router.get("/mine_avatar")
+def profile_pic(
+    payload: dict = Depends(get_user_from_token),
+    db: Session= Depends(get_db)
+):
+    return user_controller.get_pfp(payload, db)
 
 #email
 @router.put("/update/mail")

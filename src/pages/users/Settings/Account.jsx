@@ -4,6 +4,9 @@ import { updateAvatar, updateEmail, updateFullName, updatePassword } from "./log
 import { useAuth } from "../../../context/useAuth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserHoni/useUser";
+import { useStatistics } from "../artists/context/statisticswala/useStatistics";
+import usePortfolio from "../artists/context/portfolio/userPortfolio";
 
 
 function SettingRow({icon, title, desc, buttonL, onClick}){
@@ -30,21 +33,22 @@ export default function Account(){
     const [expanded, setExpanded] = useState(true);
     const [avatarFile, setAvatarFile] = useState(null);
     const [emailInput, setEmailInput] = useState("");
+    const {refreshStats} = useStatistics();
     const [fnInput, setFnInput] = useState("");
+    const { refreshProfilePic } = useUser();
+    const {refreshProfile} = usePortfolio();
     const [oldPwdInput, setOldPwdInput] = useState("");
     const [newPwdInput, setNewPwdInput] = useState("");
-    const {auth, logout, setUserData} = useAuth();
+    const {auth, logout} = useAuth();
     const navigate = useNavigate();
 
     const handleAvatarUpdate = async()=>{
         if (!avatarFile) return toast.error("Select a file first");
         try{
-            const response = await updateAvatar(avatarFile, auth?.token);
-            setUserData(prev => ({
-                ...prev,
-                user: response.user
-            }));
-
+            await updateAvatar(avatarFile, auth?.token);
+            refreshProfilePic();
+            refreshStats();
+            refreshProfile();
             toast.success("avatar updated succession");
         }catch(erro){
             toast.error(erro.message)

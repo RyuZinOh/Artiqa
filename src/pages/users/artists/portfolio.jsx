@@ -2,39 +2,11 @@ import { NavLink } from "react-router-dom";
 import Layout from "../../../components/layouts/layout";
 import { useTheme } from "../../../theme/useTheme";
 import { getFullUrl } from "../../../utils/urlHelpers";
-import { useAuth } from "../../../context/useAuth";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-
+import usePortfolio from "./context/portfolio/userPortfolio";
 export default function Portfolio() {
-    const {auth} = useAuth();
     const {theme} = useTheme();
-    const [profile, setProfile] = useState(null);
-
-    useEffect(()=>{
-        if (!auth?.token)  return;
-
-        const fetchProfile  = async()=>{
-            try {
-                  const res = await fetch(
-                            `${import.meta.env.VITE_STATIC_FAST_API_URL}/artists/profile/mine`,
-                            {
-                              headers:{
-                                Authorization : `Bearer ${auth.token}`
-                            },
-                        }        
-                      )
-                      
-                      if(!res.ok) throw new toast.error("failed to fetch profile");
-                      const data = await res.json();
-                      setProfile(data);
-            } catch (error) {
-                toast.error(error)
-            }
-        };
-        fetchProfile();
-    }, [auth?.token]);
-
+    const {profile}  = usePortfolio();
+   
     if (!profile) return <Layout>No profile found.</Layout>
     const hasBadges = profile.badges && profile.badges.length> 0;
 

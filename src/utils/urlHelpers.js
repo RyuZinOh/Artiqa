@@ -9,13 +9,10 @@ export function getUrlforAssets(path) {
 
 export function getFullUrl(path) {
   if (!path || typeof path != "string") return null;
-  
+    
     if (path.startsWith("http://") || path.startsWith("https://")){
       return path;
     }    
 
-    const timestamp = new  Date().getTime();
-    const spef = path.includes("?")  ? 'g' : '?';
-
-    return `${BASE_URL}${path.startsWith("/") ? "" : "/"}${path}${spef}t=${timestamp}`;
+    return `${BASE_URL}${path.startsWith("/") ? "" : "/"}${path}`;
   }

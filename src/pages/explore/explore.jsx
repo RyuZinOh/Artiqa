@@ -2,26 +2,14 @@ import { ChatCircleTextIcon, HeartIcon } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 import Layout from "../../components/layouts/layout";
 import { getFullUrl } from "../../utils/urlHelpers";
-import { useEffect, useState } from "react";
+import { useExplore } from "../context/Exploration/useExplore";
 
 export default function Explore() {
-  const [arts, setArts] = useState([]);
+  const {arts, loading, error} = useExplore();
+ if (loading) return <p className="text-center mt-8">Loading arts...</p>;
+  if (error) return <p className="text-center mt-8 text-red-500">{error}</p>;
 
-  useEffect(()=>{
-    const fetchArts  = async() =>{
-      try{
-                 const res = await fetch(
-            `${import.meta.env.VITE_STATIC_FAST_API_URL}/artists/all-arts`,);
-            if (!res.ok) throw new Error("Failed to fetch arts");
-            const data = await res.json();
-            setArts(data);
-
-      }catch(erro){
-        console.error(erro);
-      }
-    };
-    fetchArts();
-  },[]);
+ 
 
   return (
     <Layout>

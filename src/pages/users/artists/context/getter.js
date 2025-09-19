@@ -37,4 +37,18 @@ export async function fetchMyStats(token) {
     return res.json();
 
 }
-    
+
+export async function fetchMyProfile(token){
+                  const res = await fetch(
+                            `${API_BASE}/artists/profile/mine`,
+                            {
+                              headers:{
+                                Authorization : `Bearer ${token}`
+                            },
+                        }        
+                      )
+                      
+                      if(!res.ok) throw new Error("failed to fetch profile");
+                      return await res.json();
+        };
+   

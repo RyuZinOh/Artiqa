@@ -10,6 +10,9 @@ import { AssetProvider } from './pages/users/artists/context/AssetsWala/AssetPro
 import { StatisticsProvider } from './pages/users/artists/context/statisticswala/StatisticsProvider.jsx'
 import MineArtsProvider from './pages/users/artists/context/minearts/MineArtsProvider.jsx'
 import { HeDoneProvider } from './pages/users/context/HeDoneProvider.jsx'
+import { UserProvider } from './pages/users/context/UserHoni/UserProvider.jsx'
+import { ExploreProvider } from './pages/context/Exploration/ExploreProvider.jsx'
+import { PortfolioProvider } from './pages/users/artists/context/portfolio/PortfolioProvider.jsx'
 
 createRoot(document.getElementById('root')).render(
 <ThemeProvider>
@@ -18,10 +21,16 @@ createRoot(document.getElementById('root')).render(
     <AssetProvider>
       <StatisticsProvider>
         <MineArtsProvider>
+          <UserProvider>
           <HeDoneProvider>
+            <PortfolioProvider>
+            <ExploreProvider>
   <App />  
       <ToastContainer position="top-center" autoClose={5000} />
+            </ExploreProvider>
+            </PortfolioProvider>
           </HeDoneProvider>
+          </UserProvider>
         </MineArtsProvider>
       </StatisticsProvider>
     </AssetProvider>

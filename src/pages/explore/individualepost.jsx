@@ -9,6 +9,7 @@ import { useAuth } from "../../context/useAuth";
 import { toast } from "react-toastify";
 import { useStatistics } from "../users/artists/context/statisticswala/useStatistics";
 import { useHeDone } from "../users/context/useHeDone";
+import { useExplore } from "../context/Exploration/useExplore";
 
 export default function IndividualePost() {
   const [post, setPost] = useState(
@@ -16,6 +17,7 @@ export default function IndividualePost() {
   );
   const {refreshStats} = useStatistics();
   const {refreshHeDone}  = useHeDone();
+  const {refreshArts} = useExplore();
   const {auth} = useAuth();
   const [newCritique, setNewCritique] = useState("");
   const {artId} = useParams();
@@ -82,6 +84,7 @@ const handleCritiqueSubmit = async () =>{
                 setNewCritique("");
                 refreshStats("");
                 refreshHeDone();
+                refreshArts();
               }catch(error){
                 console.log(error);
               }
@@ -108,6 +111,8 @@ const handleHeartClick = async () =>{
              }));
              refreshStats();
              refreshHeDone();
+                refreshArts();
+
   }catch(error){
     console.log(error)
   }
