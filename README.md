@@ -23,4 +23,6 @@
 - [x] some jagged context apis, but might refactor somehow, someday if I feel like [there are so many retundant api  calls, I found out while making providers and hooks fuck it]
 - [x] user sends artist to be request / admin can disapprove or approve it
 - [x] creating a competition lasting a week from created date
+- [x] a working segmented upload art
+- [x] weekly table leaderboard 
 

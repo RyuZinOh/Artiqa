@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File , Query, Body
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File , Query
 from sqlalchemy.orm import Session
 from controllers import user_controller, artist_controller 
 from utils.dependencies import get_user_from_token, get_bearer_token
@@ -157,3 +157,10 @@ def get_arts_by_tags(
     cur_id = payload.get("id") if payload else None
     return artist_controller.get_arts_by_tags(tag_names, db, cur_id)
 
+
+
+
+##getting weekly
+@router.get("/weekly", response_model=List[dict])
+def weekly_leaderboard(limit: int=10,db: Session = Depends(get_db)):
+    return artist_controller.get_weekly_top_leaders(db, limit)

@@ -1,7 +1,7 @@
 import os
 from fastapi import UploadFile, HTTPException, status
 from sqlalchemy.orm import Session
-from models import Art, Critique, Heart, Report, ProfileCosmetic, Asset, User, Tag
+from models import Art, Critique, Heart, Report, ProfileCosmetic, Asset, User, Tag, Competition, competition_art_link
 from schemas import ArtOut, CritiqueOut, ReportOut, ArtThumb, ArtCritism, ArtUpdate
 from dotenv import load_dotenv
 from typing import List
@@ -98,6 +98,29 @@ async def upload_art(payload: dict, file: UploadFile, description: str, status_s
         db.add(new_art)
         db.commit()
         db.refresh(new_art)
+
+        if is_competing:
+            active_comp = db.query(Competition).filter(Competition.is_active == True).first()
+            if not active_comp:
+                db.delete(new_art)
+                db.commit()
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="no ongoing compeition to join"
+                )
+            
+            user_competing_arts = (
+                db.query(Art).join(competition_art_link, Art.art_id == competition_art_link.c.art_id).filter(competition_art_link.c.competition_id == active_comp.competition_id,Art.user_id == payload.get("id")).first()
+                )    
+            
+            if user_competing_arts:
+                db.delete(new_art)
+                db.commit()
+                raise HTTPException(status_code=400,detail="you already competing art in the current competition")    
+            
+            active_comp.participating_arts.append(new_art)
+            db.commit()
+            db.refresh(active_comp)    
 
     except Exception as e:
         if os.path.exists(file_path):
@@ -250,6 +273,14 @@ def update_art(
 )->ArtOut:
     user_id = payload.get("id")
     art = db.query(Art).filter(Art.art_id == art_id).first()
+
+    if not art:
+        raise HTTPException(status_code=404, detail="Art not found")
+    
+    if art.user_id!=user_id:
+        raise HTTPException(status_code=404, detail="you can only update your own art")
+        
+
     update_data = art_update.model_dump(exclude_unset=True)
 
     status_str = update_data.get("status", art.status)
@@ -259,34 +290,50 @@ def update_art(
     if status_str not in ["draft", "published"]:
         raise HTTPException(status_code=400, detail="invalid")
     if visibility not in ["public", "private"]:
-        raise HTTPException(status_code=400, detail="invalid")
-
-        
-
-    if not art:
-        raise HTTPException(status_code=404, detail="Art Not Found")
-    if art.user_id != user_id:
-        raise HTTPException(status_code=403, detail="You can only update your own art.")
+        raise HTTPException(status_code=400, detail="invalid")      
     if status_str == "draft" and visibility == "public":
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Drafted artworks can't be public"
         )
-    
     if status_str == "published" and visibility == "private":
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="published artworks can't be private"
         )
-    
     if is_competing and (status_str=="draft" or visibility=="private"):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="draft or private artworks can't be entered into any competition"
         ) 
-    update_data = art_update.model_dump(exclude_unset=True)
+    
     for key, value in update_data.items():
         setattr(art, key, value)
+
+    if "is_competing" in update_data:
+        if is_competing:
+            active_comp = db.query(Competition).filter(Competition.is_active == True).first()
+            if not active_comp:
+                raise HTTPException(status_code=400, detail="no ongoing competition to join")
+            
+            existing_arts = (
+                db.query(Art).join(competition_art_link, Art.art_id == competition_art_link.c.art_id).filter(
+                    competition_art_link.c.competition_id == active_comp.competition_id,
+                    Art.user_id == user_id,
+                    Art.art_id != art.art_id
+                ).first()
+            )
+
+            if existing_arts:
+                raise HTTPException(status_code=400, detail="you already have a competing art in the current competition.")
+
+
+            if art not in active_comp.participating_arts:
+                active_comp.participating_arts.append(art)
+        else:
+            for comp in art.competitions:
+                if comp.is_active and art in comp.participating_arts:
+                    comp.participating_arts.remove(art)
     
     db.commit()
     db.refresh(art)
@@ -569,3 +616,46 @@ def get_user_stats(db: Session, user_id: int):
         "monthly_likes": monthly_likes,
         "radar": radar
     }
+
+
+
+
+## getting weekly toppers
+def get_weekly_top_leaders(db: Session, limit: int=10):
+    active_comp = db.query(Competition).filter(Competition.is_active == True).first()
+    if not active_comp:
+        return [] ## ongling competion only nor past compeitions arts.
+    
+    art_id_rows = db.query(competition_art_link.c.art_id).filter(
+        competition_art_link.c.competition_id == active_comp.competition_id
+    ).all()
+    art_ids = [row[0] for row in art_id_rows]
+
+    if not art_ids:
+        return []
+    
+    arts = db.query(Art).filter(Art.art_id.in_(art_ids)).all()
+    leaderboard = []
+
+
+    for art in arts:
+        user  = art.artist
+        hearts_count = len(art.hearts)
+        critiques_count = len(art.critiques)
+        engagement_points = hearts_count + critiques_count
+
+        leaderboard.append({
+            "username": user.username,
+            "profile_picture": user.profile_pic,
+            "competing_art":{
+                "art_id": art.art_id,
+                "image_name": art.image_name,
+                "upload_date": art.upload_date
+            },
+            "engagement_points": engagement_points
+        })
+
+    leaderboard.sort(key=lambda x:x["engagement_points"], reverse=True)
+
+    return leaderboard[:limit]
+    

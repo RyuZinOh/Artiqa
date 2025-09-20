@@ -6,11 +6,11 @@ import {
   LessThanIcon,
   UserIcon,
 } from "@phosphor-icons/react";
-import userData from "../dummy/user.json";
-import currentUser from "../dummy/current_user.json"
 import { getFullUrl } from "../utils/urlHelpers";
 import { NavLink } from "react-router-dom";
-import { slugify } from "../utils/slugify";
+import { API_BASE } from "../utils/api";
+import { useEffect, useState } from "react";
+import { useAuth } from "../context/useAuth";
 const days = [
   "Sunday",
   "Monday",
@@ -23,28 +23,28 @@ const days = [
 
 
 export default function Weekly() {
+  const {userData} = useAuth();
+
+  const [leaderboard, setLeaderboard]= useState([]);
+  const [currentUserentry, setCurrentUserEntry] = useState(null);
+  
+  useEffect(()=>{
+    fetch(`${API_BASE}/users/weekly`).then((res) => res.json()).then((data)=>{
+      setLeaderboard(data);
+      const username = userData?.user?.username?.trim().toLowerCase();
+      if (username){
+        const entry = data.find((e)=> e.username.trim().toLowerCase() === username);
+        if (entry) setCurrentUserEntry(entry);
+  }
+}).catch((error) => console.error("failed to fetch weely leaders", error));
+}, [userData?.user?.username])
+  
+  
   const date = new Date(); // here we will like get the created challenge date from the database and diff it through one week of time, but for now its's Just the skeleton so whatever is looking resemblance is added!
   const theme = "Whispers from Forgotten Worlds";
 
+  const currentRank = currentUserentry ? leaderboard.findIndex((e)=> e.username === currentUserentry.username) +1:null;
 
-  //collecting all competing posts from each user in the array or groups
-  const competingPosts = userData.flatMap(user=>
-    user.overall_posts.filter(post=> post.isCompeting)
-    .map(post=>({
-      artist: user.username,
-      pfp: user.profile_picture,
-      art: post.image_name,
-      votes: post.hearts,
-      createdAt: post.upload_date
-    }))
-  )
-
-  const sortedPosts = competingPosts.sort((a,b)=> b.votes - a.votes);
-
-  const cuurentuserpost = currentUser?.username && currentUser.username.trim()!= "" && currentUser.username!="none" ?  
-  sortedPosts.find(p=> p.artist === currentUser.username): null;
-
-  const currentRank = cuurentuserpost ? sortedPosts.findIndex(p=> p === cuurentuserpost) +1: null;
 
 
 
@@ -60,18 +60,18 @@ export default function Weekly() {
         </div>
       </div>
       {/* upper table  userSpecific */}
-      {cuurentuserpost&& (
+      {currentUserentry&& (
       <div className="mb-10">
         <table className="min-w-full drop-shadow-md text-gray-500">
           <tbody className="text-md border-3  border-[var(--border)] overflow-hidden">
             <tr className="bg-[var(--bgc)]">
               <td className="px-3 py-3 text-left w-[5%]">{currentRank}</td>
-              <td className="px-4 py-3 text-left w-[20%]">{cuurentuserpost.artist}</td>
+              <td className="px-4 py-3 text-left w-[20%]">{currentUserentry.username}</td>
               <td className="px-6 py-3 text-left w-[40%]">
-              {cuurentuserpost.art}
+              {currentUserentry.competing_art.image_name}
               </td>
-              <td className="py-3 px-4 text-right w-[15%]">{cuurentuserpost.votes}</td>
-              <td className="px-4 py-3 pr-5 text-right w-[20%]">{cuurentuserpost.createdAt}</td>
+              <td className="py-3 px-4 text-right w-[15%]">{currentUserentry.engagement_points}</td>
+              <td className="px-4 py-3 pr-5 text-right w-[20%]">{new Date(currentUserentry.competing_art.upload_date).toLocaleDateString()}</td>
             </tr>
           </tbody>
         </table>
@@ -116,14 +116,14 @@ export default function Weekly() {
             <tr>
               <th className="px-3 py-3 text-left w-[5%]">#</th>
               <th className="px-4 py-3 text-left w-[20%]">Artist</th>
-              <th className="px-6 py-3 text-left w-[40%]">Art</th>
-              <th className="px-4 py-3 text-right w-[15%]">Votes</th>
+              <th className="px-6 py-3 text-left w-[30%]">Art</th>
+              <th className="px-4 py-3 text-right w-[25%]">Engagements Points</th>
               <th className="px-4 py-3 pr-5 text-right w-[20%]">Date</th>
             </tr>
           </thead>
 
           <tbody className="text-md">
-            {sortedPosts.map((entry, index) => (
+            {leaderboard.map((entry, index) => (
               <tr
                 key={index}
                 >
@@ -141,28 +141,28 @@ export default function Weekly() {
                 </td>
                 <td className="py-4 px-4">
                   <NavLink
-                        to={`/profile/${entry.artist}`}
+                        to={`/profile/${entry.username}`}
                         className="flex items-center gap-3 hover:underline"
                         >
                                           <img
-                                          src={getFullUrl(entry.pfp)}
+                                          src={getFullUrl(entry.profile_picture)}
                                           alt={entry.artist}
                                           className="w-8 h-8 rounded-full object-cover cursor-pointer"
                                           />
                                           <span
                                           className="hover:underline cursor-pointer"
-                                          >{entry.artist}</span>
+                                          >{entry.username}</span>
                         </NavLink>
                               
                 </td>
                 <td className="px-6 py-3 text-left hover:underline">
                   
-                  <NavLink to={`/Explore/${slugify(entry.art)}`}>
-                  {entry.art}
+                  <NavLink to={`/Explore/${entry.competing_art.art_id}`}>
+                  {entry.competing_art.image_name}
                   </NavLink>
                   </td>
-                <td className="px-4 py-3 text-right">{entry.votes}</td>
-                <td className="px-4 py-3 text-right pr-5">{entry.createdAt}</td>
+                <td className="px-4 py-3 text-right">{entry.engagement_points}</td>
+                <td className="px-4 py-3 text-right pr-5">{new Date(entry.competing_art.upload_date).toLocaleDateString()}</td>
               </tr>
             ))}
           </tbody>
