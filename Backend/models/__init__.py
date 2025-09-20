@@ -15,3 +15,5 @@ from .profilecosmetic_model import ProfileCosmetic
 from .tags_model import Tag
 from .artisttags_model import ArtistTag
 from .asset_model import Asset
+from .competition_model import Competition
+from .topleader import TopLeader

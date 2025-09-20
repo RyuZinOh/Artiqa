@@ -1,4 +1,4 @@
-from sqlalchemy  import Column, Integer, Boolean, ForeignKey, DateTime, Enum as esx, collate
+from sqlalchemy  import Column, Integer, Boolean, ForeignKey, DateTime, Enum as esx,String
 from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
 from models import Base
@@ -11,6 +11,7 @@ class RoleRequest(Base):
     requested_role = Column(esx(RoleFixed), nullable=False)
     requested_at = Column(DateTime(timezone=True),  default=lambda: datetime.now(timezone.utc))
     is_approved = Column(Boolean, default=False)
+    message = Column(String(255), nullable=True)
 
 
     user = relationship("User", back_populates="role_requests")

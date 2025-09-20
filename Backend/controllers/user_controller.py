@@ -182,7 +182,7 @@ def reset_password(token:str, data:ForgetPasswordReset, db:Session):
 
 
 ## send the request for artist change
-def request_role_change(payload: dict, db:Session)->dict:
+def request_role_change(payload: dict, db:Session, message: str = None)->dict:
     user_id = payload.get("id")
     user = db.query(User).filter(User.id== user_id).first()
 
@@ -199,7 +199,7 @@ def request_role_change(payload: dict, db:Session)->dict:
     if existing_user:
         raise HTTPException(status_code=400, detail="you already sent, wait for the approval!")
 
-    new_request = RoleRequest(user_id=user.id, requested_role=RoleFixed.artist)
+    new_request = RoleRequest(user_id=user.id, requested_role=RoleFixed.artist, message = message)
 
     db.add(new_request)
     db.commit()

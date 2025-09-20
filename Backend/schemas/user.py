@@ -50,3 +50,8 @@ class EmailUpdate(BaseModel):
 #fullname
 class FullNameUpdate(BaseModel):
     full_name : str 
+
+
+##requestartist
+class RoleChangeRequest(BaseModel):
+    message: str = None

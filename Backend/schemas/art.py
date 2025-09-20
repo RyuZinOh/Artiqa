@@ -98,3 +98,8 @@ class ArtOut(BaseModel):
         "from_attributes": True
     }
 
+
+
+class WeeklyCompetitionCreate(BaseModel):
+    name : str
+    description: str

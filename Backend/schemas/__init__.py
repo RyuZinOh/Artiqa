@@ -1,4 +1,4 @@
-from .user import UserCreate, UserOut, loginFormat, EmailUpdate, FullNameUpdate
+from .user import UserCreate, UserOut, loginFormat, EmailUpdate, FullNameUpdate, RoleChangeRequest
 from .roles import RoleFixed
 from .password import ForgetPasswordVerify, ForgetPasswordReset, PasswordChange
-from .art import  ArtOut, CritiqueOut, ReportOut, CritiqueCreate, ReportCreate, ArtThumb, ArtCritism, ArtUpdate
+from .art import  ArtOut, CritiqueOut, ReportOut, CritiqueCreate, ReportCreate, ArtThumb, ArtCritism, ArtUpdate, WeeklyCompetitionCreate

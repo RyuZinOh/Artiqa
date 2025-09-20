@@ -31,6 +31,11 @@ class User(Base):
     reports = relationship("Report", back_populates="user", cascade="all, delete-orphan")
     artist_tags = relationship("ArtistTag", back_populates="artist", cascade="all, delete-orphan")
     profile_cosmetic =  relationship("ProfileCosmetic", back_populates="user", cascade="all, delete-orphan", uselist=False)
+    top_leader = relationship("TopLeader", back_populates="user", uselist=False)
+
+
+
+
 
  
 

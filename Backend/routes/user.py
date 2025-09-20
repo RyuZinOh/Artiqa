@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File , Query
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File , Query, Body
 from sqlalchemy.orm import Session
 from controllers import user_controller, artist_controller 
 from utils.dependencies import get_user_from_token, get_bearer_token
 from database import get_db
-from schemas import UserOut, UserCreate, loginFormat, EmailUpdate, FullNameUpdate, PasswordChange, ArtOut
+from schemas import UserOut, UserCreate, loginFormat, EmailUpdate, FullNameUpdate, PasswordChange, ArtOut, RoleChangeRequest
 from typing import List
 
 router = APIRouter(
@@ -59,8 +59,9 @@ def reset_password(
 
 ##as a user send the artist role change signal
 @router.post("/requestrolechange")
-def request_role_chang(payload:dict= Depends(get_user_from_token), db:Session = Depends(get_db)):
-    return user_controller.request_role_change(payload, db)
+def request_role_chang( request: RoleChangeRequest, payload:dict= Depends(get_user_from_token), db:Session = Depends(get_db)):
+    message = request.message
+    return user_controller.request_role_change(payload, db, message)
 
 
 #public profile

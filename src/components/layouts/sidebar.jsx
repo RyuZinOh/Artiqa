@@ -20,13 +20,32 @@ import {
 } from "@phosphor-icons/react";
 import { useTheme } from "../../theme/useTheme";
 import { useAuth } from "../../context/useAuth";
+import { requestRoleChange } from "./logic";
+import { useState } from "react";
 
 export default function SideBar() {
   const {theme} = useTheme();
-  const {userData} = useAuth();
+  const {userData, auth} = useAuth();
   const sbgurl = theme["--sbgurl"];
   const opacity = theme["--opacity"];
   const blur = theme["--blur"];
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+
+  const handleRequestRoleChange = async(msg)=>{
+    try{
+      setLoading(true); 
+      const res =  await requestRoleChange(auth.token, msg);
+      if (res){
+        setMessage("");
+      } 
+    }catch(err){
+      console.error(err);
+    }finally{
+      setLoading(false);
+    }
+  }
 
 
 
@@ -215,8 +234,36 @@ export default function SideBar() {
           </nav>
         </>
       )}
-   
-   
+{userData && !userData.is_artist && !userData.is_admin && (
+  <div className="mt-20 p-4 border-3 border-[var(--border)] rounded-2xl bg-[var(--sbgc)]">
+    <h3 className="text-xl font-semibold text-[var(--color)] mb-2">
+      Become an Artist
+    </h3>
+    <p className="text-sm text-[var(--color)] mb-3 opacity-80">
+      Request an upgrade to artist role to showcase your portfolio and unlock
+      creative features.
+    </p>
+
+    <textarea
+      id="role-message"
+      placeholder="Why u wannabe a artist?"
+      className="w-full p-2 mb-3 rounded-lg border-2 border-[var(--border)] bg-[var(--bgc)] text-[var(--color)] focus:outline-none focus:ring-2 focus:ring-[var(--border)]"
+      rows="3"
+      value={message}
+      onChange={(e) => setMessage(e.target.value)}
+    />
+
+    <button
+      onClick={() => !loading && handleRequestRoleChange(message)}
+      disabled={loading}
+      className={`w-full py-2 px-4 rounded-full font-semibold transition 
+        ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[var(--bgc)] hover:bg-[var(--sbgc)] text-[var(--color)] border-3 border-[var(--border)] cursor-pointer"}`}
+    >
+      {loading ? "Sending..." : "Request Artist Role"}
+    </button>
+  </div>
+)}
+
     </aside>
   );
 }
