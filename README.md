@@ -18,6 +18,7 @@
 - [x] Working tokenbased protection
 - [x] Critiqing, hearting and reporting
 - [x] Artist art upload & deletion & editin & viewing [full CRUD] / users like/ his critiques catering
+- [x] now there will be list of artts belonging to same tags as a suggestion
 - [x] Portfolio [personal and public both]
 - [x] statistics of user and added one perk system for bg/card yet to implement
 - [x] some jagged context apis, but might refactor somehow, someday if I feel like [there are so many retundant api  calls, I found out while making providers and hooks fuck it]
@@ -25,4 +26,7 @@
 - [x] creating a competition lasting a week from created date
 - [x] a working segmented upload art
 - [x] weekly table leaderboard 
+- [x] global top leaderboard managed by chron well.
+- [x] users can now take advantage of persk to setup their portfolio
+- [x] admin manageing users [listing, selective viewing]
 

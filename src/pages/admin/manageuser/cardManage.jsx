@@ -31,7 +31,7 @@ export default function CardManage({user, onClose}){
             <div className="flex px-4 gap-4 -mt-12">
                 <div className="w-1/2">
                 <img
-                src={getFullUrl(user.profile_picture)}
+                src={getFullUrl(user.profile_pic)}
                 alt={user.username}
                 className="w-24 h-24 rounded-full border-3 border-[var(--sbgc)] object-cover"
                 />

@@ -1,7 +1,7 @@
 import os
 from fastapi import UploadFile, HTTPException, status
 from sqlalchemy.orm import Session
-from models import Art, Critique, Heart, Report, ProfileCosmetic, Asset, User, Tag, Competition, competition_art_link
+from models import Art, Critique, Heart, Report, ProfileCosmetic, Asset, User, Tag, Competition, competition_art_link, TopLeader
 from schemas import ArtOut, CritiqueOut, ReportOut, ArtThumb, ArtCritism, ArtUpdate
 from dotenv import load_dotenv
 from typing import List
@@ -26,6 +26,10 @@ def serialize_art_for_output(art: Art, cur_id: int = None) -> dict:
         "upload_date": art.upload_date,
         "is_competing": art.is_competing,
         "hearted_by_user": any(h.user_id == cur_id for h in art.hearts) if cur_id else False,
+        "critiques_count":len(art.critiques),
+        "hearts_count": len(art.hearts),
+        "profile_picture": art.artist.profile_pic if art.artist else None,
+        "username": art.artist.username if art.artist else None,
         "global_tags":[tag.name for tag in art.global_tags]
     }
 
@@ -659,3 +663,24 @@ def get_weekly_top_leaders(db: Session, limit: int=10):
 
     return leaderboard[:limit]
     
+
+
+##getting leaderboard top
+def gt_leaderboard_top(db: Session, limit: int=10) -> List[dict]:
+    leaders = (
+        db.query(TopLeader).join(User, TopLeader.user_id == User.id).order_by(TopLeader.weekly_wins.desc(), TopLeader.engagement_points.desc()).limit(limit).all()
+    )
+
+    leaderboard = []
+    for leader in leaders:
+        user = leader.user
+        leaderboard.append({
+            "user_id": user.id,
+            "username": user.username,
+            "profile_picture": user.profile_pic,
+            "weekly_wins": leader.weekly_wins,
+            "engagement_points": leader.engagement_points,
+            "joined_at": user.joined_date
+        })    
+
+    return leaderboard    

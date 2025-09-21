@@ -164,3 +164,13 @@ def get_arts_by_tags(
 @router.get("/weekly", response_model=List[dict])
 def weekly_leaderboard(limit: int=10,db: Session = Depends(get_db)):
     return artist_controller.get_weekly_top_leaders(db, limit)
+
+
+##getting topleaerboard -> [run the chron script at some interval amount of time i guess.]
+@router.get("/leaderboard")
+def weekly_leaderboard(limit: int=10,db: Session = Depends(get_db)):
+    return artist_controller.gt_leaderboard_top(db, limit=limit)
+
+
+
+

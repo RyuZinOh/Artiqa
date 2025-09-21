@@ -68,3 +68,13 @@ def create_weekly_competition(
     data: WeeklyCompetitionCreate = None
 ):
     return admin_controller.create_weekly(data.name, data.description, payload, db)
+
+
+
+##MANAGING USRES
+##listing
+@router.get("/users")
+def get_all_users(payload: dict = Depends(get_admin_token),
+    db: Session = Depends(get_db),
+):
+    return admin_controller.list_all_users(payload, db)

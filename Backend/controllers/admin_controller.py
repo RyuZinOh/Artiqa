@@ -1,7 +1,7 @@
 from fastapi import HTTPException,UploadFile
 from sqlalchemy.orm import Session
 from controllers.user_controller import ROLENAMETOID
-from models import User, RoleRequest, Asset, Competition
+from models import User, RoleRequest, Asset, Competition, ProfileCosmetic
 from schemas import  RoleFixed
 import os
 from dotenv import load_dotenv
@@ -197,3 +197,48 @@ def create_weekly(name: str, description: str, payload: dict, db:Session):
     
 # ##closing_weekly
 # def close_weekly_competition(db:Session): [we will autoamtea fetwe we done with the leaderboard table]
+
+
+
+
+##Managing users 
+#listing
+def list_all_users(payload: dict, db: Session)->list[dict]:
+    admin_uid = payload.get("id")
+    admin_user = db.query(User).filter(User.id == admin_uid).first()
+    if not admin_user or admin_user.role_id != ROLENAMETOID[RoleFixed.superuser]:
+        raise HTTPException(status_code=403, detail="Only admin can list the users in this way!")
+    
+    users = db.query(User).all()
+
+    result = []
+    for user in users:
+        cosmetic = user.profile_cosmetic
+
+        result.append({
+            "id": user.id,
+            "username": user.username,
+            "full_name": user.full_name,
+            "email": user.email,
+            "profile_pic": user.profile_pic,
+            "nationality": user.nationality,
+            "biography": user.biography,
+            "gender": user.gender,
+            "speciality": user.speciality,
+            "is_verified": user.is_verified,
+            "role_id": user.role_id,
+            "joined_date": user.joined_date,
+            "role_name": user.role.role_name if user.role else "n/a",
+            "selected_bg": cosmetic.selected_bg if cosmetic else None,
+            "selected_card": cosmetic.selected_card if cosmetic else None,
+            "badges": cosmetic.badges if cosmetic else [],
+            "total_arts": cosmetic.total_arts if cosmetic else 0,
+            "total_wins": cosmetic.total_wins if cosmetic else 0,
+            "current_streak": cosmetic.current_streak if cosmetic else 0,
+            "level": cosmetic.level if cosmetic else 1,
+            "progress": cosmetic.progress if cosmetic else 0.0,
+            "recent_victories": cosmetic.recent_victories if cosmetic else []
+ 
+        })
+    
+    return result
