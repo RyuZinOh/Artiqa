@@ -9,6 +9,7 @@ import os
 from shutil import copyfileobj
 import time
 from datetime import datetime, timezone
+from sqlalchemy import or_
 
 
 A_F = os.getenv("ARTS_PATH")
@@ -132,6 +133,40 @@ def login_user (request:loginFormat, db: Session = Depends(get_db)):
         "is_admin": is_admin,
         "is_artist": is_artist
     }
+
+
+
+
+##searching arits
+def search_artists(keyword: str, db: Session):
+    if not keyword:
+        return []
+    
+    keyword = f"%{keyword.lower()}%"
+    artist_role_id = ROLENAMETOID[RoleFixed.artist]
+
+    artists = db.query(User).filter(
+        User.role_id == artist_role_id,
+        or_(
+            User.username.ilike(keyword),
+            User.full_name.ilike(keyword),
+            User.biography.ilike(keyword)
+        )
+    ).all()
+    results = [
+        {
+            "id": a.id,
+            "username": a.username,
+            "full_name": a.full_name,
+            "profile_pic": a.profile_pic,
+            "biography": a.biography
+            
+        }
+        for a in artists
+    ]
+
+    return results
+
 
 
 

@@ -3,7 +3,7 @@ from utils.dependencies import get_artist_token, get_user_from_token, get_user_f
 from sqlalchemy.orm import Session
 from database import get_db
 from controllers import artist_controller
-from schemas import ArtOut, CritiqueOut, CritiqueCreate, ReportCreate  , ReportOut, ArtThumb,ArtCritism, ArtUpdate
+from schemas import ArtOut, CritiqueOut, CritiqueCreate, ReportCreate  , ReportOut, ArtThumb,ArtCritism, ArtUpdate, GalleryCreateRequest
 from typing import List, Optional
 
 
@@ -167,3 +167,36 @@ def get_my_stats(
     user_id = payload.get("id")
     return artist_controller.get_user_stats(db, user_id)
     
+
+
+
+    
+##creating new gallery
+@router.post("/gallery/create")
+def create_gallery(request: GalleryCreateRequest, payload = Depends(get_artist_token), db:Session=Depends(get_db)):
+    return artist_controller.create_gallery(payload["id"],request.tag_name, db)
+
+##listing all gallery tags
+@router.get("/gallery/mine")
+def get_galleries(payload = Depends(get_artist_token), db:Session=Depends(get_db)):
+    return artist_controller.list_galleries(payload["id"], db)
+
+#add arto to a gallery
+@router.post("/gallery/{gallery_id}/add-art/{art_id}")
+def add_artto_gallery(gallery_id: int, art_id: int, payload = Depends(get_artist_token), db:Session=Depends(get_db)):
+    return artist_controller.add_art_to_gallery(payload["id"], art_id,gallery_id, db)
+
+##listing artworks inside gallery
+@router.get("/gallery/{gallery_id}/arts")
+def get_gallery_fromid(gallery_id: int, payload = Depends(get_artist_token), db:Session=Depends(get_db)):
+    return artist_controller.list_arts_in_gallery(payload["id"],gallery_id, db)
+
+# Delete entire gallery
+@router.delete("/gallery/{gallery_id}/remove")
+def remove_gallery(gallery_id: int, payload=Depends(get_artist_token), db: Session = Depends(get_db)):
+    return artist_controller.delete_gallery(payload["id"], gallery_id, db)
+
+# Remove an art from a gallery
+@router.delete("/gallery/remove/{gallery_id}/art/{art_id}")
+def remove_art_from_gallery(gallery_id: int, art_id: int, payload=Depends(get_artist_token), db: Session = Depends(get_db)):
+    return artist_controller.delete_art_fromgallery(payload["id"], art_id, gallery_id, db)

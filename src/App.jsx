@@ -27,6 +27,7 @@ import PleaseRegisterOrLogin from "./pages/PleaseRegisterOrLogin";
 import Guester from "./protection/guester";
 import ViewArt from "./pages/users/artists/viewArt";
 import Perks from "./pages/users/artists/perks";
+import SearchData from "./components/searchData";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
       <Route path="/" element={<Navigate to="/Explore" replace />} />
       <Route path="/Explore" element={<Explore/>} />
       <Route path="/Explore/:artId" element={<IndividualePost />} />
+      <Route path="/search" element={<SearchData />} />
 
 
       <Route path="/login" element={

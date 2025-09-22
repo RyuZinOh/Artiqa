@@ -30,4 +30,6 @@
 - [x] users can now take advantage of perrk to setup their portfolio
 - [x] admin managing users [listing, selective viewing, art moderation based on reports, user banning and unbanning]
 - [x] tags showcasing in main page tho its just a headline line showcase kinda
+- [x] keyword based searching
+- [x] artist private gallery
 

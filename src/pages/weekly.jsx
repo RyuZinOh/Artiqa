@@ -24,6 +24,8 @@ const days = [
 
 export default function Weekly() {
   const {userData} = useAuth();
+  const [timeLeft, setTimeLeft] = useState("");
+  const [currentCompetition, setCurrentCompetition] = useState(null);
 
   const [leaderboard, setLeaderboard]= useState([]);
   const [currentUserentry, setCurrentUserEntry] = useState(null);
@@ -39,9 +41,51 @@ export default function Weekly() {
 }).catch((error) => console.error("failed to fetch weely leaders", error));
 }, [userData?.user?.username])
   
-  
+  useEffect(()=>{
+    const fetchComp = async()=>{    
+      try {
+        const res = await fetch(`${API_BASE}/users/activecompetition`);
+        if (!res.ok) throw new Error("Failed to fetch competition");
+        const data = await res.json();
+        setCurrentCompetition(data);
+    } catch (err) {
+      console.error("Failed to fetch competition:", err);
+    }
+    };
+    fetchComp();
+  }, []);
+
+
+  useEffect(() => {
+  if (!currentCompetition) return;
+
+  const endTime = new Date(currentCompetition.end_date);
+
+  const interval = setInterval(() => {
+    const now = new Date();
+    const diff = endTime - now;
+
+    if (diff <= 0) {
+      setTimeLeft("Competition ended");
+      clearInterval(interval);
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, [currentCompetition]);
+
+
   const date = new Date(); // here we will like get the created challenge date from the database and diff it through one week of time, but for now its's Just the skeleton so whatever is looking resemblance is added!
-  const theme = "Whispers from Forgotten Worlds";
+  const theme = currentCompetition? currentCompetition.name : "Loading...";
+  // const themeDescription = currentCompetition? currentCompetition.description : "";
 
   const currentRank = currentUserentry ? leaderboard.findIndex((e)=> e.username === currentUserentry.username) +1:null;
 
@@ -83,9 +127,8 @@ export default function Weekly() {
       <div className="overflow-x-auto text-[var(--color)]">
         <div className="flex justify-between items-centermb-2 drop-shadow-md">
           <h1 className="text-xl text-[var(--color)]">
-            Next reset in: {date.getHours()}:{date.getMinutes()}:
-            {date.getSeconds()}
-          </h1>
+  Next reset in: {timeLeft || "Loading..."}
+</h1>
 
           <div className="flex space-x-3 mb-2">
             {[

@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { getFullUrl } from "../../utils/urlHelpers";
 import {
   ArrowLeftIcon,
@@ -31,7 +31,9 @@ export default function SideBar() {
   const blur = theme["--blur"];
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [searchKeyword, setSearchKeyword] = useState("");
+  
+  const navigate = useNavigate();
 
   const handleRequestRoleChange = async(msg)=>{
     try{
@@ -44,6 +46,12 @@ export default function SideBar() {
       console.error(err);
     }finally{
       setLoading(false);
+    }
+  }
+
+  const hkS = (e)=>{
+    if (e.key == "Enter" && searchKeyword.trim()!==""){
+      navigate(`/search?keyword=${encodeURIComponent(searchKeyword.trim())}`);
     }
   }
 
@@ -141,6 +149,9 @@ export default function SideBar() {
           type="search"
           placeholder="Search..."
           className="w-full p-3 pr-10 rounded-full bg-[var(--bgc)] border-3 text-[var(--color)] border-[var(--border)] drop-shadow-md  transition duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--border)] "
+          value={searchKeyword}
+          onChange={(e)=>setSearchKeyword(e.target.value)}
+          onKeyDown={hkS}
         />
         <MagnifyingGlassIcon
           size={28}

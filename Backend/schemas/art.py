@@ -103,3 +103,8 @@ class ArtOut(BaseModel):
 class WeeklyCompetitionCreate(BaseModel):
     name : str
     description: str
+
+
+
+class GalleryCreateRequest(BaseModel):
+    tag_name: str    

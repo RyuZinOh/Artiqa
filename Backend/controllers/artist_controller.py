@@ -1,7 +1,7 @@
 import os
 from fastapi import UploadFile, HTTPException, status
 from sqlalchemy.orm import Session
-from models import Art, Critique, Heart, Report, ProfileCosmetic, Asset, User, Tag, Competition, competition_art_link, TopLeader
+from models import Art, Critique, Heart, Report, ProfileCosmetic, Asset, User, Tag, Competition, competition_art_link, TopLeader, ArtistTag
 from schemas import ArtOut, CritiqueOut, ReportOut, ArtThumb, ArtCritism, ArtUpdate
 from dotenv import load_dotenv
 from typing import List
@@ -684,3 +684,125 @@ def gt_leaderboard_top(db: Session, limit: int=10) -> List[dict]:
         })    
 
     return leaderboard    
+
+
+
+##gallery
+#creating
+def create_gallery(user_id: int, tag_name: str, db: Session):
+    existing = db.query(ArtistTag).filter(
+        ArtistTag.user_id == user_id, ArtistTag.name == tag_name
+    ).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Galery alreay exists")
+    
+    new_gallery = ArtistTag(user_id=user_id, name=tag_name)
+    db.add(new_gallery)
+    db.commit()
+    db.refresh(new_gallery)
+    return{"id": new_gallery.id, "name": new_gallery.name}
+
+
+##lising gallery
+def list_galleries(user_id: int, db:Session):
+    galleries = db.query(ArtistTag).filter(ArtistTag.user_id == user_id).all()
+    return [{
+        "id": g.id,
+        "name": g.name,
+        "arts_count": len(g.arts)
+    } for g in galleries]
+
+##assigning
+def add_art_to_gallery(user_id:int, art_id: int, gallery_id: int, db:Session):
+    art = db.query(Art).filter(Art.art_id == art_id, Art.user_id ==user_id).first()
+    if not art:
+        raise HTTPException(status_code=404, detail="Art not found or not yours")
+    
+
+    gallery = db.query(ArtistTag).filter(
+        ArtistTag.id == gallery_id, ArtistTag.user_id == user_id
+    ).first()
+
+    if not gallery:
+        raise HTTPException(status_code=404, detail="Gallery not found")
+
+    if gallery.id  in [g.id for g in art.artist_tags]:
+        raise HTTPException(status_code=400, detail="Art already in this gallery")
+    
+    if art.artist_tags:
+        existing = art.artist_tags[0].name
+        raise HTTPException(status_code=400, detail=f"Art already in this gallery {existing}")
+        
+
+    art.artist_tags.append(gallery)
+    db.commit()
+    return {"message": f"Art {art.art_id} added to gallery '{gallery.name}'"}
+
+
+
+#lising all arts in a gallery
+def list_arts_in_gallery(user_id: int, gallery_id: int, db: Session):
+    gallery = db.query(ArtistTag).filter(ArtistTag.id == gallery_id, ArtistTag.user_id == user_id).first()
+    if not gallery:
+        raise HTTPException(status_code=404, detail="gallery not found")
+
+    return{
+        "id": gallery.id,
+        "name": gallery.name,
+        "arts": [serialize_art_for_output(art, user_id) for art in gallery.arts]
+    }    
+
+
+
+##deleting gallery
+def delete_gallery(user_id: int, gallery_id: int, db: Session):
+    gallery = db.query(ArtistTag).filter(
+        ArtistTag.id == gallery_id,
+        ArtistTag.user_id == user_id
+    ).first()
+
+    if not gallery:
+        raise HTTPException(status_code=404, detail="Gallery not found")
+    
+    for art in gallery.arts:
+        art.artist_tags.remove(gallery)
+    
+    db.delete(gallery)
+    db.commit()
+
+    return{
+            "message": f"gallery {gallery.name} deleted"
+    }
+    
+
+
+
+##deleing art from gallery
+def delete_art_fromgallery(user_id: int, art_id: int, gallery_id: int, db: Session):
+    art = db.query(Art).filter(
+        Art.art_id == art_id,
+        Art.user_id == user_id
+    ).first()
+
+    if not art:
+        raise HTTPException(status_code=404, detail="Art not found")
+    
+
+    gallery = db.query(ArtistTag).filter(
+        ArtistTag.id == gallery_id,
+        ArtistTag.user_id == user_id
+    ).first()
+
+    if not gallery:
+        raise HTTPException(status_code=404, detail="Art not found")
+    
+
+    if gallery not in art.artist_tags:
+        raise HTTPException(status_code=400, detail="Art is not realted to this gallery")
+    
+    art.artist_tags.remove(gallery)
+    db.commit()
+
+    return{
+            "message": f"{art.image_name} removed from {gallery.name} deleted"
+    }   

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File , Query
 from sqlalchemy.orm import Session
-from controllers import user_controller, artist_controller 
+from controllers import user_controller, artist_controller , admin_controller
 from utils.dependencies import get_user_from_token, get_bearer_token
 from database import get_db
 from schemas import UserOut, UserCreate, loginFormat, EmailUpdate, FullNameUpdate, PasswordChange, ArtOut, RoleChangeRequest
@@ -158,7 +158,17 @@ def get_arts_by_tags(
     return artist_controller.get_arts_by_tags(tag_names, db, cur_id)
 
 
-
+##searching
+@router.get("/search/artists")
+def search_artists(
+    keyword: str= Query(..., description="keyword to search artists"),
+    db: Session = Depends(get_db)
+):
+    results = user_controller.search_artists(keyword, db)
+    if not results:
+        return {"message":"no aritsts found"}
+    
+    return results
 
 ##getting weekly
 @router.get("/weekly", response_model=List[dict])
@@ -174,3 +184,6 @@ def weekly_leaderboard(limit: int=10,db: Session = Depends(get_db)):
 
 
 
+@router.get("/activecompetition")
+def get_current_competition(db:Session=Depends(get_db)):
+    return admin_controller.get_competition_details(db)

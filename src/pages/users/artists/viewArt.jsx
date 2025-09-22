@@ -4,25 +4,28 @@ import { useAuth } from "../../../context/useAuth";
 import { toast } from "react-toastify";
 import Layout from "../../../components/layouts/layout";
 import { getFullUrl } from "../../../utils/urlHelpers";
+import { API_BASE } from "../../../utils/api";
 
 export default function ViewArt() {
   const { artId } = useParams();
   const navigate = useNavigate();
   const { auth } = useAuth();
+
   const [art, setArt] = useState(null);
+  const [galleries, setGalleries] = useState([]);
+  const [selectedGallery, setSelectedGallery] = useState("");
 
   useEffect(() => {
     const fetchArt = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_STATIC_FAST_API_URL}/artists/art/${artId}`,
+          `${API_BASE}/artists/art/${artId}`,
           { headers: { Authorization: `Bearer ${auth.token}` } }
         );
 
         if (!res.ok) throw new Error("Failed to fetch art");
         const artData = await res.json();
         setArt(artData);
-
       } catch (error) {
         console.error("Error fetching art:", error);
         toast.error("Failed to load artwork.");
@@ -31,6 +34,47 @@ export default function ViewArt() {
 
     if (auth?.token) fetchArt();
   }, [artId, auth?.token]);
+
+  useEffect(() => {
+    const fetchGalleries = async () => {
+      try {
+        const res = await fetch(
+          `${API_BASE}/artists/gallery/mine`,
+          { headers: { Authorization: `Bearer ${auth.token}` } }
+        );
+
+        if (!res.ok) throw new Error("Failed to fetch galleries");
+        const data = await res.json();
+        setGalleries(data);
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to load galleries.");
+      }
+    };
+
+    if (auth?.token) fetchGalleries();
+  }, [auth?.token]);
+
+  const handleAddToGallery = async () => {
+    if (!selectedGallery) {
+      toast.error("Please select a gallery first");
+      return;
+    }
+    try {
+      const res = await fetch(
+        `${API_BASE}/artists/gallery/${selectedGallery}/add-art/${artId}`,
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${auth.token}` },
+        }
+      );
+      if (!res.ok) throw new Error("Failed to add art to gallery");
+      toast.success("Art added to gallery!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Could not add to gallery.");
+    }
+  };
 
   if (!art) {
     return (
@@ -54,7 +98,7 @@ export default function ViewArt() {
   return (
     <Layout>
       <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-12">
-        <div className="flex-1 rounded-2xl overflow-hidden shadow-2xl border-[var(--border)] border group">
+        <div className="flex-1 rounded-2xl overflow-hidden shadow-2xl border-[var(--border)] border-3 group">
           <img
             src={getFullUrl(art.image_url)}
             alt={art.image_name}
@@ -63,7 +107,7 @@ export default function ViewArt() {
         </div>
 
         <div className="flex-1 flex flex-col gap-4">
-          <div className="p-4 rounded-lg border-[var(--border)] border bg-[var(--sbgc)] shadow-md">
+          <div className="p-4 rounded-lg border-[var(--border)] border-3 bg-[var(--sbgc)] shadow-md">
             <h1 className="text-4xl font-bold mb-2 text-[var(--color)]">{art.image_name}</h1>
             <p className="text-lg font-semibold text-gray-700 mb-2">By {art.username || "Unknown Artist"}</p>
             <div className="h-1 w-24 bg-[var(--border)] mb-4"></div>
@@ -71,30 +115,47 @@ export default function ViewArt() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-3 border-[var(--border)] border rounded-lg bg-[var(--bgc)]">
+            <div className="p-3 border-[var(--border)] border-3 rounded-lg bg-[var(--bgc)]">
               <p className="text-sm text-gray-500">Status</p>
               <p className="font-medium capitalize">{art.status}</p>
             </div>
-            <div className="p-3 border-[var(--border)] border rounded-lg bg-[var(--bgc)]">
+            <div className="p-3 border-[var(--border)]  border-3 rounded-lg bg-[var(--bgc)]">
               <p className="text-sm text-gray-500">Visibility</p>
               <p className="font-medium capitalize">{art.visibility}</p>
             </div>
-            <div className="p-3 border-[var(--border)] border rounded-lg bg-[var(--bgc)]">
+            <div className="p-3 border-[var(--border)] border-3 rounded-lg bg-[var(--bgc)]">
               <p className="text-sm text-gray-500">Competing</p>
               <p className="font-medium">{art.is_competing ? "Yes" : "No"}</p>
             </div>
-            <div className="p-3 border-[var(--border)] border rounded-lg bg-[var(--bgc)]">
+            <div className="p-3 border-[var(--border)] border-3 rounded-lg bg-[var(--bgc)]">
               <p className="text-sm text-gray-500">Upload Date</p>
               <p className="font-medium">{new Date(art.upload_date).toLocaleDateString()}</p>
             </div>
           </div>
 
-          <button className="mt-4 px-6 py-3 border-[var(--border)] border rounded-lg hover:bg-gray-50 transition-colors">
-            Add to Gallery (Coming Soon)
-          </button>
+          <div className="mt-4 flex gap-2">
+            <select
+              value={selectedGallery}
+              onChange={(e) => setSelectedGallery(e.target.value)}
+              className="px-4 py-2 border-[var(--border)] border-3 rounded-lg bg-white"
+            >
+              <option value="">Select Gallery</option>
+              {galleries.map((g) => (
+                <option key={g.id} value={g.id}>
+                  {g.name} ({g.arts_count} arts)
+                </option>
+              ))}
+            </select>
+
+            <button
+              onClick={handleAddToGallery}
+              className="bg-[var(--bgc)] hover:bg-[var(--sbgc)] text-[var(--color)] border-3 border-[var(--border)] cursor-pointer rounded-md p-2"
+            >
+              Add to Gallery
+            </button>
+          </div>
         </div>
       </div>
-
     </Layout>
   );
 }

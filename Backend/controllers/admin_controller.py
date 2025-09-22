@@ -194,6 +194,22 @@ def create_weekly(name: str, description: str, payload: dict, db:Session):
         }
     }
 
+##get details of compeition
+def get_competition_details(db:Session)-> dict:
+    competition = db.query(Competition).filter(Competition.is_active == True).first()
+
+    if not competition:
+        raise HTTPException(status_code=404, detail="competition not found")
+    return {
+            "competition_id" : competition.competition_id,
+            "name": competition.name,
+            "description": competition.description,
+            "start_date": competition.start_date,
+            "end_date": competition.end_date,
+    }
+
+    
+
     
 # ##closing_weekly
 # def close_weekly_competition(db:Session): [we will autoamtea fetwe we done with the leaderboard table]
