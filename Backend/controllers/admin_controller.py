@@ -1,7 +1,7 @@
 from fastapi import HTTPException,UploadFile
 from sqlalchemy.orm import Session
 from controllers.user_controller import ROLENAMETOID
-from models import User, RoleRequest, Asset, Competition, ProfileCosmetic
+from models import User, RoleRequest, Asset, Competition, Art
 from schemas import  RoleFixed
 import os
 from dotenv import load_dotenv
@@ -228,6 +228,7 @@ def list_all_users(payload: dict, db: Session)->list[dict]:
             "is_verified": user.is_verified,
             "role_id": user.role_id,
             "joined_date": user.joined_date,
+            "is_banned": user.is_banned,
             "role_name": user.role.role_name if user.role else "n/a",
             "selected_bg": cosmetic.selected_bg if cosmetic else None,
             "selected_card": cosmetic.selected_card if cosmetic else None,
@@ -242,3 +243,156 @@ def list_all_users(payload: dict, db: Session)->list[dict]:
         })
     
     return result
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##moderating arts
+##listing
+def list_all_arts(payload: dict, db: Session, skip:int=0, limit: int =20)->dict:
+    admin_uid = payload.get("id")
+    admin_user = db.query(User).filter(User.id == admin_uid).first()
+    if not admin_user or admin_user.role_id != ROLENAMETOID[RoleFixed.superuser]:
+        raise HTTPException(status_code=403, detail="Only admin can list.")
+    
+    total_arts= db.query(Art).count()
+
+    arts =db.query(Art).offset(skip).limit(limit).all()
+    
+    result  = []
+    for art in arts:
+        reports_data = [
+            {
+                "report_id": r.report_id,
+                "user_id": r.user_id,
+                "username": r.user.username if r.user else None,
+                "reason": r.reason,
+                "reported_at": r.reported_at
+            }
+            for r in art.reports
+        ]
+
+        result.append({
+            "art_id": art.art_id,
+            "image_name": art.image_name,
+            "description": art.description,
+            "is_competing": art.is_competing,
+            "reports": reports_data
+        })
+
+    return{
+        "total": total_arts,
+        "skip": skip,
+        "limit": limit,
+        "arts": result
+    }    
+
+
+## banning user
+def ban_user(user_id: int, duration_hours: int, reason: str, admin_payload: dict, db:Session):
+    admin_uid = admin_payload.get("id")
+    admin_user = db.query(User).filter(User.id == admin_uid).first()
+
+    if admin_user.role_id!=ROLENAMETOID[RoleFixed.superuser]:
+        raise HTTPException(status_code=403, detail="You can ban, lil bro.")
+    
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="user not spotted")
+    
+    if user.role_id == ROLENAMETOID[RoleFixed.superuser]:
+        raise HTTPException(status_code=403, detail="cannot ban the admin")
+    
+    now = datetime.now(timezone.utc)
+    banned_until = now + timedelta(hours=duration_hours)
+    
+    user.is_banned = True
+    user.banned_until = banned_until
+    user.ban_reason = reason
+    db.commit()
+    db.refresh(user)
+
+    return {
+        "message": f"{user.username} has been banned for {duration_hours} hours",
+        "banned_until" : user.banned_until,
+        "reson": user.ban_reason
+    }
+
+
+##lifting the ban
+def unban_user(user_id: int, admin_payload: dict, db:Session):
+    admin_uid = admin_payload.get("id")
+    admin_user = db.query(User).filter(User.id == admin_uid).first()
+
+    if admin_user.role_id!=ROLENAMETOID[RoleFixed.superuser]:
+        raise HTTPException(status_code=403, detail="You can unban, lil bro.")
+    
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="user not spotted")
+    
+    user.is_banned = False
+    user.banned_until = None
+    user.ban_reason = None
+    db.commit()
+    db.refresh(user)
+    return{
+        "message": f"{user.username} unbanned!"
+    }
+
+    
+        
+    
+        
+    
+
+##deleting that art
+def delete_art(art_id: int, payload: dict, db:Session)->dict:
+    admin_uid = payload.get("id")
+    admin_user = db.query(User).filter(User.id == admin_uid).first()
+    if not admin_user or admin_user.role_id != ROLENAMETOID[RoleFixed.superuser]:
+        raise HTTPException(status_code=403, detail="Only admin can delete this way!")
+    
+    art = db.query(Art).filter(Art.art_id == art_id).first()
+    if not art:
+        raise HTTPException(status_code=404, detail="Art not found")
+    
+    if art.image_url and art.image_url.startswith("/"):
+        try:
+            file_path = os.path.join(os.getenv("ARTIQA_BASE", ""), art.image_url.lstrip("/"))
+            if os.path.exists(file_path):
+                os.remove(file_path)
+        
+        except Exception as e:
+            print (f"Failed to delete, {e}")
+
+    db.delete(art)
+    db.commit()
+
+    return{"message": f"{art.image_name} has been deleted"}         
+         
+    
+    
+    
+  

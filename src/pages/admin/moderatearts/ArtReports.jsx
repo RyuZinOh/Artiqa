@@ -12,7 +12,7 @@ export default function ArtReport() {
         {art?.reports?.length ?(
           art.reports.map((r, i) => (
             <div key={i}>
-              {r.user}:{r.reason}
+              {r.username}:{r.reason}
             </div>
           )))
           :

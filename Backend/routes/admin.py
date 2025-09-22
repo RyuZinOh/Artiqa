@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, Form, UploadFile
+from fastapi import APIRouter, Depends, Query,HTTPException, Form, UploadFile
 from sqlalchemy.orm import Session
 from controllers import admin_controller
 from database import get_db
 from utils.dependencies import get_admin_token
-from schemas import WeeklyCompetitionCreate
+from schemas import WeeklyCompetitionCreate, BanUserRequest
 
 
 
@@ -78,3 +78,50 @@ def get_all_users(payload: dict = Depends(get_admin_token),
     db: Session = Depends(get_db),
 ):
     return admin_controller.list_all_users(payload, db)
+
+##banning
+@router.post("/ban/{user_id}")
+def ban_user(
+    user_id: int,
+    payload: BanUserRequest,
+    admin_payload:dict = Depends(get_admin_token),
+    db: Session = Depends(get_db)
+):
+    return admin_controller.ban_user(
+        user_id=user_id,
+        duration_hours=payload.duration_hours,
+        reason=payload.reason,
+        admin_payload = admin_payload,
+        db=db)
+
+##unbanning
+@router.post("/unban/{user_id}")
+def ban_user(
+    user_id: int,
+    admin_payload: dict= Depends(get_admin_token),
+    db: Session = Depends(get_db)
+):
+    return admin_controller.unban_user(user_id=user_id,admin_payload=admin_payload, db=db)
+
+
+
+##MANAGING ARTS
+##listing
+@router.get("/arts")
+def get_all_arts(
+    skip: int = 0,
+    limit: int = 20,
+    payload: dict = Depends(get_admin_token),
+    db: Session = Depends(get_db),
+):
+    return admin_controller.list_all_arts(payload, db, skip=skip, limit=limit)
+
+
+##deleting
+@router.delete("/arts/{art_id}")
+def delete_art(
+    art_id: int,
+    payload: dict = Depends(get_admin_token),
+    db: Session  = Depends(get_db)
+):
+    return admin_controller.delete_art(art_id, payload, db)

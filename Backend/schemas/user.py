@@ -55,3 +55,10 @@ class FullNameUpdate(BaseModel):
 ##requestartist
 class RoleChangeRequest(BaseModel):
     message: str = None
+
+
+
+##banniing
+class BanUserRequest(BaseModel):
+    duration_hours:int
+    reason: str | None = None    

@@ -13,6 +13,7 @@ import { HeDoneProvider } from './pages/users/context/HeDoneProvider.jsx'
 import { UserProvider } from './pages/users/context/UserHoni/UserProvider.jsx'
 import { ExploreProvider } from './pages/context/Exploration/ExploreProvider.jsx'
 import { PortfolioProvider } from './pages/users/artists/context/portfolio/PortfolioProvider.jsx'
+import { TagProvider } from './pages/context/Tags/TagProvider.jsx'
 
 createRoot(document.getElementById('root')).render(
 <ThemeProvider>
@@ -25,8 +26,12 @@ createRoot(document.getElementById('root')).render(
           <HeDoneProvider>
             <PortfolioProvider>
             <ExploreProvider>
+              <TagProvider>
+
   <App />  
       <ToastContainer position="top-center" autoClose={5000} />
+              </TagProvider>
+
             </ExploreProvider>
             </PortfolioProvider>
           </HeDoneProvider>

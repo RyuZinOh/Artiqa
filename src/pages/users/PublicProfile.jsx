@@ -2,12 +2,50 @@ import { useAuth } from "../../context/useAuth";
 import { getFullUrl } from "../../utils/urlHelpers";
 import Layout from "../../components/layouts/layout";
 import PleaseRegisterOrLogin from "../PleaseRegisterOrLogin";
-import usePortfolio from "./artists/context/portfolio/userPortfolio";
+import { useState , useEffect} from "react";
+import { API_BASE } from "../../utils/api";
+import { useParams } from "react-router-dom";
 
 export default function PublicProfile() {
-        const {profile}  = usePortfolio();
     
     const {auth}  = useAuth();
+    const {username}= useParams();
+
+    const [profile, setProfile] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        if (!auth?.token) return;
+
+        const fetchProfile = async () => {
+            try {
+                const res = await fetch(`${API_BASE}/users/profile/${username}`, {
+                    headers: { Authorization: `Bearer ${auth.token}` },
+                });
+                if (!res.ok) {
+                    const data = await res.json();
+                    throw new Error(data.detail || "Failed to fetch profile");
+                }
+                const data = await res.json();
+                setProfile(data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProfile();
+    }, [username, auth?.token]);
+
+    if (!auth || !auth.token) return <PleaseRegisterOrLogin />;
+    if (loading) return <Layout>Loading...</Layout>;
+    if (error) return <Layout>{error}</Layout>;
+    if (!profile) return <Layout>No profile found</Layout>;
+
+    const hasBadges = profile.badges && profile.badges.length > 0;
+
 
 
     if(!auth || !auth.token) return <PleaseRegisterOrLogin/>;
@@ -55,30 +93,26 @@ export default function PublicProfile() {
                         <h2 className="drop-shadow-md">Joined At: {new Date(profile.joined_date).toLocaleDateString()}</h2>
 
                 </div>
+              
+                {/* Badges */}
                 <div className="flex-1 bottom-10 absolute">
-                    {profile.badges && profile.badges.length > 0 ? (
-
-                    <div className="flex flex-wrap gap-0">{profile.badges.map((badge,i)=>(
-                        <img 
-                        key={i}
-                        src={getFullUrl(badge)}
-                        className="w-66 -m-8"
-
-                        />
-                    ))}
-                    </div>
-                    ):(
-                         <div className="flex items-center justify-center w-full">
-              <div className="text-center p-8 border-3 border-dashed border-[var(--border)] rounded-lg ml-2">
-                <p className="text-xl text-gray-500">No badges yet</p>
-                <p className="text-sm text-gray-400 mt-2">
-                  Earn badges by completing achievements
-                </p>
-              </div>
-            </div>
+                    {hasBadges ? (
+                        <div className="flex flex-wrap gap-0">
+                            {profile.badges.map((badge, i) => (
+                                <img key={i} src={getFullUrl(badge)} className="w-66 -m-8" />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="flex items-center justify-center w-full">
+                            <div className="text-center p-8 border-3 border-dashed border-[var(--border)] rounded-lg ml-2">
+                                <p className="text-xl text-gray-500">No badges yet</p>
+                                <p className="text-sm text-gray-400 mt-2">
+                                    Earn badges by completing achievements
+                                </p>
+                            </div>
+                        </div>
                     )}
                 </div>
-         
 
          {/* top  */}
          <div className="absolute bottom-4 right-4 ">

@@ -10,7 +10,7 @@ export const themes = {
   },
   
   monochromeMist: {
-  "--sbgurl": "/Assets/Cards/5.jpg",
+  "--sbgurl": "",
   "--bgc": "#f5f5f5",     
   "--sbgc": "#c0c0c0",    
   "--color": "#1a1a1a",

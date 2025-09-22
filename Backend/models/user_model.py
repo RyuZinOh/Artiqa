@@ -34,6 +34,11 @@ class User(Base):
     top_leader = relationship("TopLeader", back_populates="user", uselist=False)
 
 
+    is_banned = Column(Boolean, default=False)
+    banned_until = Column(DateTime(timezone=True), nullable=True)
+    ban_reason = Column(String(255), nullable=True)
+
+
 
 
 

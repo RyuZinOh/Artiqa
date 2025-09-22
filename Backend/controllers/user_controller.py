@@ -8,7 +8,7 @@ from utils.jwt_token import create_token, password_token_create, password_token_
 import os
 from shutil import copyfileobj
 import time
-
+from datetime import datetime, timezone
 
 
 A_F = os.getenv("ARTS_PATH")
@@ -92,6 +92,23 @@ def login_user (request:loginFormat, db: Session = Depends(get_db)):
             status_code = status.HTTP_401_UNAUTHORIZED,
             detail="Invalid User or Email"
         )
+    
+    if user.is_banned and user.banned_until:
+        now = datetime.now(timezone.utc)
+        banned_until = user.banned_until
+        if banned_until.tzinfo is None:
+            banned_until = banned_until.replace(tzinfo=timezone.utc)
+        if banned_until > now:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"You are banned until {banned_until} for {user.ban_reason}"
+            )
+        else:
+            user.is_banned = False
+            user.banned_until = None
+            user.ban_reason = None
+            db.commit()
+
     is_artist = user.role_id == 699
     is_admin = user.role_id == 69
 
@@ -140,7 +157,8 @@ def get_user_data(payload:dict, db:Session)->dict:
         "user": UserOut.model_validate(user),
         "is_admin": user.role_id ==ROLENAMETOID[RoleFixed.superuser],
         "is_artist": user.role_id == ROLENAMETOID[RoleFixed.artist],
-        "is_user": user.role_id == ROLENAMETOID[RoleFixed.user]
+        "is_user": user.role_id == ROLENAMETOID[RoleFixed.user],
+        
     }
 
     
