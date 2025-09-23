@@ -4,6 +4,7 @@ import { getFullUrl } from "../../utils/urlHelpers";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../context/useAuth";
 import { useUser } from "../../pages/users/context/UserHoni/useUser";
+import { API_BASE } from "../../utils/api";
 
 export default function TopBar() {
   const {auth,userData, logout} = useAuth();
@@ -20,17 +21,9 @@ export default function TopBar() {
 
     const menuRef = useRef(null);
     const notiRef = useRef(null);
+    const wsRef = useRef(null);
 
-
-    useEffect(()=>{
-      if(auth){
-        setNotifications([
-          {username:"system", message:"welcome to artiqa!", pfp:"/something"}
-        ]);
-      }else{
-        setNotifications([]);
-      }
-    },[auth]);
+    
       
       useEffect(()=>{
         const handleClickOutside = (e) =>{
@@ -47,7 +40,12 @@ export default function TopBar() {
         }, []);
 
         const toggleMenu =  ()=> setMenuOpen((prev)=>!prev);
-        const toggleNoti =  ()=> setNotiOpen((prev)=>!prev);
+        const toggleNoti =  ()=> {setNotiOpen(prev=>{
+          const newState = !prev;
+          if (newState) markAllAsRead();
+          return newState;
+        });
+      };
         
           const handleLogout =()=>{
             logout();
@@ -56,7 +54,63 @@ export default function TopBar() {
           }
 
           const fullname = userData?.user?.full_name;
+
+
+          //notification 
+          useEffect(()=>{
+            if (!auth?.token){
+              setNotifications([]);
+              return;
+            }
+            const fetchNotifications = async()=>{
+              try{
+                const res = await fetch(`${API_BASE}/notifications/`,{
+                  headers: {
+                    Authorization: `Bearer ${auth.token}`
+                  }
+                });
+                if(!res.ok) throw new Error("failed to fetch notifications");
+                const data = await res.json();
+                setNotifications(data);
+              }catch(err){
+                console.error(err);
+              }
+            };
+            fetchNotifications();
+          }, [auth?.token]);
+
   
+
+          // Connect WebSocket for live notifications
+  useEffect(() => {
+    if (!auth?.token) return;
+
+    const wsUrl = `${API_BASE.replace(/^http/, 'ws')}/notifications/ws?token=${auth.token}`;
+    const ws = new WebSocket(wsUrl);
+    wsRef.current = ws;
+
+    ws.onopen = () => console.log("Connected to notifications WebSocket");
+    ws.onmessage = event => {
+      const notif = JSON.parse(event.data);
+      setNotifications(prev => [notif, ...prev]);
+    };
+    ws.onclose = () => console.log("Notifications WebSocket closed");
+
+    return () => ws.close();
+  }, [auth?.token]);
+
+const markAllAsRead = async () => {
+  try {
+    await fetch(`${API_BASE}/notifications/read-all`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${auth.token}` },
+    });
+    setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 
   return (
     <header className="bg-[var(--bgc)] p-4 justify-between items-center flex">
@@ -73,9 +127,10 @@ export default function TopBar() {
             onClick={toggleNoti}
             className="cursor-pointer"
             />
-            {notifications.length>0 && (
-              <span className="absolute top-0 right-0 block h-2 w-2 rounded-full ring-0 border border-[var(--border)]  bg-[var(--sbgc)]"></span>
-            )}
+            {notifications.some(n => !n.is_read) && (
+  <span className="absolute top-0 right-0 block h-2 w-2 rounded-full ring-0 border border-[var(--border)] bg-[var(--sbgc)]"></span>
+)}
+
           {notiOpen && (
             <div className="absolute -mr-10 right-2 top-10 w-72 max-h-80 overflow-y-auto shadow-lg rounded-xl p-3 bg-[var(--sbgc)] text-[var(--color)] z-50">
               {notifications.length > 0 ? (

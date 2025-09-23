@@ -5,10 +5,12 @@ import { EyeClosedIcon, EyeIcon, ImageIcon, TextboxIcon, TrophyIcon, UploadIcon,
 import { useStatistics } from "./context/statisticswala/useStatistics";
 import { useMineArts } from "./context/minearts/useMineArts";
 import { useExplore } from "../../context/Exploration/useExplore";
+import { useTags } from "../../context/Tags/useTag";
 
 export default function CreateArt({ onArtCreated }) {
   const { auth } = useAuth();
   const {refreshMineArts} = useMineArts();
+  const {refreshTags} = useTags();
   const {refreshArts} = useExplore();
   const {refreshStats} = useStatistics();
   const [file, setFile] = useState(null);
@@ -87,6 +89,7 @@ export default function CreateArt({ onArtCreated }) {
       refreshStats(); //the uploadig wont refresh because we are using the chron job there so it have to be manually or along with be handled.
       refreshMineArts();
       refreshArts();
+      refreshTags();
       toast.success("Artwork uploaded successfully!");
     } catch (error) {
       toast.error("Upload error: " + error.message);

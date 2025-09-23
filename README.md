@@ -32,4 +32,5 @@
 - [x] tags showcasing in main page tho its just a headline line showcase kinda
 - [x] keyword based searching
 - [x] artist private gallery
+- [x] real time notification sending to the users
 

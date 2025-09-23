@@ -18,3 +18,4 @@ from .asset_model import Asset
 from .competition_model import Competition, competition_art_link
 from .topleader import TopLeader
 from .artisttags_model import ArtistTag
+from .notifications_model import Notification

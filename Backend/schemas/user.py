@@ -62,3 +62,11 @@ class RoleChangeRequest(BaseModel):
 class BanUserRequest(BaseModel):
     duration_hours:int
     reason: str | None = None    
+
+
+
+##Notification
+class NotificationCreate(BaseModel):
+    user_id: int
+    title: str
+    message: Optional[str] = None

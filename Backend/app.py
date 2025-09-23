@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from routes import user as user_routes
 from routes import admin as admin_routes
 from routes import artist as artist_routes
+from routes import ws_notific as notification_routes
 from fastapi.middleware.cors import CORSMiddleware
 
 @asynccontextmanager
@@ -26,7 +27,7 @@ app.add_middleware(
 app.include_router(user_routes.router)
 app.include_router(admin_routes.router)
 app.include_router(artist_routes.router)
-
+app.include_router(notification_routes.router)
 
 
 @app.get("/")
